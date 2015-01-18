@@ -449,7 +449,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
             try {
                 HttpClient httpClient = new DefaultHttpClient();
-                HttpPost httpPost = new HttpPost("http://10.132.85.158/~rahulanishetty/OpenSoft/login.php");
+                HttpPost httpPost = new HttpPost("http://10.109.24.15/~rahulanishetty/OpenSoft/login.php");
                 List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(2);
                 nameValuePair.add(new BasicNameValuePair("email", mEmail));
                 nameValuePair.add(new BasicNameValuePair("passwd",mPassword));
