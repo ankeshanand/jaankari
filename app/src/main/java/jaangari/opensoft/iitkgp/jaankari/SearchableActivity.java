@@ -1,7 +1,8 @@
 package jaangari.opensoft.iitkgp.jaankari;
 
+import android.app.ListActivity;
+import android.app.SearchManager;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,12 +10,22 @@ import android.view.MenuItem;
 import jaangari.opensoft.iitkgp.jaangari.R;
 
 
-public class MainActivity extends ActionBarActivity {
+public class SearchableActivity extends ListActivity {
+
+    protected void contentSearch(String Query){
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_searchable);
+
+        Intent intent  =  getIntent();
+        if(intent.ACTION_SEARCH.equals(intent.getAction())){
+            String Query = intent.getStringExtra(SearchManager.QUERY);
+            contentSearch(Query);
+        }
     }
 
 

@@ -3,7 +3,6 @@ package jaangari.opensoft.iitkgp.jaankari;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
@@ -22,6 +21,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -66,7 +66,7 @@ import jaangari.opensoft.iitkgp.jaangari.R;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends FragmentActivity implements LoaderCallbacks<Cursor> {
 
     private static final int SELECT_PHOTO = 100;
     private static final int REQUEST_CAMERA = 101;
@@ -214,12 +214,13 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         SharedPreferences sp1 = this.getSharedPreferences("Login", 0);
         String sLogin = sp1.getString("sLogin", null);
         String path = sp1.getString("proPic",null);
         if (sLogin != null) {
             if (sLogin.equals("true")) {
-                Intent intent = new Intent(getApplicationContext(), HomeScreenActivity.class);
+                Intent intent = new Intent(getApplicationContext(), HomeScreen.class);
                 startActivity(intent);
             }
         } else {
@@ -394,6 +395,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                 ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
     }
 
+
+
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         List<String> emails = new ArrayList<String>();
@@ -493,7 +496,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                 Ed.putString("sLogin","true");
                 Ed.putString("emailId",mEmail);
                 Ed.commit();
-                Intent intent = new Intent(getApplicationContext(),HomeScreenActivity.class);
+                Intent intent = new Intent(getApplicationContext(),HomeScreen.class);
                 startActivity(intent);
                 finish();
             } else {
