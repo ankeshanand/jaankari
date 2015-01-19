@@ -4,6 +4,7 @@ import jaangari.opensoft.iitkgp.jaankari.util.SystemUiHider;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -12,6 +13,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -58,6 +60,12 @@ public class HomeScreen extends Activity {
         startActivity(intent);
     }
 
+    private void showInputMethod(View view) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.showSoftInput(view, 0);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,17 +73,17 @@ public class HomeScreen extends Activity {
 
         setContentView(R.layout.activity_home_screen);
 
-        SearchView search = (SearchView) findViewById(R.id.searchView);
-        search.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-
+        SearchView mSearchView = (SearchView) findViewById(R.id.searchView);
+        mSearchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                // TODO Auto-generated method stub
-
-                Toast.makeText(getBaseContext(), String.valueOf(hasFocus),
-                        Toast.LENGTH_SHORT).show();
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (hasFocus) {
+                    showInputMethod(view.findFocus());
+                }
             }
         });
+
+
 
         final View controlsView = findViewById(R.id.fullscreen_content_controls);
 //        final View contentView = findViewById(R.id.fullscreen_content);
@@ -152,6 +160,7 @@ public class HomeScreen extends Activity {
                 Ed.commit();
                 Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }

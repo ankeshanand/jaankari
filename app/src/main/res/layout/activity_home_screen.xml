@@ -11,22 +11,13 @@
         <!--android:layout_height="match_parent" android:keepScreenOn="true" android:textColor="#33b5e5"-->
         <!--android:layout_gravity="bottom"-->
         <!--android:textStyle="bold" android:textSize="50sp" android:gravity="center"/>-->
-    <SearchView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/searchView"
-        android:background="#FFFFFF"
-        android:queryHint="@string/query_hint"
-        android:gravity="bottom"
-        android:layout_gravity="top"
-        android:inputType="textAutoComplete"/>
     <!--    android:text="@string/dummy_content" /> -->
 
     <!-- This FrameLayout insets its children based on system windows using
          android:fitsSystemWindows. -->
 
 
-    <FrameLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+    <FrameLayout android:layout_width="match_parent" android:layout_height="match_parent"
         android:layout_gravity="bottom"
         android:fitsSystemWindows="true">
 
@@ -44,38 +35,73 @@
                 android:layout_gravity="bottom" />
         </LinearLayout>
 
+        <SearchView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/searchView"
+            android:background="#FFFFFF"
+            android:queryHint="@string/query_hint"
+            android:gravity="bottom"
+            android:layout_gravity="top"
+            android:inputType="textAutoComplete"/>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="478dp"
+            android:layout_gravity="left|center_vertical">
+
+            <TextView
+                android:layout_width="230dp"
+                android:layout_height="150dp"
+                android:text="@string/videos"
+                android:background="#CCCCCC"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="95dp"
+                android:id="@+id/videos_textView" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="150dp"
+                android:background="#AAAAAA"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/news"
+                android:id="@+id/news_textView"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_toRightOf="@+id/videos_textView"
+                android:layout_toEndOf="@+id/videos_textView"
+                android:layout_alignTop="@+id/videos_textView" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/weather"
+                android:background="#BBBBBB"
+                android:id="@+id/weather_textView"
+                android:layout_below="@+id/videos_textView"
+                android:layout_toLeftOf="@+id/news_textView"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/stocks"
+                android:background="#DDDDDD"
+                android:id="@+id/stocks_textView"
+                android:layout_alignTop="@+id/weather_textView"
+                android:layout_toRightOf="@+id/weather_textView"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignBottom="@+id/weather_textView" />
+
+        </RelativeLayout>
+
     </FrameLayout>
-
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="478dp"
-        android:layout_gravity="left|center_vertical">
-
-        <TextView
-            android:layout_width="230dp"
-            android:layout_height="150dp"
-            android:text="Videos"
-            android:background="#AAAABB"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="95dp"
-            android:id="@+id/videos_textView" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="150dp"
-            android:background="#0919AA"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="News"
-            android:id="@+id/news_textView"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_toRightOf="@+id/videos_textView"
-            android:layout_toEndOf="@+id/videos_textView"
-            android:layout_alignTop="@+id/videos_textView" />
-
-    </RelativeLayout>
 
 
 </FrameLayout>

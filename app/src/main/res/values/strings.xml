@@ -9,6 +9,12 @@
     <string name="query_hint">Search Videos and Text</string>
     <string name="title_activity_home_screen">Jaankari</string>
     <string name="logout">Logout</string>
+    <string name="videos">Videos</string>
+    <string name="news">News</string>
+    <string name="weather">Weather</string>
+    <string name="stocks">Stock</string>
+    
+    
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_activity_videos">Videos</string>
 

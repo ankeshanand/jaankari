@@ -452,7 +452,7 @@ public class LoginActivity extends FragmentActivity implements LoaderCallbacks<C
 
             try {
                 HttpClient httpClient = new DefaultHttpClient();
-                HttpPost httpPost = new HttpPost("http://10.109.24.15/~rahulanishetty/OpenSoft/login.php");
+                HttpPost httpPost = new HttpPost("http://10.109.24.28/~rahulanishetty/OpenSoft/login.php");
                 List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(2);
                 nameValuePair.add(new BasicNameValuePair("email", mEmail));
                 nameValuePair.add(new BasicNameValuePair("passwd",mPassword));
@@ -502,6 +502,7 @@ public class LoginActivity extends FragmentActivity implements LoaderCallbacks<C
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
+                Log.i("Login","Incorrect Password");
             }
         }
 
