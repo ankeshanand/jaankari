@@ -6,16 +6,29 @@
     <string name="action_settings">Settings</string>
     <string name="action_example">Example action</string>
     <string name="app_label">Jaankari</string>
-    <string name="query_hint">Search Videos and Text</string>
+    <string name="query_hint">Search Videos and Files</string>
     <string name="title_activity_home_screen">Jaankari</string>
     <string name="logout">Logout</string>
     <string name="videos">Videos</string>
     <string name="news">News</string>
     <string name="weather">Weather</string>
-    <string name="stocks">Stock</string>
-    
-    
+    <string name="stocks">Stocks</string>
+    <string name="education">Education</string>
+    <string name="app_id">1423921831232319</string>
+    <string name="new_password">New Password</string>
+    <string name="retype_new_password">Re-type Password</string>
+    <string name="old_password">Current Password</string>
+    <string name="update_password">Update!</string>
+    <string name="ip_address">10.109.24.36/~rahulanishetty/OpenSoft</string>
+
+    <string-array name="profile_updates">
+        <item>Update Profile Picture</item>
+        <item>Update Password</item>
+    </string-array>
+
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_activity_videos">Videos</string>
+    <string name="title_activity_password_change">PasswordChangeActivity</string>
+    <string name="title_activity_update_profile_pic">UpdateProfilePicActivity</string>
 
 </resources>

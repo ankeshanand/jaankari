@@ -1,5 +1,6 @@
 package jaangari.opensoft.iitkgp.jaankari;
 
+import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -7,7 +8,7 @@ import android.view.MenuItem;
 
 import jaangari.opensoft.iitkgp.jaangari.R;
 
-public class Videos extends ActionBarActivity {
+public class Videos extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

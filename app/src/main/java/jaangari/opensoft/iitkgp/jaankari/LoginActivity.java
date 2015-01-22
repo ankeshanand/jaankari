@@ -10,6 +10,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,8 +24,10 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -55,6 +60,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -85,6 +92,8 @@ public class LoginActivity extends FragmentActivity implements LoaderCallbacks<C
     private View mProgressView;
     private View mLoginFormView;
     private ImageView mImageView;
+
+    private MainFragment mainFragment;
 
 
     public void imagePick(View view){
@@ -215,6 +224,18 @@ public class LoginActivity extends FragmentActivity implements LoaderCallbacks<C
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+//        if(savedInstanceState==null){
+//            mainFragment = new MainFragment();
+//            getSupportFragmentManager()
+//                    .beginTransaction()
+//                    .add(android.R.id.content, mainFragment)
+//                    .commit();
+//        }
+//        else{
+//            mainFragment = (MainFragment) getSupportFragmentManager()
+//                    .findFragmentById(android.R.id.content);
+//        }
+
         SharedPreferences sp1 = this.getSharedPreferences("Login", 0);
         String sLogin = sp1.getString("sLogin", null);
         String path = sp1.getString("proPic",null);
@@ -250,18 +271,24 @@ public class LoginActivity extends FragmentActivity implements LoaderCallbacks<C
                 }
             });
 
-            Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-            mEmailSignInButton.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.v(PRINT_SERVICE, "Attempting Login");
-                    attemptLogin();
-                }
-            });
+//            Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+//            mEmailSignInButton.setOnClickListener(new OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Log.v(PRINT_SERVICE, "Attempting Login");
+//                    attemptLogin();
+//                }
+//            });
 
             mLoginFormView = findViewById(R.id.login_form);
             mProgressView = findViewById(R.id.login_progress);
         }
+    }
+
+
+    public void loginButton(View view){
+        Log.v(PRINT_SERVICE, "Attempting Login");
+        attemptLogin();
     }
 
     private void populateAutoComplete() {
@@ -452,7 +479,7 @@ public class LoginActivity extends FragmentActivity implements LoaderCallbacks<C
 
             try {
                 HttpClient httpClient = new DefaultHttpClient();
-                HttpPost httpPost = new HttpPost("http://10.109.24.28/~rahulanishetty/OpenSoft/login.php");
+                HttpPost httpPost = new HttpPost("http://10.132.142.38/~rahulanishetty/OpenSoft/login.php");
                 List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(2);
                 nameValuePair.add(new BasicNameValuePair("email", mEmail));
                 nameValuePair.add(new BasicNameValuePair("passwd",mPassword));
@@ -495,6 +522,7 @@ public class LoginActivity extends FragmentActivity implements LoaderCallbacks<C
                 SharedPreferences.Editor Ed=sp.edit();
                 Ed.putString("sLogin","true");
                 Ed.putString("emailId",mEmail);
+                Ed.putString("password",mPassword);
                 Ed.commit();
                 Intent intent = new Intent(getApplicationContext(),HomeScreen.class);
                 startActivity(intent);
@@ -513,6 +541,5 @@ public class LoginActivity extends FragmentActivity implements LoaderCallbacks<C
         }
     }
 }
-
 
 

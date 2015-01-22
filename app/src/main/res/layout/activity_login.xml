@@ -13,12 +13,6 @@
         android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:layout_marginBottom="8dp" android:visibility="gone" />
 
-    <!--<com.facebook.widget.LoginButton-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:id="@+id/facebook_login"-->
-        <!--android:text="@string/com_facebook_loginview_log_in_button"/>-->
-
     <LinearLayout
         android:id="@+id/profile_pic_layout"
         android:layout_marginTop="40dp"
@@ -56,11 +50,25 @@
                 android:imeActionLabel="@string/action_sign_in_short"
                 android:imeOptions="actionUnspecified" android:inputType="textPassword"
                 android:maxLines="1" android:singleLine="true" />
-
-            <Button android:id="@+id/email_sign_in_button" style="?android:textAppearanceSmall"
-                android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:layout_marginTop="8dp" android:text="@string/action_sign_in"
-                android:textStyle="bold" />
+            <LinearLayout
+                android:id="@+id/main"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <Button android:id="@+id/email_sign_in_button"
+                    android:onClick="loginButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/action_sign_in"
+                    android:textStyle="bold" />
+                <com.facebook.widget.LoginButton
+                    android:layout_marginTop="8dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/authButton"
+                    android:text="@string/com_facebook_loginview_log_in_button"/>
+                </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

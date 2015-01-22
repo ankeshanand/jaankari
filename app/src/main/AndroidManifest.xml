@@ -25,19 +25,11 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
-        <activity
-            android:name="jaangari.opensoft.iitkgp.jaankari.SearchableActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait" >
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
+        android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/app_id" />
 
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
-        </activity>
         <activity
             android:name="jaangari.opensoft.iitkgp.jaankari.LoginActivity"
             android:label="@string/app_name"
@@ -50,19 +42,60 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+        <activity android:name="com.facebook.LoginActivity"
+            android:screenOrientation="portrait"/>
+
+
+        <activity
+            android:name="jaangari.opensoft.iitkgp.jaankari.SearchableActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+
+
         <activity
             android:name="jaangari.opensoft.iitkgp.jaankari.HomeScreen"
             android:configChanges="orientation|screenSize"
-            android:label="@string/title_activity_home_screen"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_home_screen" >
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value=".SearchableActivity" />
         </activity>
+
+
         <activity
             android:name="jaangari.opensoft.iitkgp.jaankari.Videos"
-            android:label="@string/title_activity_videos" >
+            android:label="@string/title_activity_videos"
+            android:screenOrientation="portrait" >
+
+            <!-- android:theme="@style/FullscreenTheme" > -->
         </activity>
+
+
+        <activity
+            android:name="jaangari.opensoft.iitkgp.jaankari.PasswordChangeActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_password_change" >
+        </activity>
+
+
+        <activity
+            android:name="jaangari.opensoft.iitkgp.jaankari.UpdateProfilePicActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_update_profile_pic" >
+        </activity>
+
+
     </application>
 
 </manifest>
