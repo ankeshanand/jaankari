@@ -270,16 +270,6 @@ public class LoginActivity extends FragmentActivity implements LoaderCallbacks<C
                     return false;
                 }
             });
-
-//            Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-//            mEmailSignInButton.setOnClickListener(new OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Log.v(PRINT_SERVICE, "Attempting Login");
-//                    attemptLogin();
-//                }
-//            });
-
             mLoginFormView = findViewById(R.id.login_form);
             mProgressView = findViewById(R.id.login_progress);
         }

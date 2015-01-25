@@ -7,6 +7,7 @@
     <string name="action_example">Example action</string>
     <string name="app_label">Jaankari</string>
     <string name="query_hint">Search Videos and Files</string>
+    <string name="search_videos">Search Videos</string>
     <string name="title_activity_home_screen">Jaankari</string>
     <string name="logout">Logout</string>
     <string name="videos">Videos</string>
@@ -27,8 +28,16 @@
     </string-array>
 
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="menu_update_password">Update Password</string>
+    <string name="menu_update_profile_pic">Update Profile Pic</string>
     <string name="title_activity_videos">Videos</string>
     <string name="title_activity_password_change">PasswordChangeActivity</string>
     <string name="title_activity_update_profile_pic">UpdateProfilePicActivity</string>
+    <string name="title_activity_video">VideoActivity</string>
+    <string name="title_section1">Popular</string>
+    <string name="title_section2">Recommended</string>
+    <string name="title_section3">History</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 
 </resources>
