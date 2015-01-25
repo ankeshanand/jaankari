@@ -19,7 +19,7 @@
     <string name="retype_new_password">Re-type Password</string>
     <string name="old_password">Current Password</string>
     <string name="update_password">Update!</string>
-    <string name="ip_address">10.109.24.36/~rahulanishetty/OpenSoft</string>
+    <string name="ip_address">10.109.24.52/~rahulanishetty/OpenSoft/</string>
 
     <string-array name="profile_updates">
         <item>Update Profile Picture</item>

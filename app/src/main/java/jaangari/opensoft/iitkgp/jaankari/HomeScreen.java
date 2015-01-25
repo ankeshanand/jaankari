@@ -2,7 +2,6 @@ package jaangari.opensoft.iitkgp.jaankari;
 
 import jaangari.opensoft.iitkgp.jaankari.util.SystemUiHider;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
@@ -10,32 +9,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.SearchView;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-
-import java.util.ArrayList;
-import java.util.List;
 
 import jaangari.opensoft.iitkgp.jaangari.R;
 
@@ -75,7 +59,7 @@ public class HomeScreen extends Activity {
     private SystemUiHider mSystemUiHider;
 
     public void videoIntent(View view){
-        Intent intent = new Intent(getApplicationContext(),Videos.class);
+        Intent intent = new Intent(getApplicationContext(),VideosActivity.class);
         startActivity(intent);
     }
 
@@ -151,6 +135,10 @@ public class HomeScreen extends Activity {
         super.onCreate(savedInstanceState);
         SharedPreferences sp1 = this.getSharedPreferences("Login", 0);
         String path = sp1.getString("proPic",null);
+
+
+        Intent intent = new Intent(getApplicationContext(),VideoDownload.class);
+        startService(intent);
 
         setContentView(R.layout.activity_home_screen);
         SearchManager mSearchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);

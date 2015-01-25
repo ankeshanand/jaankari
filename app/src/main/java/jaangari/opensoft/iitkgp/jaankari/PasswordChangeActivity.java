@@ -142,7 +142,7 @@ public class PasswordChangeActivity extends Activity{
         protected Boolean doInBackground(Void... params) {
             try {
                 HttpClient httpClient = new DefaultHttpClient();
-                HttpPost httpPost = new HttpPost("http://10.132.142.38/~rahulanishetty/OpenSoft/changePassword.php");
+                HttpPost httpPost = new HttpPost("http://"+getString(R.string.ip_address)+"changePassword.php");
                 List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(2);
                 nameValuePair.add(new BasicNameValuePair("email", mEmail));
                 nameValuePair.add(new BasicNameValuePair("password",mPassword));

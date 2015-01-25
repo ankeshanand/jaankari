@@ -123,7 +123,7 @@ public class LoginActivity extends FragmentActivity implements LoaderCallbacks<C
     }
 
     private void writeProfilePic(Bitmap yourSelectedImage){
-        String path = android.os.Environment.getExternalStorageDirectory() + File.separator + R.string.app_name;
+        String path = android.os.Environment.getExternalStorageDirectory() + File.separator + getString(R.string.app_name);
         OutputStream fOut = null;
         File file = new File(path);
         if (!file.exists())
@@ -479,7 +479,7 @@ public class LoginActivity extends FragmentActivity implements LoaderCallbacks<C
 
             try {
                 HttpClient httpClient = new DefaultHttpClient();
-                HttpPost httpPost = new HttpPost("http://10.132.142.38/~rahulanishetty/OpenSoft/login.php");
+                HttpPost httpPost = new HttpPost("http://"+getString(R.string.ip_address)+"login.php");
                 List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(2);
                 nameValuePair.add(new BasicNameValuePair("email", mEmail));
                 nameValuePair.add(new BasicNameValuePair("passwd",mPassword));
