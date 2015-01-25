@@ -28,42 +28,11 @@
             android:background="@color/black_overlay" android:orientation="horizontal"
             tools:ignore="UselessParent">
 
-            <Button android:id="@+id/logout_button" style="?metaButtonBarButtonStyle"
-                android:layout_width="0dp" android:layout_height="wrap_content"
-                android:textColor="#FFFFFF"
-                android:layout_weight="1" android:text="@string/logout"
-                android:background="@color/black_overlay"
-                android:layout_gravity="bottom" />
         </LinearLayout>
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:focusableInTouchMode="false">
-            <SearchView
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:id="@+id/searchView"
-                android:background="#FFFFFF"
-                android:queryHint="@string/query_hint"
-                android:layout_gravity="top"
-                android:inputType="textAutoComplete"
-                android:focusableInTouchMode="true" />
-
-            <ImageView
-                android:layout_alignParentRight="true"
-                android:layout_width="50dp"
-                android:layout_height="48dp"
-                android:id="@+id/profile_pic_home_screen"
-                android:onClick="profilePreferences"
-                android:background="@drawable/default_profile_pic"/>
-
-        </RelativeLayout>
-
-        <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="477dp"
+            android:layout_height="fill_parent"
             android:layout_gravity="left|center_vertical">
 
             <TextView
@@ -124,12 +93,12 @@
                 android:text="@string/education"
                 android:id="@+id/education_textView"
                 android:background="#FFFFFF"
-                android:layout_below="@+id/weather_textView"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentBottom="true"
                 android:layout_alignRight="@+id/stocks_textView"
-                android:layout_alignEnd="@+id/stocks_textView" />
+                android:layout_alignEnd="@+id/stocks_textView"
+                android:layout_below="@+id/weather_textView" />
 
         </RelativeLayout>
 

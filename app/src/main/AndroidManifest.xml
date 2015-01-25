@@ -67,13 +67,6 @@
                 android:value=".SearchableActivity" />
         </activity>
         <activity
-            android:name="jaangari.opensoft.iitkgp.jaankari.VideosActivity"
-            android:label="@string/title_activity_videos"
-            android:screenOrientation="portrait" >
-
-            <!-- android:theme="@style/FullscreenTheme" > -->
-        </activity>
-        <activity
             android:name="jaangari.opensoft.iitkgp.jaankari.PasswordChangeActivity"
             android:label="@string/title_activity_password_change"
             android:screenOrientation="portrait" >
@@ -89,6 +82,12 @@
             android:enabled="true"
             android:exported="true" >
         </service>
+
+        <activity
+            android:name="jaangari.opensoft.iitkgp.jaankari.VideoActivity"
+            android:label="@string/title_activity_video"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>

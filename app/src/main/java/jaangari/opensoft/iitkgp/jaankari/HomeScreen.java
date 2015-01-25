@@ -30,12 +30,7 @@ public class HomeScreen extends ActionBarActivity {
 
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if(id == R.id.logout_home_screen){
             SharedPreferences sp=getSharedPreferences("Login", 0);
             SharedPreferences.Editor Ed=sp.edit();
@@ -48,14 +43,15 @@ public class HomeScreen extends ActionBarActivity {
             startActivity(intent);
             finish();
         }
-        else if(id == R.id.pro_pic_menu){
-//            ImageView mImageView = (ImageView)findViewById(R.id.pro_pic_menu);
-//            mImageView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    profilePreferences(v);
-//                }
-//            });
+        else if(id == R.id.update_password){
+            Intent intent = new Intent(this,PasswordChangeActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }
+        else if(id==R.id.update_profile_picture){
+            Intent intent =  new Intent(this,UpdateProfilePicActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
