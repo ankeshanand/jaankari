@@ -4,6 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
+import android.os.AsyncTask;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -18,9 +22,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 
@@ -61,13 +68,14 @@ public class VideoActivity extends ActionBarActivity
             ImageView imageView = (ImageView) rowView.findViewById(R.id.list_image_view);
             txtTitle.setText(web[position]);
             imageView.setImageBitmap(imageId[position]);
-//            videoView.setVideoPath(videoId[position]);
             return rowView;
         }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+//        mTask = new UIThumbnailsTask();
+//        mTask.execute((Void)null);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video);
 
@@ -76,29 +84,6 @@ public class VideoActivity extends ActionBarActivity
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer,(DrawerLayout) findViewById(R.id.drawer_layout));
-
-//        final ListView listview = (ListView) findViewById(R.id.videos_list_view);
-//        File file = new File(Environment.getExternalStorageDirectory() + "/" + getString(R.string.app_name) + "/Videos");
-//        if (file.exists()) {
-//            files = file.listFiles();
-//            values = new String[files.length];
-//            paths = new String[files.length];
-//            imageId = new Bitmap[files.length];
-//            for (int i = 0; i < files.length; i++) {
-//                values[i] = files[i].getName().replace("_", " ");
-//                paths[i] = files[i].getAbsolutePath();
-//                imageId[i] = ThumbnailUtils.createVideoThumbnail(paths[i], MediaStore.Images.Thumbnails.MINI_KIND);
-//            }
-//            CustomList adapter = new CustomList(VideoActivity.this,values, imageId);
-//            listview.setAdapter(adapter);
-//            listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                @Override
-//                public void onItemClick(AdapterView<?> parent, View view,
-//                                        int position, long id) {
-//                    Toast.makeText(VideoActivity.this, "You Clicked at " + values[+position], Toast.LENGTH_SHORT).show();
-//                }
-//            });
-//        }
 
     }
 
@@ -115,6 +100,7 @@ public class VideoActivity extends ActionBarActivity
         switch (number) {
             case 1:
                 mTitle = getString(R.string.title_section1);
+
                 break;
             case 2:
                 mTitle = getString(R.string.title_section2);
@@ -122,6 +108,28 @@ public class VideoActivity extends ActionBarActivity
             case 3:
                 mTitle = getString(R.string.title_section3);
                 break;
+        }
+        ListView listview = (ListView) findViewById(R.id.videos_list_view);
+        File file = new File(Environment.getExternalStorageDirectory() + "/" + getString(R.string.app_name) + "/Videos");
+        if (file.exists()) {
+            files = file.listFiles();
+            values = new String[files.length];
+            paths = new String[files.length];
+            imageId = new Bitmap[files.length];
+            for (int i = 0; i < files.length; i++) {
+                values[i] = files[i].getName().replace("_", " ");
+                paths[i] = files[i].getAbsolutePath();
+                imageId[i] = ThumbnailUtils.createVideoThumbnail(paths[i], MediaStore.Images.Thumbnails.MINI_KIND);
+            }
+            CustomList adapter = new CustomList(VideoActivity.this,values, imageId);
+            listview.setAdapter(adapter);
+            listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view,
+                                        int position, long id) {
+                    Toast.makeText(VideoActivity.this, "You Clicked at " + values[+position], Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 

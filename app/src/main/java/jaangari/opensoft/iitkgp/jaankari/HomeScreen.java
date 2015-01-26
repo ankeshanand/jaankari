@@ -63,16 +63,16 @@ public class HomeScreen extends ActionBarActivity {
         Intent intent = new Intent(getApplicationContext(),VideoDownload.class);
         startService(intent);
         setContentView(R.layout.activity_home_screen);
+//        ImageView mImageView = (ImageView)findViewById(R.id.pro_pic_menu);
+//        SharedPreferences sp1 = this.getSharedPreferences("Login", 0);
+//        String path = sp1.getString("proPic",null);
+//        if(path!=null)
+//            Log.v(PRINT_SERVICE,"Path" + path);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.menu_home_screen, menu);
-        ImageView mImageView = (ImageView)findViewById(R.id.pro_pic_menu);
-        SharedPreferences sp1 = this.getSharedPreferences("Login", 0);
-        String path = sp1.getString("proPic",null);
-        if(path!=null)
-            mImageView.setImageBitmap(BitmapFactory.decodeFile(path));
         return super.onCreateOptionsMenu(menu);
     }
 

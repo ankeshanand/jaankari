@@ -151,9 +151,8 @@ public class LoginActivity extends FragmentActivity implements LoaderCallbacks<C
     private void setProfilePic(Bitmap yourSelectedImage , boolean set){
         mImageView = (ImageView) findViewById(R.id.profile_pic);
         ViewGroup.LayoutParams params = mImageView.getLayoutParams();
-        params.height = (int) (yourSelectedImage.getHeight());
-        params.width = (int) (yourSelectedImage.getWidth());
-        Log.v(PRINT_SERVICE,"height :" + params.height + " , width : "+params.width);
+        params.height = 200;
+        params.width = 200;
         mImageView.setLayoutParams(params);
         mImageView.setImageBitmap(yourSelectedImage);
         if(set) {
@@ -198,7 +197,7 @@ public class LoginActivity extends FragmentActivity implements LoaderCallbacks<C
         BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImage), null, o);
 
         // The new size we want to scale to
-        final int REQUIRED_SIZE = 140;
+        final int REQUIRED_SIZE = 300;
 
         // Find the correct scale value. It should be the power of 2.
         int width_tmp = o.outWidth, height_tmp = o.outHeight;
