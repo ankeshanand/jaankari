@@ -1,9 +1,13 @@
 package jaangari.opensoft.iitkgp.jaankari;
 
+import android.app.SearchManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -57,22 +61,29 @@ public class HomeScreen extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        db = new DatabaseHandler(this.getApplicationContext());
-//        db.closeDB();
         Intent intent = new Intent(getApplicationContext(),VideoDownloadService.class);
         setContentView(R.layout.activity_home_screen);
         startService(intent);
-//        ImageView mImageView = (ImageView)findViewById(R.id.pro_pic_menu);
-//        SharedPreferences sp1 = this.getSharedPreferences("Login", 0);
-//        String path = sp1.getString("proPic",null);
-//        if(path!=null)
-//            Log.v(PRINT_SERVICE,"Path" + path);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.menu_home_screen, menu);
-        return super.onCreateOptionsMenu(menu);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(new ComponentName(getApplicationContext(),SearchableActivity.class)));
+        searchView.setIconifiedByDefault(false);
+       // return super.onCreateOptionsMenu(menu);
+        return true;
+    }
+
+    @Override
+    public boolean onSearchRequested() {
+        Bundle appData = new Bundle();
+        appData.putBoolean(SearchableActivity.JARGON, true);
+        startSearch(null, false, appData, false);
+        return true;
     }
 
     @Override

@@ -31,7 +31,7 @@ public class GlobalDatabaseImageService extends Service {
             @Override
             public void run() {
                 try {
-                    String url = "http://10.132.235.67:3000/newsLogs";
+                    String url = "http://10.135.239.70:3000/newsLogs";
                     HttpClient httpclient = new DefaultHttpClient();
                     HttpGet httpGet = new HttpGet(url);
                     HttpResponse response = httpclient.execute(httpGet);
@@ -62,7 +62,7 @@ public class GlobalDatabaseImageService extends Service {
             @Override
             public void run() {
                 try{
-                    String url = "http://10.132.235.67:3000/healthLogs";
+                    String url = "http://10.135.239.70:3000/healthLogs";
                     HttpClient httpclient = new DefaultHttpClient();
                     HttpGet httpGet = new HttpGet(url);
                     HttpResponse response = httpclient.execute(httpGet);
@@ -92,7 +92,7 @@ public class GlobalDatabaseImageService extends Service {
             @Override
             public void run() {
                 try{
-                    String url = "http://10.132.235.67:3000/videoLogs";
+                    String url = "http://10.135.239.70:3000/videoLogs";
                     HttpClient httpclient = new DefaultHttpClient();
                     HttpGet httpGet = new HttpGet(url);
                     HttpResponse response = httpclient.execute(httpGet);
