@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/HealthListUpperLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:background="@color/blue"
+        android:paddingBottom="2dp"
+        android:clickable="true"
+        android:onClick="healthClickedUp"
+        >
+        <TextView
+            android:id="@+id/healthTitleUp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/abc_text_size_large_material"
+            android:textStyle="bold"
+            android:paddingLeft="25dp"
+            android:paddingTop="15dp"
+            android:text="Title" />
+        <TextView
+            android:id="@+id/healthSummaryUp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingLeft="15dp"
+            android:textSize="@dimen/abc_text_size_medium_material"
+            android:text="Summary of the health article" />
+
+    </LinearLayout>
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="0.2dp"
+        android:id="@+id/separator"
+        android:visibility="visible"
+        android:background="@android:color/black"/>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:background="@color/blue"
+        android:paddingTop="2dp"
+        android:clickable="true"
+        android:onClick="healthClickedDown"
+        >
+        <TextView
+            android:id="@+id/healthTitleDown"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/abc_text_size_large_material"
+            android:paddingLeft="25dp"
+            android:paddingTop="15dp"
+            android:textStyle="bold"
+            android:text="Title" />
+        <TextView
+            android:id="@+id/healthSummaryDown"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingLeft="15dp"
+            android:textSize="@dimen/abc_text_size_medium_material"
+            android:text="Summary of the health article" />
+    </LinearLayout>
+</LinearLayout>

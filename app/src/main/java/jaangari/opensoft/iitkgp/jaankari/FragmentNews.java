@@ -129,7 +129,7 @@ public class FragmentNews extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        ((NewsActivity) activity).onSectionAttached(position + 1);
+        //((NewsActivity) activity).onSectionAttached(position + 1);
     }
 
     @Override

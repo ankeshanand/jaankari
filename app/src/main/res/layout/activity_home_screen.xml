@@ -181,6 +181,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:clickable="true"
+                android:onClick="healthIntent"
                 android:text="Health"
                 android:padding="16dp"
                 android:background="@drawable/health"

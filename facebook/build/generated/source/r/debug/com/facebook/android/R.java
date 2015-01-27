@@ -20,7 +20,7 @@ public final class R {
 <tr><td><code>top</code></td><td>2</td><td></td></tr>
 </table>
          */
-        public static int auxiliary_view_position=0x7f010004;
+        public static int auxiliary_view_position=0x7f010006;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -28,11 +28,11 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static int confirm_logout=0x7f010006;
+        public static int confirm_logout=0x7f010008;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static int done_button_background=0x7f010010;
+        public static int done_button_background=0x7f010012;
         /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -40,7 +40,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static int done_button_text=0x7f01000e;
+        public static int done_button_text=0x7f010010;
         /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -48,7 +48,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static int extra_fields=0x7f01000b;
+        public static int extra_fields=0x7f01000d;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -56,7 +56,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static int fetch_user_info=0x7f010007;
+        public static int fetch_user_info=0x7f010009;
         /** <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
 "<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
 <p>This may also be a reference to a resource (in the form
@@ -65,7 +65,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static int foreground_color=0x7f010001;
+        public static int foreground_color=0x7f010003;
         /** <p>Must be one of the following constant values.</p>
 <table>
 <colgroup align="left" />
@@ -77,7 +77,7 @@ containing a value of this type.
 <tr><td><code>right</code></td><td>2</td><td></td></tr>
 </table>
          */
-        public static int horizontal_alignment=0x7f010005;
+        public static int horizontal_alignment=0x7f010007;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -85,7 +85,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static int is_cropped=0x7f010016;
+        public static int is_cropped=0x7f010018;
         /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -93,7 +93,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static int login_text=0x7f010008;
+        public static int login_text=0x7f01000a;
         /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -101,7 +101,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static int logout_text=0x7f010009;
+        public static int logout_text=0x7f01000b;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -109,7 +109,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static int multi_select=0x7f010000;
+        public static int multi_select=0x7f010002;
         /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -117,7 +117,29 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static int object_id=0x7f010002;
+        public static int object_id=0x7f010004;
+        /** <p>Must be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>vertical</code></td><td>0</td><td></td></tr>
+<tr><td><code>horizontal</code></td><td>1</td><td></td></tr>
+</table>
+         */
+        public static int orientation=0x7f010000;
+        /** <p>Must be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>glow</code></td><td>0</td><td></td></tr>
+<tr><td><code>rubber_band</code></td><td>1</td><td></td></tr>
+</table>
+         */
+        public static int overFlipMode=0x7f010001;
         /** <p>Must be one of the following constant values.</p>
 <table>
 <colgroup align="left" />
@@ -129,7 +151,7 @@ containing a value of this type.
 <tr><td><code>large</code></td><td>-4</td><td></td></tr>
 </table>
          */
-        public static int preset_size=0x7f010015;
+        public static int preset_size=0x7f010017;
         /** <p>Must be an integer value, such as "<code>100</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -137,7 +159,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static int radius_in_meters=0x7f010011;
+        public static int radius_in_meters=0x7f010013;
         /** <p>Must be an integer value, such as "<code>100</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -145,7 +167,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static int results_limit=0x7f010012;
+        public static int results_limit=0x7f010014;
         /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -153,7 +175,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static int search_text=0x7f010013;
+        public static int search_text=0x7f010015;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -161,7 +183,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static int show_pictures=0x7f01000a;
+        public static int show_pictures=0x7f01000c;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -169,7 +191,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static int show_search_box=0x7f010014;
+        public static int show_search_box=0x7f010016;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -177,7 +199,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static int show_title_bar=0x7f01000c;
+        public static int show_title_bar=0x7f01000e;
         /** <p>Must be one of the following constant values.</p>
 <table>
 <colgroup align="left" />
@@ -189,11 +211,11 @@ containing a value of this type.
 <tr><td><code>box_count</code></td><td>2</td><td></td></tr>
 </table>
          */
-        public static int style=0x7f010003;
+        public static int style=0x7f010005;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static int title_bar_background=0x7f01000f;
+        public static int title_bar_background=0x7f010011;
         /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -201,7 +223,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static int title_text=0x7f01000d;
+        public static int title_text=0x7f01000f;
     }
     public static final class color {
         public static int com_facebook_blue=0x7f040000;
@@ -298,44 +320,48 @@ containing a value of this type.
         public static int com_facebook_usersettingsfragment_background_gradient=0x7f02002e;
     }
     public static final class id {
-        public static int bottom=0x7f080003;
-        public static int box_count=0x7f080000;
-        public static int button=0x7f080001;
-        public static int center=0x7f080006;
-        public static int com_facebook_body_frame=0x7f08001e;
-        public static int com_facebook_button_xout=0x7f080020;
-        public static int com_facebook_login_activity_progress_bar=0x7f08000e;
-        public static int com_facebook_picker_activity_circle=0x7f08000d;
-        public static int com_facebook_picker_checkbox=0x7f080010;
-        public static int com_facebook_picker_checkbox_stub=0x7f080014;
-        public static int com_facebook_picker_divider=0x7f080018;
-        public static int com_facebook_picker_done_button=0x7f080017;
-        public static int com_facebook_picker_image=0x7f080011;
-        public static int com_facebook_picker_list_section_header=0x7f080015;
-        public static int com_facebook_picker_list_view=0x7f08000c;
-        public static int com_facebook_picker_profile_pic_stub=0x7f080012;
-        public static int com_facebook_picker_row_activity_circle=0x7f08000f;
-        public static int com_facebook_picker_search_text=0x7f08001d;
-        public static int com_facebook_picker_title=0x7f080013;
-        public static int com_facebook_picker_title_bar=0x7f08001a;
-        public static int com_facebook_picker_title_bar_stub=0x7f080019;
-        public static int com_facebook_picker_top_bar=0x7f080016;
-        public static int com_facebook_search_bar_view=0x7f08001c;
-        public static int com_facebook_tooltip_bubble_view_bottom_pointer=0x7f080022;
-        public static int com_facebook_tooltip_bubble_view_text_body=0x7f080021;
-        public static int com_facebook_tooltip_bubble_view_top_pointer=0x7f08001f;
-        public static int com_facebook_usersettingsfragment_login_button=0x7f080025;
-        public static int com_facebook_usersettingsfragment_logo_image=0x7f080023;
-        public static int com_facebook_usersettingsfragment_profile_name=0x7f080024;
-        public static int inline=0x7f080004;
-        public static int large=0x7f080009;
-        public static int left=0x7f080007;
-        public static int normal=0x7f08000a;
-        public static int picker_subtitle=0x7f08001b;
-        public static int right=0x7f080008;
-        public static int small=0x7f08000b;
-        public static int standard=0x7f080002;
-        public static int top=0x7f080005;
+        public static int bottom=0x7f080007;
+        public static int box_count=0x7f080004;
+        public static int button=0x7f080005;
+        public static int center=0x7f08000a;
+        public static int com_facebook_body_frame=0x7f080022;
+        public static int com_facebook_button_xout=0x7f080024;
+        public static int com_facebook_login_activity_progress_bar=0x7f080012;
+        public static int com_facebook_picker_activity_circle=0x7f080011;
+        public static int com_facebook_picker_checkbox=0x7f080014;
+        public static int com_facebook_picker_checkbox_stub=0x7f080018;
+        public static int com_facebook_picker_divider=0x7f08001c;
+        public static int com_facebook_picker_done_button=0x7f08001b;
+        public static int com_facebook_picker_image=0x7f080015;
+        public static int com_facebook_picker_list_section_header=0x7f080019;
+        public static int com_facebook_picker_list_view=0x7f080010;
+        public static int com_facebook_picker_profile_pic_stub=0x7f080016;
+        public static int com_facebook_picker_row_activity_circle=0x7f080013;
+        public static int com_facebook_picker_search_text=0x7f080021;
+        public static int com_facebook_picker_title=0x7f080017;
+        public static int com_facebook_picker_title_bar=0x7f08001e;
+        public static int com_facebook_picker_title_bar_stub=0x7f08001d;
+        public static int com_facebook_picker_top_bar=0x7f08001a;
+        public static int com_facebook_search_bar_view=0x7f080020;
+        public static int com_facebook_tooltip_bubble_view_bottom_pointer=0x7f080026;
+        public static int com_facebook_tooltip_bubble_view_text_body=0x7f080025;
+        public static int com_facebook_tooltip_bubble_view_top_pointer=0x7f080023;
+        public static int com_facebook_usersettingsfragment_login_button=0x7f080029;
+        public static int com_facebook_usersettingsfragment_logo_image=0x7f080027;
+        public static int com_facebook_usersettingsfragment_profile_name=0x7f080028;
+        public static int glow=0x7f080002;
+        public static int horizontal=0x7f080000;
+        public static int inline=0x7f080008;
+        public static int large=0x7f08000d;
+        public static int left=0x7f08000b;
+        public static int normal=0x7f08000e;
+        public static int picker_subtitle=0x7f08001f;
+        public static int right=0x7f08000c;
+        public static int rubber_band=0x7f080003;
+        public static int small=0x7f08000f;
+        public static int standard=0x7f080006;
+        public static int top=0x7f080009;
+        public static int vertical=0x7f080001;
     }
     public static final class layout {
         public static int com_facebook_friendpickerfragment=0x7f030000;
@@ -391,6 +417,55 @@ containing a value of this type.
         public static int tooltip_bubble_text=0x7f070002;
     }
     public static final class styleable {
+        /** Attributes that can be used with a FlipView.
+           <p>Includes the following attributes:</p>
+           <table>
+           <colgroup align="left" />
+           <colgroup align="left" />
+           <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #FlipView_orientation com.facebook.android:orientation}</code></td><td></td></tr>
+           <tr><td><code>{@link #FlipView_overFlipMode com.facebook.android:overFlipMode}</code></td><td></td></tr>
+           </table>
+           @see #FlipView_orientation
+           @see #FlipView_overFlipMode
+         */
+        public static final int[] FlipView = {
+            0x7f010000, 0x7f010001
+        };
+        /**
+          <p>This symbol is the offset where the {@link com.facebook.android.R.attr#orientation}
+          attribute's value can be found in the {@link #FlipView} array.
+
+
+          <p>Must be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>vertical</code></td><td>0</td><td></td></tr>
+<tr><td><code>horizontal</code></td><td>1</td><td></td></tr>
+</table>
+          @attr name com.facebook.android:orientation
+        */
+        public static int FlipView_orientation = 0;
+        /**
+          <p>This symbol is the offset where the {@link com.facebook.android.R.attr#overFlipMode}
+          attribute's value can be found in the {@link #FlipView} array.
+
+
+          <p>Must be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>glow</code></td><td>0</td><td></td></tr>
+<tr><td><code>rubber_band</code></td><td>1</td><td></td></tr>
+</table>
+          @attr name com.facebook.android:overFlipMode
+        */
+        public static int FlipView_overFlipMode = 1;
         /** Attributes that can be used with a com_facebook_friend_picker_fragment.
            <p>Includes the following attributes:</p>
            <table>
@@ -402,7 +477,7 @@ containing a value of this type.
            @see #com_facebook_friend_picker_fragment_multi_select
          */
         public static final int[] com_facebook_friend_picker_fragment = {
-            0x7f010000
+            0x7f010002
         };
         /**
           <p>This symbol is the offset where the {@link com.facebook.android.R.attr#multi_select}
@@ -437,8 +512,8 @@ containing a value of this type.
            @see #com_facebook_like_view_style
          */
         public static final int[] com_facebook_like_view = {
-            0x7f010001, 0x7f010002, 0x7f010003, 0x7f010004,
-            0x7f010005
+            0x7f010003, 0x7f010004, 0x7f010005, 0x7f010006,
+            0x7f010007
         };
         /**
           <p>This symbol is the offset where the {@link com.facebook.android.R.attr#auxiliary_view_position}
@@ -540,7 +615,7 @@ containing a value of this type.
            @see #com_facebook_login_view_logout_text
          */
         public static final int[] com_facebook_login_view = {
-            0x7f010006, 0x7f010007, 0x7f010008, 0x7f010009
+            0x7f010008, 0x7f010009, 0x7f01000a, 0x7f01000b
         };
         /**
           <p>This symbol is the offset where the {@link com.facebook.android.R.attr#confirm_logout}
@@ -621,8 +696,8 @@ containing a value of this type.
            @see #com_facebook_picker_fragment_title_text
          */
         public static final int[] com_facebook_picker_fragment = {
-            0x7f01000a, 0x7f01000b, 0x7f01000c, 0x7f01000d,
-            0x7f01000e, 0x7f01000f, 0x7f010010
+            0x7f01000c, 0x7f01000d, 0x7f01000e, 0x7f01000f,
+            0x7f010010, 0x7f010011, 0x7f010012
         };
         /**
           <p>This symbol is the offset where the {@link com.facebook.android.R.attr#done_button_background}
@@ -731,7 +806,7 @@ containing a value of this type.
            @see #com_facebook_place_picker_fragment_show_search_box
          */
         public static final int[] com_facebook_place_picker_fragment = {
-            0x7f010011, 0x7f010012, 0x7f010013, 0x7f010014
+            0x7f010013, 0x7f010014, 0x7f010015, 0x7f010016
         };
         /**
           <p>This symbol is the offset where the {@link com.facebook.android.R.attr#radius_in_meters}
@@ -802,7 +877,7 @@ containing a value of this type.
            @see #com_facebook_profile_picture_view_preset_size
          */
         public static final int[] com_facebook_profile_picture_view = {
-            0x7f010015, 0x7f010016
+            0x7f010017, 0x7f010018
         };
         /**
           <p>This symbol is the offset where the {@link com.facebook.android.R.attr#is_cropped}
