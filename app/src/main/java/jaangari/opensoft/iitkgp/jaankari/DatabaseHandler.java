@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String TABLE_WEATHER = "Weather";
     private static final String TABLE_NEWS = "News";
     private static final String TABLE_HEALTH = "Health";
+    private static final String TABLE_VIRTUAL = "FTS_TABLE";
 
     //Video Columns
     private static final String VIDEOS_ID = "id";
@@ -61,6 +63,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String HEALTH_TITLE = "title";
     private static final String HEALTH_TEXT = "text";
 
+    //Virtual Table
+    private static final String VIRTUAL_ID = "id";
+    private static final String VIRTUAL_CATEGORY = "Category";
+    private static final String VIRTUAL_TITLE = "title";
+    private static final String VIRTUAL_SUMMARY = "Summary";
+    private static final String VIRTUAL_TEXT = "text";
+
 
     private final String TAG = "Database";
     //TODO Education/Books Database Schema on Server and App
@@ -85,14 +94,20 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String CREATE_HEALTH_TABLE = "CREATE TABLE IF NOT EXISTS "+TABLE_HEALTH+"(" +HEALTH_ID+" INTEGER PRIMARY KEY," +
                 HEALTH_TITLE +" TEXT,"+HEALTH_TEXT + " TEXT"+");";
 
+        String CREATE_VIRTUAL_TABLE = "CREATE VIRTUAL TABLE IF NOT EXISTS " + TABLE_VIRTUAL + " USING fts3("
+                +VIRTUAL_ID+", "+VIRTUAL_CATEGORY+", "
+                +VIRTUAL_TITLE+", "+VIRTUAL_SUMMARY+", "+VIRTUAL_TEXT+", tokenize=porter);";
+
         db.execSQL(CREATE_VIDEOS_TABLE);
-        Log.v(TAG, "Videos created");
+        Log.v(TAG, "Videos Table created");
         db.execSQL(CREATE_WEATHER_TABLE);
         Log.v(TAG, "Weather Table Created");
         db.execSQL(CREATE_NEWS_TABLE);
         Log.v(TAG,"News Table Created");
         db.execSQL(CREATE_HEALTH_TABLE);
         Log.v(TAG,"Health Table Created");
+        db.execSQL(CREATE_VIRTUAL_TABLE);
+        Log.v(TAG,"Virtual Table Created");
     }
 
     @Override
@@ -101,6 +116,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_WEATHER);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NEWS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_HEALTH);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_VIRTUAL);
         onCreate(db);
     }
 
@@ -121,7 +137,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(VIDEOS_RATING,video.getRating());
         values.put(VIDEOS_HISTORY,0);
         values.put(VIDEOS_RATED,0);
-        db.insert(TABLE_VIDEOS,null,values);
+        db.insert(TABLE_VIDEOS, null, values);
+        values = new ContentValues();
+        values.put(VIRTUAL_ID,video.getID());
+        values.put(VIRTUAL_CATEGORY,"Video");
+        values.put(VIRTUAL_TITLE,video.getName());
+        values.put(VIRTUAL_SUMMARY,(String)null);
+        values.put(VIRTUAL_TEXT,(String)null);
+        db.insert(TABLE_VIRTUAL,null,values);
         db.close();
     }
 
@@ -135,6 +158,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(NEWS_TITLE,news.getTitle());
         values.put(NEWS_CATEGORY,news.getCategory());
         db.insert(TABLE_NEWS,null,values);
+        values = new ContentValues();
+        values.put(VIRTUAL_ID,news.getID());
+        values.put(VIRTUAL_CATEGORY,"News");
+        values.put(VIRTUAL_TITLE,news.getTitle());
+        values.put(VIRTUAL_SUMMARY,news.getSummary());
+        values.put(VIRTUAL_TEXT,news.getText());
+        db.insert(TABLE_VIRTUAL,null,values);
         db.close();
     }
 
@@ -160,6 +190,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(HEALTH_TEXT,health.getText());
         values.put(HEALTH_TITLE,health.getTitle());
         db.insert(TABLE_HEALTH,null,values);
+        values = new ContentValues();
+        values.put(VIRTUAL_ID,health.getID());
+        values.put(VIRTUAL_CATEGORY,"Health");
+        values.put(VIRTUAL_TITLE,health.getTitle());
+        values.put(VIRTUAL_SUMMARY,(String)null);
+        values.put(VIRTUAL_TEXT,health.getText());
+        db.insert(TABLE_VIRTUAL,null,values);
         db.close();
     }
 
@@ -170,6 +207,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(VIDEOS_HISTORY,history);
         db.update(TABLE_VIDEOS,values,VIDEOS_ID+ " = ?",new String[]{String.valueOf(id)});
         Log.e(TAG,"Updated History");
+        db.close();
     }
 
     public void updateRating(int id){
@@ -178,6 +216,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(VIDEOS_RATED,1);
         db.update(TABLE_VIDEOS,values,VIDEOS_ID+ " = ?",new String[]{String.valueOf(id)});
         Log.e(TAG,"Updated isRated");
+        db.close();
     }
 
 
@@ -203,6 +242,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         else{
             Log.e(TAG,c.toString());
         }
+        db.close();
         return news;
     }
 
@@ -237,9 +277,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         else{
             Log.e(TAG,c.toString());
         }
+        db.close();
         return videos;
     }
 
+    public Cursor searchMatches(String query, String[] columns){
+        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        String titleQuery =  builder.buildQuery(null,VIRTUAL_TITLE + " MATCH '"+query+"*'",null,null,null,null);
+        String summaryQuery = builder.buildQuery(null,VIRTUAL_SUMMARY + " MATCH '"+query+"*'",null,null,null,null);
+        String textQuery = builder.buildQuery(null,VIRTUAL_TEXT + " MATCH '"+query+"*'",null,null,null,null);
+        String unionQuery = builder.buildUnionQuery(new String[]{titleQuery,summaryQuery,textQuery},null,null);
+        Cursor result = db.rawQuery(unionQuery,null);
+        db.close();
+        return  result;
+    }
     //TODO:Gets list of category,ids based on the search query.
     public ArrayList<SearchableActivity.PairCategory> fetchIndexList(String query){
         return null;

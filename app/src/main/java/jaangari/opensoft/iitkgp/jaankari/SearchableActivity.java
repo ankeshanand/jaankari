@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ListActivity;
 import android.app.SearchManager;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -18,13 +19,32 @@ public class SearchableActivity extends Activity {
     private DatabaseHandler dbHandler;
     private final String TAG = "Searchable";
     static final String JARGON = "Searchable";
+    private static final String VIRTUAL_ID = "id";
+    private static final String VIRTUAL_CATEGORY = "Category";
+    private static final String VIRTUAL_TITLE = "title";
+    private static final String VIRTUAL_SUMMARY = "Summary";
+    private static final String VIRTUAL_TEXT = "text";
+
     public class PairCategory{
         String category;
         ArrayList<Integer> ids;
     }
 
     protected void contentSearch(String Query){
+        DatabaseHandler db = new DatabaseHandler(getApplicationContext());
+        Cursor results = db.searchMatches(Query,null);
+        if(results.moveToFirst()){
+            do{
+                int id = results.getInt(results.getColumnIndex(VIRTUAL_ID));
+                String category = results.getString(results.getColumnIndex(VIRTUAL_CATEGORY));
+                String title = results.getString(results.getColumnIndex(VIRTUAL_TITLE));
+                String summary = results.getString(results.getColumnIndex(VIRTUAL_SUMMARY));
+                String text = results.getString(results.getColumnIndex(VIRTUAL_TEXT));
+                Log.v(TAG,"id : " + id + ", Category : " + category);
+            }while(results.moveToNext());
+        }
         Log.e(TAG,Query);
+        db.closeDB();
     }
 
     @Override
