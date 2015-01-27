@@ -20,7 +20,7 @@
     <string name="retype_new_password">Re-type Password</string>
     <string name="old_password">Current Password</string>
     <string name="update_password">Update!</string>
-    <string name="ip_address">10.132.188.62/~rahulanishetty/OpenSoft/</string>
+    <string name="ip_address">10.109.24.72/~rahulanishetty/OpenSoft/</string>
 
     <string-array name="profile_updates">
         <item>Update Profile Picture</item>
@@ -37,6 +37,9 @@
     <string name="title_section1">Popular</string>
     <string name="title_section2">Recommended</string>
     <string name="title_section3">History</string>
+    <string name="news_title_section1">Top Stories</string>
+    <string name="news_title_section2">World</string>
+    <string name="news_title_section3">Business</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="title_activity_news">NewsActivity</string>

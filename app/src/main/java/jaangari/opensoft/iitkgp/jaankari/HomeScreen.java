@@ -22,7 +22,7 @@ public class HomeScreen extends ActionBarActivity {
         startActivity(intent);
     }
 
-    public void NewsIntent(View view){
+    public void newsIntent(View view){
         Intent intent = new Intent(getApplicationContext(), NewsActivity.class);
         startActivity(intent);
     }
