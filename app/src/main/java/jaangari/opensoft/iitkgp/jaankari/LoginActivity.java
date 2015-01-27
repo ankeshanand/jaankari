@@ -220,6 +220,10 @@ public class LoginActivity extends FragmentActivity implements LoaderCallbacks<C
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(AppStatus.getInstance(this).isOnline()){
+            Intent intent_service = new Intent(getApplicationContext(),GlobalDatabaseImageService.class);
+            startService(intent_service);
+        }
 
 //        if(savedInstanceState==null){
 //            mainFragment = new MainFragment();
@@ -275,7 +279,19 @@ public class LoginActivity extends FragmentActivity implements LoaderCallbacks<C
 
     public void loginButton(View view){
         Log.v(PRINT_SERVICE, "Attempting Login");
-        attemptLogin();
+        if (AppStatus.getInstance(this).isOnline()){
+            attemptLogin();
+        }
+        else{
+            final AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+            builder.setTitle("Internet Connection not Available");
+            builder.setPositiveButton("Ok",new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+            builder.show();
+        }
     }
 
     private void populateAutoComplete() {
@@ -466,6 +482,7 @@ public class LoginActivity extends FragmentActivity implements LoaderCallbacks<C
 
             try {
                 HttpClient httpClient = new DefaultHttpClient();
+//                HttpPost httpPost = new HttpPost("http://10.132.235.67:3000/userLogin");
                 HttpPost httpPost = new HttpPost("http://"+getString(R.string.ip_address)+"login.php");
                 List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(2);
                 nameValuePair.add(new BasicNameValuePair("email", mEmail));

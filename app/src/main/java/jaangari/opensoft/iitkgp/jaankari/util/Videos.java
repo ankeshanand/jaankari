@@ -3,6 +3,15 @@ package jaangari.opensoft.iitkgp.jaankari.util;
 /**
  * Created by rahulanishetty on 1/25/15.
  */
+
+/*
+ Popular - 0
+ Recommended - 1
+ Technology -2
+ Music - 3
+ Education 4
+
+ */
 public class Videos {
 
     private int id;

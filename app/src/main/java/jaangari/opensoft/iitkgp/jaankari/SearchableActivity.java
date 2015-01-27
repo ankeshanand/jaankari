@@ -7,10 +7,17 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+
 import jaangari.opensoft.iitkgp.jaangari.R;
 
 
 public class SearchableActivity extends ListActivity {
+    private DatabaseHandler dbHandler;
+    public class PairCategory{
+        String category;
+        ArrayList<Integer> ids;
+    }
 
     protected void contentSearch(String Query){
 
@@ -24,6 +31,13 @@ public class SearchableActivity extends ListActivity {
         if(intent.ACTION_SEARCH.equals(intent.getAction())){
             String Query = intent.getStringExtra(SearchManager.QUERY);
             contentSearch(Query);
+            dbHandler = new DatabaseHandler(getApplicationContext());
+            ArrayList<PairCategory> fetchedIds = dbHandler.fetchIndexList(Query);
+            int size  = fetchedIds.size();
+            for(int i=0; i<size ; i++){
+
+            }
+            dbHandler.closeDB();
         }
     }
 
