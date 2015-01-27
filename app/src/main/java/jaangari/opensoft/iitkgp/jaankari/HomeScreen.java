@@ -10,6 +10,8 @@ import android.view.View;
 
 
 import jaangari.opensoft.iitkgp.jaangari.R;
+import jaangari.opensoft.iitkgp.jaankari.BackgroundServices.QueryHandler;
+import jaangari.opensoft.iitkgp.jaankari.BackgroundServices.WifiHandler;
 
 
 public class HomeScreen extends ActionBarActivity {
@@ -62,6 +64,14 @@ public class HomeScreen extends ActionBarActivity {
         Intent intent = new Intent(getApplicationContext(),VideoDownloadService.class);
         setContentView(R.layout.activity_home_screen);
         startService(intent);
+
+//        Intent bgServiceIntent = new Intent(getApplicationContext(), WifiHandler.class);
+//        startService(bgServiceIntent);
+//
+//
+//        Intent commService = new Intent(getApplicationContext(), QueryHandler.class);
+//        startService(commService);
+        
 //        ImageView mImageView = (ImageView)findViewById(R.id.pro_pic_menu);
 //        SharedPreferences sp1 = this.getSharedPreferences("Login", 0);
 //        String path = sp1.getString("proPic",null);
