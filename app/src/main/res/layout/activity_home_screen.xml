@@ -162,21 +162,36 @@
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/education"
+                android:layout_height="200dp"
                 android:padding="16dp"
                 android:id="@+id/education_textView"
-                android:background="@drawable/books"
+                android:layout_below="@+id/weather_rel_layout"
+                android:layout_toLeftOf="@+id/stocks_textView"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_alignParentBottom="true"
-                android:layout_alignRight="@+id/stocks_textView"
-                android:layout_alignEnd="@+id/stocks_textView"
-                android:layout_below="@+id/weather_rel_layout"
+                android:background="@drawable/books"
+                android:textColor="#ffffffff"
                 android:textStyle="bold"
-                android:textColor="#ffffffff" />
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Education"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:clickable="true"
+                android:text="Health"
+                android:padding="16dp"
+                android:background="@drawable/health"
+                android:id="@+id/health_textView"
+                android:layout_alignTop="@+id/education_textView"
+                android:layout_toRightOf="@+id/education_textView"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignBottom="@+id/education_textView"
+                android:textColor="#ffffffff"
+                android:textStyle="bold" />
 
         </RelativeLayout>
 
