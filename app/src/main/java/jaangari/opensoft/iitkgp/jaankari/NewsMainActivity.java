@@ -16,16 +16,17 @@ public class NewsMainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_news_main);
 
         Bundle b = getIntent().getExtras();
-        TextView tv=(TextView) findViewById(R.id.MainNewsTitle);
+        TextView tv= (TextView)findViewById(R.id.MainNewsTitle);
+        System.out.println(b.getString("title"));
         tv.setText(b.getString("title"));
         tv = (TextView) findViewById(R.id.MainNewsLocation);
         tv.setText(b.getString("location"));
         tv = (TextView) findViewById(R.id.MainNewsBody);
         tv.setText(b.getString("text"));
 
-        setContentView(R.layout.activity_news_main);
 
     }
 

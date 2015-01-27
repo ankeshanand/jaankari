@@ -105,10 +105,11 @@ public class NewsActivity extends ActionBarActivity {
         int pos = flipView.getCurrentPage();
         ListAdapter ad = flipView.getAdapter();
         News n = (News)ad.getItem(pos);
+        System.out.println(n.getTitle());
         Intent intent = new Intent(getApplicationContext(),NewsMainActivity.class);
         intent.putExtra("title",n.getTitle());
         intent.putExtra("text",n.getText());
-        intent.putExtra("place",n.getPlace());
+        intent.putExtra("location",n.getPlace());
         startActivity(intent);
     }
 
