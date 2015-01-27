@@ -112,6 +112,10 @@
             android:name="jaangari.opensoft.iitkgp.jaankari.HealthListActivity"
             android:label="@string/title_activity_health_list" >
         </activity>
+        <activity
+            android:name="jaangari.opensoft.iitkgp.jaankari.NewsListActivity"
+            android:label="@string/title_activity_news_list" >
+        </activity>
     </application>
 
 </manifest>

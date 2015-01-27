@@ -45,5 +45,6 @@
     <string name="title_activity_news">NewsActivity</string>
     <string name="title_activity_news_main">NewsMainActivity</string>
     <string name="title_activity_health_list">HealthListActivity</string>
+    <string name="title_activity_news_list">NewsListActivity</string>
 
 </resources>
