@@ -1,6 +1,7 @@
 package jaangari.opensoft.iitkgp.jaankari;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -104,9 +106,42 @@ public class HealthListActivity extends ActionBarActivity
 
 
         flipView.setAdapter(adapter);
-
-
     }
+
+
+    public void healthClickedUp(View view){
+        FlipView flipView = (FlipView) findViewById(R.id.flip_view_health);
+
+        int pos = flipView.getCurrentPage();
+        ListAdapter ad = flipView.getAdapter();
+        HealthPair hp = (HealthPair) ad.getItem(pos);
+        Health h = hp.getFirst();
+//        System.out.println(n.getTitle());
+        Intent intent = new Intent(getApplicationContext(), NewsMainActivity.class);
+        intent.putExtra("title", h.getTitle());
+        intent.putExtra("text", h.getText());
+        intent.putExtra("location", "");
+        startActivity(intent);
+    }
+
+
+    public void healthClickedDown(View view) {
+        FlipView flipView = (FlipView) findViewById(R.id.flip_view_health);
+
+        int pos = flipView.getCurrentPage();
+        ListAdapter ad = flipView.getAdapter();
+        HealthPair hp = (HealthPair) ad.getItem(pos);
+        Health h = hp.getSecond();
+        if (h != null) {
+            Intent intent = new Intent(getApplicationContext(), NewsMainActivity.class);
+            intent.putExtra("title", h.getTitle());
+            intent.putExtra("text", h.getText());
+            intent.putExtra("location", "");
+            startActivity(intent);
+        } else return;
+    }
+
+
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
