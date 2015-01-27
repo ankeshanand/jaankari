@@ -86,7 +86,15 @@
         <activity
             android:name="jaangari.opensoft.iitkgp.jaankari.VideoActivity"
             android:label="@string/title_activity_video"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="jaangari.opensoft.iitkgp.jaankari.NewsActivity"
+            android:label="@string/title_activity_news"
+            android:parentActivityName="jaangari.opensoft.iitkgp.jaankari.HomeScreen" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="jaangari.opensoft.iitkgp.jaankari.HomeScreen" />
         </activity>
     </application>
 
