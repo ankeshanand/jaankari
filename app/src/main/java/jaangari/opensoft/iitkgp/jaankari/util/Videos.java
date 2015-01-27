@@ -8,11 +8,18 @@ public class Videos {
     private int id;
     private String filename;
     private String path;
+    private int category;
+    private float rating;
+    private boolean history;
 
-    public Videos(int id,String filename,String path){
+    public Videos(){}
+
+    public Videos(int id,String filename,String path,int category,float rating){
         this.id = id;
         this.filename = filename;
         this.path = path;
+        this.category = category;
+        this.rating = rating;
     }
 
     public int getID(){
@@ -37,6 +44,30 @@ public class Videos {
 
     public void setPath(String path){
         this.path = path;
+    }
+
+    public int getCategory(){
+        return this.category;
+    }
+
+    public void setCategory(int category){
+        this.category = category;
+    }
+
+    public float getRating(){
+        return this.rating;
+    }
+
+    public void setRating(float rating){
+        this.rating = rating;
+    }
+
+    public boolean getHistory(){
+        return this.history;
+    }
+
+    public void setHistory(boolean history){
+        this.history = history;
     }
 
 }

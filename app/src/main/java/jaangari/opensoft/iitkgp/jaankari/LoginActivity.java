@@ -93,8 +93,6 @@ public class LoginActivity extends FragmentActivity implements LoaderCallbacks<C
     private View mLoginFormView;
     private ImageView mImageView;
 
-    private MainFragment mainFragment;
-
 
     public void imagePick(View view){
         final CharSequence[] items = {"Take Photo", "Choose from Library","Cancel"};

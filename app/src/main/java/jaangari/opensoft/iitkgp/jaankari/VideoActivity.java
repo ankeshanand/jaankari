@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -46,61 +47,56 @@ public class VideoActivity extends ActionBarActivity
      */
     private CharSequence mTitle;
 
-    String[] values,paths;
-    Bitmap[] imageId;
-    File[] files;
 
-    private class CustomList extends ArrayAdapter<String>{
-        private final Activity context;
-        private final String[] web;
-        private final Bitmap[] imageId;
-        public CustomList(Activity context,String[] web, Bitmap[] imageId) {
-            super(context, R.layout.custom_list_view, web);
-            this.context = context;
-            this.web = web;
-            this.imageId = imageId;
-        }
-        @Override
-        public View getView(int position, View view, ViewGroup parent) {
-            LayoutInflater inflater = context.getLayoutInflater();
-            View rowView= inflater.inflate(R.layout.custom_list_view, null, true);
-            TextView txtTitle = (TextView) rowView.findViewById(R.id.list_text_view);
-            ImageView imageView = (ImageView) rowView.findViewById(R.id.list_image_view);
-            txtTitle.setText(web[position]);
-            imageView.setImageBitmap(imageId[position]);
-            return rowView;
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        mTask = new UIThumbnailsTask();
-//        mTask.execute((Void)null);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
 
-        // Set up the drawer.
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer,(DrawerLayout) findViewById(R.id.drawer_layout));
 
     }
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
+        Log.v(PRINT_SERVICE,"Fragment drawer");
+        FragmentVideo fragment = null;
         // update the main content by replacing fragments
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-                .commit();
+        switch (position){
+            case 0:
+                fragment = new FragmentVideo();
+                break;
+            case 1:
+                fragment = new FragmentVideo();
+                break;
+            case 2:
+                fragment = new FragmentVideo();
+                break;
+        }
+
+        if(fragment!=null){
+            fragment.setPosition(position);
+            android.app.FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, fragment).commit();
+        }
+        else {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                    .commit();
+        }
     }
 
     public void onSectionAttached(int number) {
+        Log.v(PRINT_SERVICE,"onSectionAttached : " +number );
         switch (number) {
             case 1:
                 mTitle = getString(R.string.title_section1);
-
                 break;
             case 2:
                 mTitle = getString(R.string.title_section2);
@@ -109,28 +105,6 @@ public class VideoActivity extends ActionBarActivity
                 mTitle = getString(R.string.title_section3);
                 break;
         }
-        ListView listview = (ListView) findViewById(R.id.videos_list_view);
-        File file = new File(Environment.getExternalStorageDirectory() + "/" + getString(R.string.app_name) + "/Videos");
-        if (file.exists()) {
-            files = file.listFiles();
-            values = new String[files.length];
-            paths = new String[files.length];
-            imageId = new Bitmap[files.length];
-            for (int i = 0; i < files.length; i++) {
-                values[i] = files[i].getName().replace("_", " ");
-                paths[i] = files[i].getAbsolutePath();
-                imageId[i] = ThumbnailUtils.createVideoThumbnail(paths[i], MediaStore.Images.Thumbnails.MINI_KIND);
-            }
-            CustomList adapter = new CustomList(VideoActivity.this,values, imageId);
-            listview.setAdapter(adapter);
-            listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view,
-                                        int position, long id) {
-                    Toast.makeText(VideoActivity.this, "You Clicked at " + values[+position], Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
     }
 
     public void restoreActionBar() {
@@ -138,11 +112,13 @@ public class VideoActivity extends ActionBarActivity
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
+        Log.v(PRINT_SERVICE,"restoreActionBar" );
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         if (!mNavigationDrawerFragment.isDrawerOpen()) {
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
