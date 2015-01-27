@@ -2,8 +2,13 @@ package jaangari.opensoft.iitkgp.jaankari;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import jaangari.opensoft.iitkgp.jaankari.util.Health;
 import jaangari.opensoft.iitkgp.jaankari.util.News;
@@ -28,6 +33,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String VIDEOS_ID = "id";
     private static final String VIDEOS_FILENAME = "filename";
     private static final String VIDEOS_PATH = "path";
+    private static final String VIDEOS_CATEGORY = "category";
+    private static final String VIDEOS_RATING = "rating";
+    private static final String VIDEOS_HISTORY = "history";
 
     //Weather Column
     private static final String WEATHER_ID = "id";
@@ -51,6 +59,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String HEALTH_TITLE = "title";
     private static final String HEALTH_TEXT = "text";
 
+
+    private final String TAG = "Database";
     //TODO Education/Books Database Schema on Server and App
 
     public DatabaseHandler(Context context){
@@ -61,7 +71,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_VIDEOS_TABLE = "CREATE TABLE IF NOT EXISTS "+TABLE_VIDEOS+"(" +VIDEOS_ID+" INTEGER PRIMARY KEY," +
-                VIDEOS_FILENAME +" TEXT,"+VIDEOS_PATH + " TEXT"+");";
+                VIDEOS_FILENAME +" TEXT,"+VIDEOS_PATH + " TEXT,"+VIDEOS_CATEGORY + " INTEGER,"+VIDEOS_RATING + " FLOAT,"+VIDEOS_HISTORY + " BOOLEAN"+");";
 
         String CREATE_WEATHER_TABLE = "CREATE TABLE IF NOT EXISTS "+TABLE_WEATHER+"(" +WEATHER_ID+" INTEGER PRIMARY KEY," +
                 WEATHER_CITY +" TEXT,"+WEATHER_DESCRIPTION + " TEXT,"+ WEATHER_MAIN + " TEXT,"+ WEATHER_TEMP + " REAL,"+
@@ -74,9 +84,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 HEALTH_TITLE +" TEXT,"+HEALTH_TEXT + " TEXT"+");";
 
         db.execSQL(CREATE_VIDEOS_TABLE);
+        Log.v(TAG, "Videos created");
         db.execSQL(CREATE_WEATHER_TABLE);
+        Log.v(TAG, "Weather Table Created");
         db.execSQL(CREATE_NEWS_TABLE);
+        Log.v(TAG,"News Table Created");
         db.execSQL(CREATE_HEALTH_TABLE);
+        Log.v(TAG,"Health Table Created");
     }
 
     @Override
@@ -88,6 +102,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    public void closeDB() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        if (db != null && db.isOpen())
+            db.close();
+    }
+
 
     public void addVideo(Videos video){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -95,6 +115,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(VIDEOS_ID,video.getID());
         values.put(VIDEOS_FILENAME,video.getName());
         values.put(VIDEOS_PATH,video.getPath());
+        values.put(VIDEOS_CATEGORY,video.getCategory());
+        values.put(VIDEOS_RATING,video.getRating());
+        values.put(VIDEOS_HISTORY,false);
         db.insert(TABLE_VIDEOS,null,values);
         db.close();
     }
@@ -136,5 +159,48 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-
+    public List<Videos> getAllVideosbyCategory(int category){
+        List<Videos> videos = new ArrayList<Videos>();
+        if(category!=2){
+            String selectQuery = "SELECT * FROM "+ TABLE_VIDEOS + " WHERE "+ VIDEOS_CATEGORY + "=" + category+ " OR " + VIDEOS_CATEGORY + "=2;";
+            Log.e(TAG, selectQuery);
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor c = db.rawQuery(selectQuery, null);
+            if(c.moveToFirst()){
+                do{
+                    Videos video = new Videos();
+                    video.setID(c.getInt(c.getColumnIndex(VIDEOS_ID)));
+                    video.setName(c.getString(c.getColumnIndex(VIDEOS_FILENAME)));
+                    video.setCategory(category);
+                    video.setPath(c.getString(c.getColumnIndex(VIDEOS_PATH)));
+                    video.setRating(c.getFloat(c.getColumnIndex(VIDEOS_RATING)));
+                    videos.add(video);
+                    Log.e(TAG,video.getName());
+                }while(c.moveToNext());
+            }
+            else{
+                Log.e(TAG,c.toString());
+            }
+        }
+        else{
+            String selectQuery = "SELECT * FROM " + TABLE_VIDEOS + " WHERE " + VIDEOS_HISTORY + "=1;";
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor c = db.rawQuery(selectQuery, null);
+            if(c.moveToFirst()){
+                do{
+                    Videos video = new Videos();
+                    video.setID(c.getInt(c.getColumnIndex(VIDEOS_ID)));
+                    video.setName(c.getString(c.getColumnIndex(VIDEOS_FILENAME)));
+                    video.setCategory(category);
+                    video.setPath(c.getString(c.getColumnIndex(VIDEOS_PATH)));
+                    video.setRating(c.getFloat(c.getColumnIndex(VIDEOS_RATING)));
+                    videos.add(video);
+                    Log.e(TAG,video.getName());
+                }while(c.moveToNext());
+            }else{
+                Log.e(TAG,c.toString());
+            }
+        }
+        return videos;
+    }
 }

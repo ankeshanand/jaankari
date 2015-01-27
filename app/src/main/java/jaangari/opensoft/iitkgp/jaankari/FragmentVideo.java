@@ -1,5 +1,6 @@
 package jaangari.opensoft.iitkgp.jaankari;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -11,13 +12,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.Layout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
@@ -43,6 +47,7 @@ public class FragmentVideo extends Fragment {
     private boolean video_set=false;
     private int video_id;
     private int position;
+    private float rating_user;
     private View parentLayout;
     DatabaseHandler db;
     private String TAG = "FragmentVideo";
@@ -122,21 +127,39 @@ public class FragmentVideo extends Fragment {
     @Override
     public void onResume(){
         if(video_set){
-//            video_set = false;
-//            AlertDialog.Builder builder = new AlertDialog.Builder(parentLayout.getContext());
-//            RatingBar ratingBar = new RatingBar(this.getActivity().getApplicationContext());
-//            ratingBar.setRating(0);
-//            ratingBar.setStepSize(0.5f);
-//            ratingBar.setNumStars(5);
-//            builder.setTitle("Rate Video");
-//            builder.setView(ratingBar);
-//            builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
-//                public void onClick(DialogInterface dialog, int which) {
-//                    Log.e(TAG,"done" + which);
-//                }
-//            });
-//            builder.setNegativeButton("Cancel", null);
-//            builder.show();
+            video_set = false;
+            LinearLayout llRating = new LinearLayout(this.getActivity());
+//            llRating.setPadding(60,0,0,0);
+            llRating.setGravity(Gravity.CENTER);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            AlertDialog.Builder builder = new AlertDialog.Builder(parentLayout.getContext(),AlertDialog.THEME_DEVICE_DEFAULT_DARK);
+            RatingBar ratingBar = new RatingBar(this.getActivity().getApplicationContext());
+            ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                @Override
+                public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                    rating_user = rating;
+                    Log.e(TAG,"Rating : " + rating_user);
+                }
+            });
+            ratingBar.setRating(0);
+            ratingBar.setStepSize(0.1f);
+            ratingBar.setNumStars(5);
+            ratingBar.setLayoutParams(params);
+            builder.setTitle("Rate Video");
+            llRating.addView(ratingBar);
+            builder.setView(llRating);
+            builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Log.e(TAG,"done" + which);
+                }
+            });
+            builder.setPositiveButton("Cancel",new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    rating_user = -1;
+                }
+            });
+            builder.show();
         }
 
 //        final CharSequence[] items = {"Take Photo", "Choose from Library","Cancel"};
