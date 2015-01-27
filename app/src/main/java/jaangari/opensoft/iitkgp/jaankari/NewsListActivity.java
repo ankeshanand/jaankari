@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -81,6 +82,7 @@ public class NewsListActivity extends ActionBarActivity
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
+    private ListView mDrawerList;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -95,7 +97,18 @@ public class NewsListActivity extends ActionBarActivity
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
+        mDrawerList = (ListView) findViewById(R.id.news_list_nav_menu);
 
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_activated_1, new String[]{
+                    getString(R.string.news_section_1),
+                    getString(R.string.news_section_2),
+                    getString(R.string.news_section_3),
+                    getString(R.string.news_section_4),
+                    getString(R.string.news_section_5),
+                    getString(R.string.news_section_6),
+                    getString(R.string.news_section_7)
+                    }));
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
@@ -164,14 +177,27 @@ public class NewsListActivity extends ActionBarActivity
     public void onSectionAttached(int number) {
         switch (number) {
             case 1:
-                mTitle = getString(R.string.title_section1);
+                mTitle = getString(R.string.news_section_1);
                 break;
             case 2:
-                mTitle = getString(R.string.title_section2);
+                mTitle = getString(R.string.news_section_2);;
                 break;
             case 3:
-                mTitle = getString(R.string.title_section3);
+                mTitle = getString(R.string.news_section_3);
                 break;
+            case 4:
+                mTitle = getString(R.string.news_section_4);
+                break;
+            case 5:
+                mTitle = getString(R.string.news_section_5);
+                break;
+            case 6:
+                mTitle = getString(R.string.news_section_6);
+                break;
+            case 7:
+                mTitle = getString(R.string.news_section_7);
+                break;
+
         }
     }
 

@@ -43,6 +43,13 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="title_activity_news">NewsActivity</string>
+    <string name="news_section_1">Top Stories</string>
+    <string name="news_section_2">World</string>
+    <string name="news_section_3">India</string>
+    <string name="news_section_4">Business</string>
+    <string name="news_section_5">Technology</string>
+    <string name="news_section_6">Sports</string>
+    <string name="news_section_7">Entertainment</string>
     <string name="title_activity_news_main">NewsMainActivity</string>
     <string name="title_activity_health_list">HealthListActivity</string>
     <string name="title_activity_news_list">NewsListActivity</string>
