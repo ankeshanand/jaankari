@@ -44,14 +44,17 @@ public class FragmentVideo extends Fragment {
     Bitmap[] imageId;
     float[] rating;
     List<Videos> videos;
-    private boolean video_set=false;
+
+    private boolean video_set = false;
     private int video_id;
+    private int video_history;
     private int position;
     private float rating_user;
     private View parentLayout;
     DatabaseHandler db;
     private String TAG = "FragmentVideo";
-    public void setPosition(int position){
+
+    public void setPosition(int position) {
         this.position = position;
     }
 
@@ -60,57 +63,62 @@ public class FragmentVideo extends Fragment {
         private final String[] web;
         private final Bitmap[] imageId;
         private final float[] rating;
-        public CustomList(Activity context,String[] web, Bitmap[] imageId,float[] rating) {
+
+        public CustomList(Activity context, String[] web, Bitmap[] imageId, float[] rating) {
             super(context, R.layout.custom_list_view, web);
             this.context = context;
             this.web = web;
             this.imageId = imageId;
             this.rating = rating;
         }
+
         @Override
         public View getView(int position, View view, ViewGroup parent) {
             LayoutInflater inflater = context.getLayoutInflater();
-            View rowView= inflater.inflate(R.layout.custom_list_view, null, true);
+            View rowView = inflater.inflate(R.layout.custom_list_view, null, true);
             TextView txtTitle = (TextView) rowView.findViewById(R.id.list_text_view);
             RatingBar ratingBar = (RatingBar) rowView.findViewById(R.id.rating_bar);
             ImageView imageView = (ImageView) rowView.findViewById(R.id.list_image_view);
             txtTitle.setText(web[position]);
             imageView.setImageBitmap(imageId[position]);
-            ratingBar.setRating((float)(rating[position]));
+            ratingBar.setRating((float) (rating[position]));
             return rowView;
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState){
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         parentLayout = inflater.inflate(R.layout.fragment_video, container, false);
         db = new DatabaseHandler(this.getActivity().getApplicationContext());
         ListView listview = (ListView) parentLayout.findViewById(R.id.videos_list_view);
         videos = db.getAllVideosbyCategory(position);
-        Log.e(TAG,videos.toString());
+        Log.e(TAG, videos.toString());
         values = new String[videos.size()];
         imageId = new Bitmap[videos.size()];
         rating = new float[videos.size()];
-        for(int i=0;i<videos.size();i++) {
+        for (int i = 0; i < videos.size(); i++) {
             values[i] = videos.get(i).getName();
             String path = videos.get(i).getPath();
             rating[i] = videos.get(i).getRating();
-            imageId[i] = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + "/" + getString(R.string.app_name)+"/Videos/"
-                    + path.substring(path.lastIndexOf("/")+1,path.lastIndexOf(".mp4"))+"_thumbnail.jpg");
+            imageId[i] = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + "/" + getString(R.string.app_name) + "/Videos/"
+                    + path.substring(path.lastIndexOf("/") + 1, path.lastIndexOf(".mp4")) + "_thumbnail.jpg");
         }
-        CustomList adapter = new CustomList(this.getActivity(),values,imageId,rating);
+        CustomList adapter = new CustomList(this.getActivity(), values, imageId, rating);
         listview.setAdapter(adapter);
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent= new Intent();
+                Intent intent = new Intent();
                 intent.setAction(android.content.Intent.ACTION_VIEW);
                 String path = videos.get(position).getPath();
-                File file = new File(Environment.getExternalStorageDirectory()+"/"+getString(R.string.app_name)+"/Videos/"+path.substring(path.lastIndexOf("/")));
-                Log.e(TAG,Environment.getExternalStorageDirectory()+getString(R.string.app_name)+"/Videos/"+path.substring(path.lastIndexOf("/")));
+                File file = new File(Environment.getExternalStorageDirectory() + "/" + getString(R.string.app_name) + "/Videos/" + path.substring(path.lastIndexOf("/")));
+                Log.e(TAG, Environment.getExternalStorageDirectory() + getString(R.string.app_name) + "/Videos/" + path.substring(path.lastIndexOf("/")));
                 intent.setDataAndType(Uri.fromFile(file), "video/*");
-                video_set = true;
+                if(videos.get(position).getIsRated()==0){
+                    video_set = true;
+                }
                 video_id = videos.get(position).getID();
+                video_history = videos.get(position).getHistory();
                 startActivity(intent);
             }
         });
@@ -121,24 +129,23 @@ public class FragmentVideo extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        ((VideoActivity) activity).onSectionAttached(position+1);
+        ((VideoActivity) activity).onSectionAttached(position + 1);
     }
 
     @Override
-    public void onResume(){
-        if(video_set){
+    public void onResume() {
+        if (video_set) {
             video_set = false;
             LinearLayout llRating = new LinearLayout(this.getActivity());
-//            llRating.setPadding(60,0,0,0);
             llRating.setGravity(Gravity.CENTER);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            AlertDialog.Builder builder = new AlertDialog.Builder(parentLayout.getContext(),AlertDialog.THEME_DEVICE_DEFAULT_DARK);
+            AlertDialog.Builder builder = new AlertDialog.Builder(parentLayout.getContext(), AlertDialog.THEME_DEVICE_DEFAULT_DARK);
             RatingBar ratingBar = new RatingBar(this.getActivity().getApplicationContext());
             ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
                 @Override
                 public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                     rating_user = rating;
-                    Log.e(TAG,"Rating : " + rating_user);
+                    Log.e(TAG, "Rating : " + rating_user);
                 }
             });
             ratingBar.setRating(0);
@@ -150,43 +157,31 @@ public class FragmentVideo extends Fragment {
             builder.setView(llRating);
             builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    Log.e(TAG,"done" + which);
+                    Log.e(TAG, "done" + which);
+                    updateDb(rating_user);
                 }
             });
-            builder.setPositiveButton("Cancel",new DialogInterface.OnClickListener() {
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     rating_user = -1;
+                    updateDb(rating_user);
                 }
             });
             builder.show();
         }
 
-//        final CharSequence[] items = {"Take Photo", "Choose from Library","Cancel"};
-//        AlertDialog.Builder builder = new AlertDialog.Builder(parentLayout.getContext());
-//        builder.setTitle("Add profile picture");
-//        builder.setItems(items, new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int item){
-//                if(items[item].equals("Take Photo")){
-//                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                    File f = new File(android.os.Environment.getExternalStorageDirectory(),"temp.jpg");
-//                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-//                    startActivityForResult(intent,100);
-//                }
-//                else if(items[item].equals("Choose from Library")){
-//                    Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-//                    photoPickerIntent.setType("image/*");
-//                    startActivityForResult(photoPickerIntent, 101);
-//                }
-//                else if(items[item].equals("Cancel")){
-//                    dialog.dismiss();
-//                }
-//            }
-//        });
-//        builder.show();
         Log.e("DEBUG", "onResume of VideoFragment");
         super.onResume();
     }
-
+    public void updateDb(float rating) {
+        DatabaseHandler db = new DatabaseHandler(this.getActivity().getApplicationContext());
+        video_history++;
+        //video_id
+        if(rating!=-1){
+            db.updateRating(video_id);
+        }
+        db.updateVideoHistory(video_id,video_history);
+        db.closeDB();
+    }
 }

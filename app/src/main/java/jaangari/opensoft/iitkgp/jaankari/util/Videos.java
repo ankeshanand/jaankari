@@ -10,7 +10,8 @@ public class Videos {
     private String path;
     private int category;
     private float rating;
-    private boolean history;
+    private int history;
+    private int isRated;
 
     public Videos(){}
 
@@ -62,12 +63,19 @@ public class Videos {
         this.rating = rating;
     }
 
-    public boolean getHistory(){
+    public int getHistory(){
         return this.history;
     }
 
-    public void setHistory(boolean history){
+    public void setHistory(int history){
         this.history = history;
+    }
+
+    public void setIsRated(int isRated){
+        this.isRated = isRated;
+    }
+    public int getIsRated(){
+        return this.isRated;
     }
 
 }

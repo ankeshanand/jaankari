@@ -36,6 +36,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String VIDEOS_CATEGORY = "category";
     private static final String VIDEOS_RATING = "rating";
     private static final String VIDEOS_HISTORY = "history";
+    private static final String VIDEOS_RATED = "isRated";
 
     //Weather Column
     private static final String WEATHER_ID = "id";
@@ -71,7 +72,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_VIDEOS_TABLE = "CREATE TABLE IF NOT EXISTS "+TABLE_VIDEOS+"(" +VIDEOS_ID+" INTEGER PRIMARY KEY," +
-                VIDEOS_FILENAME +" TEXT,"+VIDEOS_PATH + " TEXT,"+VIDEOS_CATEGORY + " INTEGER,"+VIDEOS_RATING + " FLOAT,"+VIDEOS_HISTORY + " BOOLEAN"+");";
+                VIDEOS_FILENAME +" TEXT,"+VIDEOS_PATH + " TEXT,"+VIDEOS_CATEGORY + " INTEGER,"+VIDEOS_RATING + " FLOAT,"+VIDEOS_HISTORY + " INTEGER, "+VIDEOS_RATED + " INTEGER"+");";
 
         String CREATE_WEATHER_TABLE = "CREATE TABLE IF NOT EXISTS "+TABLE_WEATHER+"(" +WEATHER_ID+" INTEGER PRIMARY KEY," +
                 WEATHER_CITY +" TEXT,"+WEATHER_DESCRIPTION + " TEXT,"+ WEATHER_MAIN + " TEXT,"+ WEATHER_TEMP + " REAL,"+
@@ -117,7 +118,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(VIDEOS_PATH,video.getPath());
         values.put(VIDEOS_CATEGORY,video.getCategory());
         values.put(VIDEOS_RATING,video.getRating());
-        values.put(VIDEOS_HISTORY,false);
+        values.put(VIDEOS_HISTORY,0);
+        values.put(VIDEOS_RATED,0);
         db.insert(TABLE_VIDEOS,null,values);
         db.close();
     }
@@ -159,47 +161,55 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+
+    public void updateVideoHistory(int id, int history){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(VIDEOS_HISTORY,history);
+        db.update(TABLE_VIDEOS,values,VIDEOS_ID+ " = ?",new String[]{String.valueOf(id)});
+        Log.e(TAG,"Updated History");
+    }
+
+    public void updateRating(int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(VIDEOS_RATED,1);
+        db.update(TABLE_VIDEOS,values,VIDEOS_ID+ " = ?",new String[]{String.valueOf(id)});
+        Log.e(TAG,"Updated isRated");
+    }
+
+
+
+
     public List<Videos> getAllVideosbyCategory(int category){
         List<Videos> videos = new ArrayList<Videos>();
+        String selectQuery = null;
         if(category!=2){
-            String selectQuery = "SELECT * FROM "+ TABLE_VIDEOS + " WHERE "+ VIDEOS_CATEGORY + "=" + category+ " OR " + VIDEOS_CATEGORY + "=2;";
-            Log.e(TAG, selectQuery);
-            SQLiteDatabase db = this.getReadableDatabase();
-            Cursor c = db.rawQuery(selectQuery, null);
-            if(c.moveToFirst()){
-                do{
-                    Videos video = new Videos();
-                    video.setID(c.getInt(c.getColumnIndex(VIDEOS_ID)));
-                    video.setName(c.getString(c.getColumnIndex(VIDEOS_FILENAME)));
-                    video.setCategory(category);
-                    video.setPath(c.getString(c.getColumnIndex(VIDEOS_PATH)));
-                    video.setRating(c.getFloat(c.getColumnIndex(VIDEOS_RATING)));
-                    videos.add(video);
-                    Log.e(TAG,video.getName());
-                }while(c.moveToNext());
-            }
-            else{
-                Log.e(TAG,c.toString());
-            }
+            selectQuery = "SELECT * FROM "+ TABLE_VIDEOS + " WHERE "+ VIDEOS_CATEGORY + "=" + category+ " OR " + VIDEOS_CATEGORY + "=2;";
         }
         else{
-            String selectQuery = "SELECT * FROM " + TABLE_VIDEOS + " WHERE " + VIDEOS_HISTORY + "=1;";
-            SQLiteDatabase db = this.getReadableDatabase();
-            Cursor c = db.rawQuery(selectQuery, null);
-            if(c.moveToFirst()){
-                do{
-                    Videos video = new Videos();
-                    video.setID(c.getInt(c.getColumnIndex(VIDEOS_ID)));
-                    video.setName(c.getString(c.getColumnIndex(VIDEOS_FILENAME)));
-                    video.setCategory(category);
-                    video.setPath(c.getString(c.getColumnIndex(VIDEOS_PATH)));
-                    video.setRating(c.getFloat(c.getColumnIndex(VIDEOS_RATING)));
-                    videos.add(video);
-                    Log.e(TAG,video.getName());
-                }while(c.moveToNext());
-            }else{
-                Log.e(TAG,c.toString());
-            }
+            selectQuery = "SELECT * FROM " + TABLE_VIDEOS + " WHERE " + VIDEOS_HISTORY + ">0;";
+        }
+
+        Log.e(TAG, selectQuery);
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        if(c.moveToFirst()){
+            do{
+                Videos video = new Videos();
+                video.setID(c.getInt(c.getColumnIndex(VIDEOS_ID)));
+                video.setName(c.getString(c.getColumnIndex(VIDEOS_FILENAME)));
+                video.setCategory(category);
+                video.setPath(c.getString(c.getColumnIndex(VIDEOS_PATH)));
+                video.setRating(c.getFloat(c.getColumnIndex(VIDEOS_RATING)));
+                video.setHistory(c.getInt(c.getColumnIndex(VIDEOS_HISTORY)));
+                video.setIsRated(c.getInt(c.getColumnIndex(VIDEOS_RATED)));
+                videos.add(video);
+                Log.e(TAG,video.getName());
+            }while(c.moveToNext());
+        }
+        else{
+            Log.e(TAG,c.toString());
         }
         return videos;
     }
