@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -66,17 +68,34 @@ public class HomeScreen extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_home_screen);
         db = new DatabaseHandler(this.getApplicationContext());
-
-        Weather weather = db.getCurrentWeather();
+        Weather weather = null;
+        weather = db.getCurrentWeather();
         if(weather != null){
             TextView temp = (TextView) findViewById(R.id.temp);
+            ImageView weatherIcon = (ImageView) findViewById(R.id.weatherIcon);
+            TextView humidity = (TextView) findViewById(R.id.humidity);
+            Log.e("Home-Screen", Float.toString(weather.getTemp()));
             temp.setText(Float.toString(weather.getTemp()));
+            switch (weather.getDescription()) {
+                case "Clear":
+                    weatherIcon.setImageResource(R.drawable.clear);
+                    break;
+                case "Cloudy":
+                    weatherIcon.setImageResource(R.drawable.cloudy);
+                    break;
+                case "Rain":
+                    weatherIcon.setImageResource(R.drawable.rain);
+                    break;
+            }
+
+            humidity.setText(Integer.toString(weather.getHumidity()) + " % Humidity");
         }
-//        db.closeDB();
+        db.closeDB();
         Intent intent = new Intent(getApplicationContext(),VideoDownloadService.class);
 
-        setContentView(R.layout.activity_home_screen);
+
         startService(intent);
 
 //        Intent bgServiceIntent = new Intent(getApplicationContext(), WifiHandler.class);
@@ -85,7 +104,7 @@ public class HomeScreen extends ActionBarActivity {
 //
 //        Intent commService = new Intent(getApplicationContext(), QueryHandler.class);
 //        startService(commService);
-        
+
 //        ImageView mImageView = (ImageView)findViewById(R.id.pro_pic_menu);
 //        SharedPreferences sp1 = this.getSharedPreferences("Login", 0);
 //        String path = sp1.getString("proPic",null);
