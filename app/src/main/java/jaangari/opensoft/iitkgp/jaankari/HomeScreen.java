@@ -98,12 +98,15 @@ public class HomeScreen extends ActionBarActivity {
 
         startService(intent);
 
-//        Intent bgServiceIntent = new Intent(getApplicationContext(), WifiHandler.class);
-//        startService(bgServiceIntent);
-//
-//
-//        Intent commService = new Intent(getApplicationContext(), QueryHandler.class);
-//        startService(commService);
+        Intent bgServiceIntent = new Intent(getApplicationContext(), WifiHandler.class);
+        startService(bgServiceIntent);
+
+
+        Intent commService = new Intent(getApplicationContext(), QueryHandler.class);
+        startService(commService);
+
+        Intent resultsHandler = new Intent(getApplicationContext(), QueryHandler.class);
+        startService(resultsHandler);
 
 //        ImageView mImageView = (ImageView)findViewById(R.id.pro_pic_menu);
 //        SharedPreferences sp1 = this.getSharedPreferences("Login", 0);

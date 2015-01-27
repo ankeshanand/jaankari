@@ -116,6 +116,11 @@
             android:name="jaangari.opensoft.iitkgp.jaankari.NewsListActivity"
             android:label="@string/title_activity_news_list" >
         </activity>
+
+        <service
+            android:name="jaangari.opensoft.iitkgp.jaankari.BackgroundServices.ResultsHandler"
+            android:exported="false" >
+        </service>
     </application>
 
 </manifest>

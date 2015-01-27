@@ -12,6 +12,7 @@ import java.util.List;
 
 import jaangari.opensoft.iitkgp.jaankari.util.Health;
 import jaangari.opensoft.iitkgp.jaankari.util.News;
+import jaangari.opensoft.iitkgp.jaankari.util.PairCategory;
 import jaangari.opensoft.iitkgp.jaankari.util.Videos;
 import jaangari.opensoft.iitkgp.jaankari.util.Weather;
 
@@ -238,10 +239,28 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return weather;
     }
 //TODO:Gets list of category,ids based on the search query.
-    public ArrayList<SearchableActivity.PairCategory> fetchIndexList(String query) {
-        return null;
+
+
+    public ArrayList<PairCategory> fetchIndexList(String query) {
+
+        ArrayList<Integer> indexes = new ArrayList<Integer>();
+
+        indexes.add(33);
+
+        indexes.add(66);
+
+        ArrayList<PairCategory> res = (new ArrayList<>());
+
+        res.add(new PairCategory("Sports",indexes));
+
+        res.add(new PairCategory("News",indexes));
+
+        return res;
+
     }
-//TODO: Returnd the filepath corresponding the category and id. Null if n.a
+
+
+    //TODO: Returnd the filepath corresponding the category and id. Null if n.a
     public String checkLocalDatabase(String category, int id) {
             return null;
     }
