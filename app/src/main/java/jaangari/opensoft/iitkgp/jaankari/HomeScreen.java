@@ -20,6 +20,11 @@ public class HomeScreen extends ActionBarActivity {
         startActivity(intent);
     }
 
+    public void NewsIntent(View view){
+        Intent intent = new Intent(getApplicationContext(), NewsActivity.class);
+        startActivity(intent);
+    }
+
 
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();

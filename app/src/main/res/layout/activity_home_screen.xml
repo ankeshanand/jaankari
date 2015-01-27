@@ -55,6 +55,7 @@
                 android:layout_height="150dp"
                 android:padding="16dp"
                 android:background="#AAAAAA"
+                android:onClick="newsIntent"
                 android:clickable="true"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="@string/news"
