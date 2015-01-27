@@ -7,11 +7,13 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 
 import jaangari.opensoft.iitkgp.jaangari.R;
 import jaangari.opensoft.iitkgp.jaankari.BackgroundServices.QueryHandler;
 import jaangari.opensoft.iitkgp.jaankari.BackgroundServices.WifiHandler;
+import jaangari.opensoft.iitkgp.jaankari.util.Weather;
 
 
 public class HomeScreen extends ActionBarActivity {
@@ -64,9 +66,16 @@ public class HomeScreen extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        db = new DatabaseHandler(this.getApplicationContext());
+        db = new DatabaseHandler(this.getApplicationContext());
+
+        Weather weather = db.getCurrentWeather();
+        if(weather != null){
+            TextView temp = (TextView) findViewById(R.id.temp);
+            temp.setText(Float.toString(weather.getTemp()));
+        }
 //        db.closeDB();
         Intent intent = new Intent(getApplicationContext(),VideoDownloadService.class);
+
         setContentView(R.layout.activity_home_screen);
         startService(intent);
 

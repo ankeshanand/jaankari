@@ -62,6 +62,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 
     private final String TAG = "Database";
+    private final String CURR_CITY = "Kharagpur";
     //TODO Education/Books Database Schema on Server and App
 
     public DatabaseHandler(Context context){
@@ -212,6 +213,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             Log.e(TAG,c.toString());
         }
         return videos;
+    }
+
+    public Weather getCurrentWeather(){
+        String query = "SELECT * FROM " + TABLE_WEATHER + " WHERE " + WEATHER_CITY + "=" + CURR_CITY +  ";";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(query, null);
+        Weather weather = null;
+        if(c.moveToFirst()){
+            weather.setCity(c.getString(c.getColumnIndex(WEATHER_CITY)));
+            weather.setTemp(c.getFloat(c.getColumnIndex(WEATHER_TEMP)));
+            weather.setHumidity(c.getInt(c.getColumnIndex(WEATHER_HUMIDITY)));
+            weather.setMain(c.getString(c.getColumnIndex(WEATHER_MAIN)));
+            weather.setDescription(c.getString(c.getColumnIndex(WEATHER_DESCRIPTION)));
+        }
+        return weather;
     }
 //TODO:Gets list of category,ids based on the search query.
     public ArrayList<SearchableActivity.PairCategory> fetchIndexList(String query) {
