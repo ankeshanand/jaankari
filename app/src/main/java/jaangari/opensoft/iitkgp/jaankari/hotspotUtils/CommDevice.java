@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
+import com.google.android.gms.internal.db;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
@@ -22,13 +24,16 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import jaangari.opensoft.iitkgp.jaankari.DatabaseHandler;
+import jaangari.opensoft.iitkgp.jaankari.SearchableActivity;
+
 /**
  * Created by shiwangi on 24/1/15.
  */
 public class CommDevice {
 
 
-
+    DatabaseHandler dbHandler;
     private class StoppableThread extends Thread{
         boolean bExit = false;
 
@@ -51,9 +56,6 @@ public class CommDevice {
 
     private static final long LISTEN_TIMEOUT = 30000 ;
 
-    public static String FILES_PATH = Environment.getExternalStorageDirectory().toString() ;
-    public static String FILES_NAME = "";
-
 
 
     private static final int MESSAGE_SIZE = 10;
@@ -69,7 +71,7 @@ public class CommDevice {
 
 
     public CommDevice(final Context context) throws IOException {
-
+        dbHandler = new DatabaseHandler(context);
     }
 
     public void listenForQueries() throws IOException {
@@ -90,7 +92,7 @@ public class CommDevice {
                 }
             }
             System.out.println("here *** "+ ans);
-            checkLocalDatabase(Integer.parseInt(ans), dp.getAddress());
+            String filepath = dbHandler.checkLocalDatabase("", 1);
 
 
         }
@@ -192,8 +194,8 @@ public class CommDevice {
 //                    File newFile = new File("/storage/sdcard0/receivedFile");
                     byte[] mybytearray = new byte[10];
                     InputStream is = sock.getInputStream();
-
-                    final File file2 = new File(FILES_PATH + FILES_NAME);
+//TODO
+                    final File file2 = new File(dbHandler.getFilePath("",1));
 
                     final OutputStream output = new FileOutputStream(file2);
 
@@ -211,6 +213,7 @@ public class CommDevice {
                         output.close();
                         is.close();
                         IS_RECEIVED = true;
+
                         break;
 
                     }

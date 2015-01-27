@@ -213,4 +213,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         return videos;
     }
+//TODO:Gets list of category,ids based on the search query.
+    public ArrayList<SearchableActivity.PairCategory> fetchIndexList(String query) {
+        return null;
+    }
+//TODO: Returnd the filepath corresponding the category and id. Null if n.a
+    public String checkLocalDatabase(String category, int id) {
+            return null;
+    }
+//TODO:Returns Filepath even though file isnot present in the local db.
+    public String getFilePath(String category, int id) {
+        return null;
+    }
 }
