@@ -78,7 +78,7 @@
         </activity>
 
         <service
-            android:name="jaangari.opensoft.iitkgp.jaankari.VideoDownload"
+            android:name="jaangari.opensoft.iitkgp.jaankari.VideoDownloadService"
             android:enabled="true"
             android:exported="true" >
         </service>

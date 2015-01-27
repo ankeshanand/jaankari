@@ -14,8 +14,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/list_text_view"
+        android:textColor="#FFFFFF"
         android:paddingTop="20dp"
         android:paddingLeft="20dp"
         android:layout_toRightOf="@+id/list_image_view"/>
+
+    <RatingBar
+        android:id = "@+id/rating_bar" style="?android:attr/ratingBarStyleSmall"
+        android:paddingLeft="20dp"
+        android:paddingTop="8dp"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:stepSize="0.5"
+        android:numStars="5"
+        android:layout_below="@+id/list_text_view"
+        android:layout_toEndOf="@+id/list_image_view" />
 
 </RelativeLayout>

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
+import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.IBinder;
@@ -24,6 +25,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -44,61 +46,20 @@ import java.util.List;
 
 import jaangari.opensoft.iitkgp.jaangari.R;
 import jaangari.opensoft.iitkgp.jaankari.util.SystemUiHider;
+import jaangari.opensoft.iitkgp.jaankari.util.Videos;
 
-public class VideoDownload extends Service {
+public class VideoDownloadService extends Service {
     private final int TIMEOUT_CONNECTION = 5000;//5sec
     private final int TIMEOUT_SOCKET = 30000;//30sec
     private final String USER_AGENT = "Mozilla/5.0";
-    private static ArrayList<String> list;
-
-//    private ArrayList<String> getFileList(){
-//        ArrayList<String> files = new ArrayList<String>();
-//
-//        try {
-//            HttpClient httpClient = new DefaultHttpClient();
-//            HttpPost httpPost = new HttpPost("http://"+getString(R.string.ip_address)+"videos.php");
-////                List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(2);
-////                nameValuePair.add(new BasicNameValuePair("email", mEmail));
-////                nameValuePair.add(new BasicNameValuePair("passwd", mPassword));
-////                httpPost.setEntity(new UrlEncodedFormEntity(nameValuePair));
-//            HttpResponse response = httpClient.execute(httpPost);
-//            HttpEntity entity = response.getEntity();
-//            InputStream inputStream = entity.getContent();
-//            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"), 8);
-//            StringBuilder sb = new StringBuilder();
-//            String line = null;
-//            while ((line = reader.readLine()) != null) {
-//                sb.append(line + "\n");
-//            }
-//            Log.v("Downloaded content","file names : "+line);
-////                if ("true\n".equals(sb.toString())) {
-////                    return true;
-////                } else {
-////                    return false;
-////                }
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//        } catch (ClientProtocolException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//
-//        return files;
-//
-//    }
+    private static ArrayList<Videos> list;
+    private DatabaseHandler db;
+    private final String TAG = "VideoDownlaodService";
 
 
-    private boolean download(String path){
-        File temp_file = new File(Environment.getExternalStorageDirectory()+"/" +getString(R.string.app_name)+"/"+ path);
-        if(temp_file.exists()){
-            return true;
-        }
+    private boolean Videodownload(String path,String filename){
         String str = "http://"+getString(R.string.ip_address)+path;
         try {
-
-//            URI uri = new URI("http",getString(R.string.ip_address),"VideosActivity",path.substring(path.lastIndexOf("/")+1),null);
             URL url = new URL(str);
             System.out.println(url.toExternalForm());
             //Open a connection to that URL.
@@ -109,12 +70,11 @@ public class VideoDownload extends Service {
             long startTime = System.currentTimeMillis();
             InputStream is = ucon.getInputStream();
             BufferedInputStream inStream = new BufferedInputStream(is, 1024 * 5);
-            File file = new File(Environment.getExternalStorageDirectory()+"/"+getString(R.string.app_name)+"/"+path.substring(0,path.lastIndexOf("/")));
+            File file = new File(Environment.getExternalStorageDirectory()+"/"+getString(R.string.app_name)+"/Videos");
             if(!file.exists()){
                 file.mkdirs();
             }
-            System.out.println(Environment.getExternalStorageDirectory()+"/"+getString(R.string.app_name)+"/"+path.substring(0,path.lastIndexOf("/")));
-            file = new File(Environment.getExternalStorageDirectory()+"/" +getString(R.string.app_name)+"/"+ path);
+            file = new File(Environment.getExternalStorageDirectory()+"/" +getString(R.string.app_name)+"/Videos/"+ path.substring(path.lastIndexOf("/")+1));
             FileOutputStream outStream = new FileOutputStream(file);
             byte[] buff = new byte[5 * 1024];
 
@@ -129,8 +89,10 @@ public class VideoDownload extends Service {
             outStream.close();
             inStream.close();
 
-            Bitmap bm = ThumbnailUtils.createVideoThumbnail(Environment.getExternalStorageDirectory()+"/" +getString(R.string.app_name)+"/"+ path,MediaStore.Images.Thumbnails.MINI_KIND);
-            file = new File(Environment.getExternalStorageDirectory()+"/" +getString(R.string.app_name)+"/"+ path.substring(0,path.lastIndexOf(".mp4"))+"_thumbnail");
+            Bitmap bm = ThumbnailUtils.createVideoThumbnail(Environment.getExternalStorageDirectory()+"/" +getString(R.string.app_name)+"/Videos/"
+                    + path.substring(path.lastIndexOf("/")+1),MediaStore.Images.Thumbnails.MINI_KIND);
+            file = new File(Environment.getExternalStorageDirectory()+"/" +getString(R.string.app_name)+"/Videos/"+
+                    path.substring(path.lastIndexOf("/")+1,path.lastIndexOf("."))+"_thumbnail.jpg");
             outStream = new FileOutputStream(file);
             bm.compress(Bitmap.CompressFormat.JPEG, 85,outStream);
             outStream.flush();
@@ -154,6 +116,7 @@ public class VideoDownload extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        db = new DatabaseHandler(this.getApplicationContext());
         try {
             Thread t = new Thread(new Runnable() {
                 public void run() {
@@ -164,19 +127,29 @@ public class VideoDownload extends Service {
                         HttpResponse response = httpclient.execute(httpGet);
                         String json_string = EntityUtils.toString(response.getEntity());
                         JSONArray jsonArray = new JSONArray(json_string);
-                        Log.v(PRINT_SERVICE,"rahul");
-                        list = new ArrayList<String>();
-                        if (jsonArray != null) {
-                            int len = jsonArray.length();
-                            for (int i=0;i<len;i++){
-                                list.add(jsonArray.get(i).toString());
+                        for(int i=0;i<jsonArray.length();i++){
+                            JSONObject root = jsonArray.getJSONObject(i);
+                            Videos video = new Videos(root.getInt("id"),root.getString("name"),
+                                    root.getString("path"),root.getInt("category"),
+                                    (float)root.getDouble("rating"));
+                            String path = root.getString("path");
+                            File check_file = new File(Environment.getExternalStorageDirectory()+"/" +getString(R.string.app_name)+"/Videos/"
+                                    + path.substring(path.lastIndexOf("/")));
+                            if(!check_file.exists()){
+                                db.addVideo(video);
+                                if(Videodownload(video.getPath(),video.getName())){
+                                    Log.v(TAG,"Download Completed");
+                                }
+                                else{
+                                    Log.v(TAG,"Download Failed");
+                                }
                             }
+                            else{
+                                Log.v(TAG,"In database");
+                            }
+                            Log.v(TAG,root.toString());
+                            db.closeDB();
                         }
-                        for (int i=0;i<list.size();i++){
-                            System.out.println(list.get(i));
-                            download(list.get(i));
-                        }
-
                     }catch(Exception e){
                         e.printStackTrace();
                     }
