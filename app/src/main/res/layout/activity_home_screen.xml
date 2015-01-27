@@ -70,6 +70,7 @@
                 android:layout_height="100dp"
                 android:padding="16dp"
                 android:clickable="true"
+                android:onClick="newsIntent"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="@string/weather"
                 android:background="#BBBBBB"
