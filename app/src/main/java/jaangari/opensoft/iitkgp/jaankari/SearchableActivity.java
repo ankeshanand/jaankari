@@ -13,11 +13,12 @@ import jaangari.opensoft.iitkgp.jaangari.R;
 
 
 public class SearchableActivity extends ListActivity {
-    DatabaseHandler dbHandler;
-    class PairCategory{
+    private DatabaseHandler dbHandler;
+    public class PairCategory{
         String category;
         ArrayList<Integer> ids;
     }
+
     protected void contentSearch(String Query){
 
     }
@@ -33,6 +34,7 @@ public class SearchableActivity extends ListActivity {
             String Query = intent.getStringExtra(SearchManager.QUERY);
             contentSearch(Query);
             // fetchIndexList(Query) : returns List<category,List<Int>> ids
+            dbHandler = new DatabaseHandler(getApplicationContext());
             ArrayList<PairCategory> fetchedIds = dbHandler.fetchIndexList(Query);
             int size  = fetchedIds.size();
             for(int i=0; i<size ; i++){

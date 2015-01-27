@@ -3,15 +3,29 @@ package jaangari.opensoft.iitkgp.jaankari.util;
 /**
  * Created by rahulanishetty on 1/25/15.
  */
+
+/*
+ 0 - Top Stories
+ 1 - World
+ 2 - India
+ 3 - Business
+ 4 - Technology
+ 5 - Sports
+ 6 - Entertainment
+ */
+
+
 public class News {
     private int id;
     private String title;
     private String text;
     private String summary;
     private String place;
-    private String category;
+    private int category;
 
-    public News(int id,String title,String summary,String text, String place, String category){
+    public News(){}
+
+    public News(int id,String title,String summary,String text, String place, int category){
         this.id = id;
         this.title = title;
         this.text = text;
@@ -56,11 +70,11 @@ public class News {
         this.place = text;
     }
 
-    public String getCategory(){
+    public int getCategory(){
         return this.category;
     }
-    public void setCategory(String text){
-        this.category = text;
+    public void setCategory(int category){
+        this.category = category;
     }
 
 }

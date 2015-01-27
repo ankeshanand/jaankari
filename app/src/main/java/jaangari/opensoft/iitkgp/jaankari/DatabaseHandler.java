@@ -54,6 +54,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String NEWS_TEXT = "text";
     private static final String NEWS_SUMMARY="summary";
     private static final String NEWS_PLACE="place";
+    private static final String NEWS_CATEGORY = "category";
 
     //Health Column
     private static final String HEALTH_ID = "id";
@@ -80,7 +81,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 WEATHER_MAX_TEMP + " REAL,"+WEATHER_MIN_TEMP + " REAL,"+WEATHER_HUMIDITY + " INTEGER"+");";
 
         String CREATE_NEWS_TABLE = "CREATE TABLE IF NOT EXISTS "+TABLE_NEWS+"(" +NEWS_ID+" INTEGER PRIMARY KEY," +
-                NEWS_PLACE +" TEXT,"+NEWS_TITLE + " TEXT,"+NEWS_SUMMARY +" TEXT,"+NEWS_TEXT +" TEXT"+");";
+                NEWS_PLACE +" TEXT,"+NEWS_TITLE + " TEXT,"+NEWS_SUMMARY +" TEXT,"+NEWS_TEXT +" TEXT,"+NEWS_CATEGORY + " INTEGER"+");";
 
         String CREATE_HEALTH_TABLE = "CREATE TABLE IF NOT EXISTS "+TABLE_HEALTH+"(" +HEALTH_ID+" INTEGER PRIMARY KEY," +
                 HEALTH_TITLE +" TEXT,"+HEALTH_TEXT + " TEXT"+");";
@@ -133,6 +134,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(NEWS_SUMMARY,news.getSummary());
         values.put(NEWS_TEXT,news.getText());
         values.put(NEWS_TITLE,news.getTitle());
+        values.put(NEWS_CATEGORY,news.getCategory());
         db.insert(TABLE_NEWS,null,values);
         db.close();
     }
@@ -180,6 +182,30 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
 
+    public List<News> getAllNewsbyCategory(int category){
+        List<News> news = new ArrayList<News>();
+        String selectQuery = "SELECT * FROM " + TABLE_NEWS + " WHERE " + NEWS_CATEGORY + "=" + category+"";
+        Log.e(TAG, selectQuery);
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        if(c.moveToFirst()){
+            do{
+                News news1 = new News();
+                news1.setID(c.getInt(c.getColumnIndex(NEWS_ID)));
+                news1.setTitle(c.getString(c.getColumnIndex(NEWS_TITLE)));
+                news1.setCategory(category);
+                news1.setSummary(c.getString(c.getColumnIndex(NEWS_SUMMARY)));
+                news1.setText(c.getString(c.getColumnIndex(NEWS_TEXT)));
+                news1.setPlace(c.getString(c.getColumnIndex(NEWS_PLACE)));
+                news.add(news1);
+                Log.e(TAG,news1.getTitle());
+            }while(c.moveToNext());
+        }
+        else{
+            Log.e(TAG,c.toString());
+        }
+        return news;
+    }
 
 
     public List<Videos> getAllVideosbyCategory(int category){
@@ -216,7 +242,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public Weather getCurrentWeather(){
-        String query = "SELECT * FROM " + TABLE_WEATHER + " WHERE " + WEATHER_CITY + "=" + CURR_CITY +  ";";
+        String query = "SELECT * FROM " + TABLE_WEATHER + " WHERE " + WEATHER_CITY + "='" + CURR_CITY +  "';";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(query, null);
         Weather weather = null;
