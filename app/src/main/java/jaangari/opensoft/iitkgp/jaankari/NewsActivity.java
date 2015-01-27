@@ -53,7 +53,7 @@ class NewsAdapter extends ArrayAdapter<NewsPair> {
             TextView tvName = (TextView) convertView.findViewById(R.id.newsTitleUp);
             TextView tvHome = (TextView) convertView.findViewById(R.id.newsSummaryUp);
             tvName.setText(npair.getFirst().getTitle());
-            tvHome.setText(npair.getSecond().getSummary());
+            tvHome.setText(npair.getFirst().getSummary());
         if(npair.getSecond() != null) {
             TextView tv1Name = (TextView) convertView.findViewById(R.id.newsTitleDown);
             TextView tv1Home = (TextView) convertView.findViewById(R.id.newsSummaryDown);
@@ -115,7 +115,7 @@ public class NewsActivity extends ActionBarActivity {
         NewsAdapter adapter = new NewsAdapter(this, news_items_list);
 
         News nit1 = new News(1,"ABC","SEFDSF0","asd sdf asd sad fasdf","asdf sdf","sd fweasd");
-        News nit2 = new News(2,"DEF","WEFASF0","sfewa dsad sad fasdf","we ewr ","We sadfasd");
+        News nit2 = new News(2,"DEF","WEFASF0. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf","sfewa dsad sad fasdf","we ewr ","We sadfasd");
         adapter.add(new NewsPair(nit1,nit2));
         nit1 = new News(3,"Aasdf we ","Swqre terSF0","SD sad fasdf asdfwe rsaf asdfasdf","asdf sdf","sd fweasd");
         nit2 = new News(4,"E aefsde","Swe rwadsfa F0","asWe wea dfdf","asdf sdf","sd fweasd");

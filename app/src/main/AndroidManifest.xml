@@ -107,6 +107,11 @@
             android:name="jaangari.opensoft.iitkgp.jaankari.BackgroundServices.WifiHandler"
             android:exported="false" >
         </service>
+
+        <activity
+            android:name="jaangari.opensoft.iitkgp.jaankari.HealthListActivity"
+            android:label="@string/title_activity_health_list" >
+        </activity>
     </application>
 
 </manifest>
