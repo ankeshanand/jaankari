@@ -130,6 +130,7 @@ public class NewsListActivity extends ActionBarActivity
 //
 //
 //        flipView.setAdapter(adapter);
+
     }
 
     public void newsClickedUp(View view){

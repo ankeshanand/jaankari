@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/search_image_list_view"
+        android:layout_width="100dp"
+        android:layout_height="75dp"/>
+    <TextView
+        android:id = "@+id/video_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
+        android:paddingTop="20dp"
+        android:paddingLeft="20dp"
+        android:layout_toRightOf="@+id/search_image_list_view"/>
+    <TextView
+        android:id="@+id/other_title" style="?android:attr/textAppearanceMedium"
+        android:textColor="#FFFFFF"
+        android:paddingTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/other_summary" style="?android:attr/textAppearanceSmall"
+        android:layout_width="wrap_content"
+        android:textColor="#FFFFFF"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/other_title"/>
+
+    <!--<RatingBar-->
+        <!--android:id = "@+id/search_rating_bar" style="?android:attr/ratingBarStyleSmall"-->
+        <!--android:paddingLeft="20dp"-->
+        <!--android:paddingTop="8dp"-->
+        <!--android:layout_width="100dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:stepSize="0.5"-->
+        <!--android:numStars="5"-->
+        <!--android:layout_below="@+id/video_title"-->
+        <!--android:layout_toEndOf="@+id/search_image_list_view" />-->
+
+</RelativeLayout>

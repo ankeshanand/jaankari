@@ -12,6 +12,7 @@ public class Weather {
     private float min_temp;
     private float max_temp;
     private int humidity;
+    public Weather(){}
 
     public Weather(int id,String city, String main, String description,float temp,float min_temp,float max_temp, int humidity){
         this.id = id;

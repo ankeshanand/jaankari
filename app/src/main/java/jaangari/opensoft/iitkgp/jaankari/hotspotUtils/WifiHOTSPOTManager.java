@@ -14,6 +14,8 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
+import jaangari.opensoft.iitkgp.jaankari.AppStatus;
+
 /**
  * Created by rohanraja on 21/01/15.
  */
@@ -48,6 +50,12 @@ public class WifiHOTSPOTManager {
     }
 
     public int EstablishConnection() {
+        //TODO is INTERNET AVAILABLE
+        if(AppStatus.getInstance(this.mContext).isOnline())
+        {
+            Log.d("WifiManager", "Internet connection available exiting!!!");
+            return 1;
+        }
 
         if (isWifiConnected())
         {

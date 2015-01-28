@@ -18,7 +18,7 @@ import jaangari.opensoft.iitkgp.jaankari.hotspotUtils.CommDevice;
  * TODO: Customize class - update intent actions, extra parameters and static
  * helper methods.
  */
-public class QueryHandler extends IntentService {
+public class FileServer extends IntentService {
     // TODO: Rename actions, choose action names that describe tasks that this
     // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
     private static final String ACTION_FOO = "jaangari.opensoft.iitkgp.jaankari.BackgroundServices.action.FOO";
@@ -36,7 +36,7 @@ public class QueryHandler extends IntentService {
      */
     // TODO: Customize helper method
     public static void startActionFoo(Context context, String param1, String param2) {
-        Intent intent = new Intent(context, QueryHandler.class);
+        Intent intent = new Intent(context, FileServer.class);
         intent.setAction(ACTION_FOO);
         intent.putExtra(EXTRA_PARAM1, param1);
         intent.putExtra(EXTRA_PARAM2, param2);
@@ -51,15 +51,15 @@ public class QueryHandler extends IntentService {
      */
     // TODO: Customize helper method
     public static void startActionBaz(Context context, String param1, String param2) {
-        Intent intent = new Intent(context, QueryHandler.class);
+        Intent intent = new Intent(context, FileServer.class);
         intent.setAction(ACTION_BAZ);
         intent.putExtra(EXTRA_PARAM1, param1);
         intent.putExtra(EXTRA_PARAM2, param2);
         context.startService(intent);
     }
 
-    public QueryHandler() {
-        super("QueryHandler");
+    public FileServer() {
+        super("FileServer");
     }
 
     @Override
@@ -69,10 +69,8 @@ public class QueryHandler extends IntentService {
             CommDevice cd = null;
             try {
                 cd = new CommDevice(getApplicationContext());
-                cd.listenForQueries();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
+                cd.listenForFileRequests();
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
