@@ -3,5 +3,6 @@
 .idea
 .DS_Store
 /build
-./facebook/build
+/facebook/build
+
 

@@ -95,4 +95,3 @@ public class WifiHandler extends IntentService {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 }
-

@@ -38,8 +38,14 @@
     <string name="title_section1">Popular</string>
     <string name="title_section2">Recommended</string>
     <string name="title_section3">History</string>
+    <string name="news_title_section1">Top Stories</string>
+    <string name="news_title_section2">World</string>
+    <string name="news_title_section3">Business</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="title_activity_news">NewsActivity</string>
+    <string name="title_activity_news_main">NewsMainActivity</string>
+    <string name="title_activity_health_list">HealthListActivity</string>
+    <string name="title_activity_news_list">NewsListActivity</string>
 
 </resources>

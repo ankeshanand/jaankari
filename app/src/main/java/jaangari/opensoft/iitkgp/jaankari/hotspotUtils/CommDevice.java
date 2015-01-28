@@ -135,11 +135,20 @@ public class CommDevice {
             Log.d("CommDevice","Sending MEssage = " + msg);
 
             out.print(msg + "\n");
+
             out.close();
+
+            // byte[] buffer = msg.getBytes();
+            //outputStream.write(buffer);
+            //outputStream.flush();
+
             outputStream.close();
 
             Log.d("CommDevice","Sent the message!!\n");
             socket.close();
+//            bis.read(buffer,0,buffer.length);
+//            outputStream.write(buffer,0,buffer.length);
+//            outputStream.flush();
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,21 +1,21 @@
 package jaangari.opensoft.iitkgp.jaankari;
 
-import android.app.SearchManager;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 
 import jaangari.opensoft.iitkgp.jaangari.R;
 import jaangari.opensoft.iitkgp.jaankari.BackgroundServices.QueryHandler;
 import jaangari.opensoft.iitkgp.jaankari.BackgroundServices.WifiHandler;
+import jaangari.opensoft.iitkgp.jaankari.util.Weather;
 
 
 public class HomeScreen extends ActionBarActivity {
@@ -26,8 +26,13 @@ public class HomeScreen extends ActionBarActivity {
         startActivity(intent);
     }
 
-    public void NewsIntent(View view){
-        Intent intent = new Intent(getApplicationContext(), NewsActivity.class);
+    public void newsIntent(View view){
+        Intent intent = new Intent(getApplicationContext(),NewsListActivity.class);
+        startActivity(intent);
+    }
+
+    public void healthIntent(View view){
+        Intent intent = new Intent(getApplicationContext(),HealthListActivity.class);
         startActivity(intent);
     }
 
@@ -63,8 +68,39 @@ public class HomeScreen extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_home_screen);
+        db = new DatabaseHandler(this.getApplicationContext());
+        Weather weather = null;
+        weather = db.getCurrentWeather();
+        if(weather != null){
+            TextView temp = (TextView) findViewById(R.id.temp);
+            ImageView weatherIcon = (ImageView) findViewById(R.id.weatherIcon);
+            TextView humidity = (TextView) findViewById(R.id.humidity);
+            Log.e("Home-Screen", Float.toString(weather.getTemp()));
+            temp.setText(Float.toString(weather.getTemp()));
+            switch (weather.getDescription()) {
+                case "Clear":
+                    weatherIcon.setImageResource(R.drawable.clear);
+                    break;
+                case "Cloudy":
+                    weatherIcon.setImageResource(R.drawable.cloudy);
+                    break;
+                case "Rain":
+                    weatherIcon.setImageResource(R.drawable.rain);
+                    break;
+            }
+
+            humidity.setText(Integer.toString(weather.getHumidity()) + " % Humidity");
+        }
+        db.closeDB();
+        Intent intent = new Intent(getApplicationContext(),VideoDownloadService.class);
+
+
+        startService(intent);
+
         Intent bgServiceIntent = new Intent(getApplicationContext(), WifiHandler.class);
         startService(bgServiceIntent);
+
 
         Intent commService = new Intent(getApplicationContext(), QueryHandler.class);
         startService(commService);
@@ -72,29 +108,17 @@ public class HomeScreen extends ActionBarActivity {
         Intent resultsHandler = new Intent(getApplicationContext(), QueryHandler.class);
         startService(resultsHandler);
 
-        Intent intent = new Intent(getApplicationContext(),VideoDownloadService.class);
-        setContentView(R.layout.activity_home_screen);
-        startService(intent);
+//        ImageView mImageView = (ImageView)findViewById(R.id.pro_pic_menu);
+//        SharedPreferences sp1 = this.getSharedPreferences("Login", 0);
+//        String path = sp1.getString("proPic",null);
+//        if(path!=null)
+//            Log.v(PRINT_SERVICE,"Path" + path);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.menu_home_screen, menu);
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) searchItem.getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(new ComponentName(getApplicationContext(),SearchableActivity.class)));
-        searchView.setIconifiedByDefault(false);
-       // return super.onCreateOptionsMenu(menu);
-        return true;
-    }
-
-    @Override
-    public boolean onSearchRequested() {
-        Bundle appData = new Bundle();
-        appData.putBoolean(SearchableActivity.JARGON, true);
-        startSearch(null, false, appData, false);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override

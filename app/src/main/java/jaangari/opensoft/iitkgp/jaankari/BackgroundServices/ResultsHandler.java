@@ -167,4 +167,3 @@ public class ResultsHandler extends IntentService {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 }
-

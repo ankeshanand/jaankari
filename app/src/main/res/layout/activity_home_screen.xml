@@ -1,6 +1,6 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:background="#0099cc"
+    android:layout_height="match_parent" android:background="#4A89DC"
     tools:context="jaangari.opensoft.iitkgp.jaankari.HomeScreen">
 
     <!-- The primary full-screen view. This can be replaced with whatever view
@@ -41,20 +41,21 @@
                 android:text="@string/videos"
                 android:onClick="videoIntent"
                 android:clickable="true"
-                android:background="#CCCCCC"
+                android:background="@drawable/videos"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:padding="16dp"
-                android:layout_marginTop="95dp"
-                android:id="@+id/videos_textView" />
+                android:id="@+id/videos_textView"
+                android:textColor="#ffffffee"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="150dp"
                 android:padding="16dp"
-                android:background="#AAAAAA"
+                android:background="@drawable/news"
                 android:onClick="newsIntent"
                 android:clickable="true"
                 android:textAppearance="?android:attr/textAppearanceLarge"
@@ -64,21 +65,83 @@
                 android:layout_alignParentEnd="true"
                 android:layout_toRightOf="@+id/videos_textView"
                 android:layout_toEndOf="@+id/videos_textView"
-                android:layout_alignTop="@+id/videos_textView" />
+                android:layout_alignTop="@+id/videos_textView"
+                android:textStyle="bold"
+                android:textColor="#ffffffff" />
 
-            <TextView
+            <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="100dp"
+                android:layout_height="200dp"
+                android:padding="16dp"
+                android:id="@+id/weather_rel_layout"
+                android:layout_below="@+id/videos_textView"
+                android:layout_toLeftOf="@+id/news_textView"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:background="@drawable/weather_bg"
+                >
+
+                <TextView
+                    android:id="@+id/cityName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="#ffffffff"
+                    android:textStyle="bold"
+                    android:layout_centerHorizontal="true"
+                    android:text="Kharagpur, IN"/>
+
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/cloudy"
+                    android:layout_below="@+id/cityName"
+                    android:id="@+id/weatherIcon"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/temp"
+                    android:layout_below="@+id/cityName"
+                    android:layout_alignParentEnd="true"
+                    android:text="20\u00B0"
+                    android:textStyle="bold"
+                    android:textSize="50dp"
+                    android:textIsSelectable="true"
+                    android:textColor="#ffffffff"
+                    android:paddingTop="20dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/weatherIcon"
+                    android:id="@+id/humidity"
+                    android:textStyle="bold"
+                    android:textSize="20dp"
+                    android:textColor="#ffffffff"
+                    android:text="60 % Humidity"
+                    android:layout_centerHorizontal="true"
+                    />
+
+
+
+                </RelativeLayout>
+
+            <!--TextView
+                android:layout_width="wrap_content"
+                android:layout_height="200dp"
                 android:padding="16dp"
                 android:clickable="true"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="@string/weather"
-                android:background="#BBBBBB"
+                android:padding="16dp"
                 android:id="@+id/weather_textView"
                 android:layout_below="@+id/videos_textView"
                 android:layout_toLeftOf="@+id/news_textView"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentStart="true"
+                android:textColor="#ffffffff"
+                android:textStyle="bold" /-->
 
             <TextView
                 android:layout_width="wrap_content"
@@ -87,29 +150,49 @@
                 android:clickable="true"
                 android:text="@string/stocks"
                 android:padding="16dp"
-                android:background="#DDDDDD"
+                android:background="@drawable/stocks"
                 android:id="@+id/stocks_textView"
-                android:layout_alignTop="@+id/weather_textView"
-                android:layout_toRightOf="@+id/weather_textView"
+                android:layout_alignTop="@+id/weather_rel_layout"
+                android:layout_toRightOf="@+id/weather_rel_layout"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:layout_alignBottom="@+id/weather_textView" />
+                android:layout_alignBottom="@+id/weather_rel_layout"
+                android:textColor="#ffffffff"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="200dp"
+                android:padding="16dp"
+                android:id="@+id/education_textView"
+                android:layout_below="@+id/weather_rel_layout"
+                android:layout_toLeftOf="@+id/stocks_textView"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:background="@drawable/books"
+                android:textColor="#ffffffff"
+                android:textStyle="bold"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Education"
+                />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:clickable="true"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/education"
+                android:clickable="true"
+                android:onClick="healthIntent"
+                android:text="Health"
                 android:padding="16dp"
-                android:id="@+id/education_textView"
-                android:background="#FFFFFF"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentBottom="true"
-                android:layout_alignRight="@+id/stocks_textView"
-                android:layout_alignEnd="@+id/stocks_textView"
-                android:layout_below="@+id/weather_textView" />
+                android:background="@drawable/health"
+                android:id="@+id/health_textView"
+                android:layout_alignTop="@+id/education_textView"
+                android:layout_toRightOf="@+id/education_textView"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignBottom="@+id/education_textView"
+                android:textColor="#ffffffff"
+                android:textStyle="bold" />
 
         </RelativeLayout>
 

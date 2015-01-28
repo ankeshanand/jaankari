@@ -107,4 +107,3 @@ public class QueryHandler extends IntentService {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 }
-
