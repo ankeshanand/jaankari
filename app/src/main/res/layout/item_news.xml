@@ -18,9 +18,11 @@
         android:id="@+id/newsTitleUp"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:textColor="#ffffff"
         android:textSize="@dimen/abc_text_size_large_material"
         android:textStyle="bold"
-        android:paddingLeft="25dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
         android:paddingTop="15dp"
         android:text="Title" />
     <TextView
@@ -28,7 +30,9 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:paddingTop="10dp"
+        android:textColor="#ffffff"
         android:paddingLeft="15dp"
+        android:paddingRight="15dp"
         android:textSize="@dimen/abc_text_size_medium_material"
         android:text="Summary of the news article" />
 
@@ -54,8 +58,10 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/abc_text_size_large_material"
-            android:paddingLeft="25dp"
+            android:textColor="#ffffff"
+            android:paddingLeft="15dp"
             android:paddingTop="15dp"
+            android:paddingRight="15dp"
             android:textStyle="bold"
             android:text="Title" />
         <TextView
@@ -63,7 +69,9 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
+            android:textColor="#ffffff"
             android:paddingLeft="15dp"
+            android:paddingRight="15dp"
             android:textSize="@dimen/abc_text_size_medium_material"
             android:text="Summary of the news article" />
     </LinearLayout>

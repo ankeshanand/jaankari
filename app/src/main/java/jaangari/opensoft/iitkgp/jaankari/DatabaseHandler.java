@@ -394,7 +394,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public List<News> getAllNewsbyCategory(int category){
         List<News> news = new ArrayList<News>();
-        String selectQuery = "SELECT * FROM " + TABLE_NEWS + " WHERE " + NEWS_CATEGORY + "=" + category;
+        String selectQuery = "SELECT * FROM " + TABLE_NEWS + " WHERE " + NEWS_CATEGORY + "=" + category+"";
         Log.e(TAG, selectQuery);
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
@@ -416,6 +416,30 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         db.close();
         return news;
+    }
+
+
+    public List<Health> getAllHealth(){
+        List<Health> healths = new ArrayList<Health>();
+        String selectQuery = "SELECT * FROM " + TABLE_HEALTH+"";
+        Log.e(TAG, selectQuery);
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        if(c.moveToFirst()){
+            do{
+                Health health1 = new Health();
+                health1.setID(c.getInt(c.getColumnIndex(NEWS_ID)));
+                health1.setTitle(c.getString(c.getColumnIndex(NEWS_TITLE)));
+                health1.setText(c.getString(c.getColumnIndex(NEWS_TEXT)));
+                healths.add(health1);
+                Log.e(TAG,health1.getTitle());
+            }while(c.moveToNext());
+        }
+        else{
+            Log.e(TAG,c.toString());
+        }
+        db.close();
+        return healths;
     }
 
     public Videos getVideobyId(int id){
@@ -490,7 +514,32 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
         return videos;
     }
-
+//
+//<<<<<<< HEAD
+//    public Weather getCurrentWeather(){
+//        String query = "SELECT * FROM " + TABLE_WEATHER + " WHERE " + WEATHER_CITY + "='" + CURR_CITY +  "';";
+//        SQLiteDatabase db = this.getReadableDatabase();
+//        Cursor c = db.rawQuery(query, null);
+//        Weather weather = null;
+//        if(c.moveToFirst()){
+//            weather.setCity(c.getString(c.getColumnIndex(WEATHER_CITY)));
+//            weather.setTemp(c.getFloat(c.getColumnIndex(WEATHER_TEMP)));
+//            weather.setHumidity(c.getInt(c.getColumnIndex(WEATHER_HUMIDITY)));
+//            weather.setMain(c.getString(c.getColumnIndex(WEATHER_MAIN)));
+//            weather.setDescription(c.getString(c.getColumnIndex(WEATHER_DESCRIPTION)));
+//        }
+//        return weather;
+//    }
+////TODO:Gets list of category,ids based on the search query.
+//    public ArrayList<SearchableActivity.PairCategory> fetchIndexList(String query) {
+//        return null;
+//    }
+////TODO: Returnd the filepath corresponding the category and id. Null if n.a
+//    public String checkLocalDatabase(String category, int id) {
+//            return null;
+//    }
+////TODO:Returns Filepath even though file isnot present in the local db.
+//=======
 
     public ArrayList<SearchResults> searchMatches(String query, String[] columns){
         ArrayList<SearchResults> list = new ArrayList<SearchResults>();
@@ -537,6 +586,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 commodity.setName(c.getString(c.getColumnIndex(COMM_NAME)));
                 commodity.setMin(c.getString(c.getColumnIndex(COMM_MIN)));
                 commodity.setMax(c.getString(c.getColumnIndex(COMM_MAX)));
+                prices.add(commodity);
                 Log.e(TAG,commodity.getName());
             }while(c.moveToNext());
         }

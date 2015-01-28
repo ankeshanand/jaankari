@@ -67,6 +67,7 @@ public class CommodityActivity extends ActionBarActivity {
         Commodity c = new Commodity("M001","Rice","23.2","23.1");
         db.addCommodity(c);
         values = db.getCommodityPrices();
+        Log.v("Commodity", ""+values.size());
         names = new String[values.size()];
         min_prices = new String[values.size()];
         max_prices = new String[values.size()];

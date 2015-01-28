@@ -189,6 +189,16 @@ public class SearchableActivity extends ActionBarActivity {
         if(intent.ACTION_SEARCH.equals(intent.getAction())){
             final String Query = intent.getStringExtra(SearchManager.QUERY);
             contentSearch(Query);
+//<<<<<<< HEAD
+//            // fetchIndexList(Query) : returns List<category,List<Int>> ids
+//            dbHandler = new DatabaseHandler(getApplicationContext());
+//            ArrayList<PairCategory> fetchedIds = dbHandler.fetchIndexList(Query);
+//            int size  = fetchedIds.size();
+//            for(int i=0; i<size ; i++){
+//
+//            }
+//            dbHandler.closeDB();
+//=======
             Thread th = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -204,6 +214,7 @@ public class SearchableActivity extends ActionBarActivity {
             });        th.start();
 //            dbHandler = new DatabaseHandler(getApplicationContext());
 //            dbHandler.closeDB();
+//>>>>>>> master
         }
     }
 

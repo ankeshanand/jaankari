@@ -28,40 +28,40 @@ import jaangari.opensoft.iitkgp.jaankari.util.HealthPair;
 import jaangari.opensoft.iitkgp.jaankari.util.News;
 import jaangari.opensoft.iitkgp.jaankari.util.NewsPair;
 import se.emilsjolander.flipview.FlipView;
-
-class HealthAdapter extends ArrayAdapter<HealthPair> {
-    public HealthAdapter(Context context, ArrayList<HealthPair> newsitems) {
-        super(context, 0, newsitems);
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        // Get the data item for this position
-        HealthPair hpair;
-        hpair = getItem(position);
-
-        // Check if an existing view is being reused, otherwise inflate the view
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_health, parent, false);
-        }
-        // Lookup view for data population
-        TextView tvName = (TextView) convertView.findViewById(R.id.healthTitleUp);
-        TextView tvHome = (TextView) convertView.findViewById(R.id.healthSummaryUp);
-        tvName.setText(hpair.getFirst().getTitle());
-        tvHome.setText(hpair.getFirst().getText());
-        if (hpair.getSecond() != null) {
-            TextView tv1Name = (TextView) convertView.findViewById(R.id.healthTitleDown);
-            TextView tv1Home = (TextView) convertView.findViewById(R.id.healthSummaryDown);
-            // Populate the data into the template view using the data object
-
-            //System.out.println(nitem.getTitle()+nitem.getSummary());
-
-            tv1Name.setText(hpair.getSecond().getTitle());
-            tv1Home.setText(hpair.getSecond().getText());
-        }
-        return convertView;
-    }
-}
+//
+//class HealthAdapter extends ArrayAdapter<HealthPair> {
+//    public HealthAdapter(Context context, ArrayList<HealthPair> newsitems) {
+//        super(context, 0, newsitems);
+//    }
+//
+//    @Override
+//    public View getView(int position, View convertView, ViewGroup parent) {
+//        // Get the data item for this position
+//        HealthPair hpair;
+//        hpair = getItem(position);
+//
+//        // Check if an existing view is being reused, otherwise inflate the view
+//        if (convertView == null) {
+//            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_health, parent, false);
+//        }
+//        // Lookup view for data population
+//        TextView tvName = (TextView) convertView.findViewById(R.id.healthTitleUp);
+//        TextView tvHome = (TextView) convertView.findViewById(R.id.healthSummaryUp);
+//        tvName.setText(hpair.getFirst().getTitle());
+//        tvHome.setText(hpair.getFirst().getText());
+//        if (hpair.getSecond() != null) {
+//            TextView tv1Name = (TextView) convertView.findViewById(R.id.healthTitleDown);
+//            TextView tv1Home = (TextView) convertView.findViewById(R.id.healthSummaryDown);
+//            // Populate the data into the template view using the data object
+//
+//            //System.out.println(nitem.getTitle()+nitem.getSummary());
+//
+//            tv1Name.setText(hpair.getSecond().getTitle());
+//            tv1Home.setText(hpair.getSecond().getText());
+//        }
+//        return convertView;
+//    }
+//}
 
 public class HealthListActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -90,22 +90,22 @@ public class HealthListActivity extends ActionBarActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
-        FlipView flipView = (FlipView) findViewById(R.id.flip_view_health);
-        ArrayList<HealthPair> health_items_list = new ArrayList<HealthPair>();
-        HealthAdapter adapter = new HealthAdapter(this, health_items_list);
+//        FlipView flipView = (FlipView) findViewById(R.id.flip_view_health);
+//        ArrayList<HealthPair> health_items_list = new ArrayList<HealthPair>();
+//        HealthAdapter adapter = new HealthAdapter(this, health_items_list);
 
-        Health hit1 = new Health(1,"ABC","sd sdf asd sad fasdf");
-        Health hit2 = new Health(2,"DEF","WEFASF0. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf");
-        adapter.add(new HealthPair(hit1,hit2));
-        hit1 = new Health(3,"Aasdf we ","SD sad fasdf asdfwe rsaf asdfasdf");
-        hit2 = new Health(4,"E aefsde","asWe wea dfdf");
-        adapter.add(new HealthPair(hit1,hit2));
+//        Health hit1 = new Health(1,"ABC","sd sdf asd sad fasdf");
+//        Health hit2 = new Health(2,"DEF","WEFASF0. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf");
+//        adapter.add(new HealthPair(hit1,hit2));
+//        hit1 = new Health(3,"Aasdf we ","SD sad fasdf asdfwe rsaf asdfasdf");
+//        hit2 = new Health(4,"E aefsde","asWe wea dfdf");
+//        adapter.add(new HealthPair(hit1,hit2));
 //        nit1 = new News(5,"ABC","SEFDSF0","asd sdf asd sad fasdf","asdf sdf","sd fweasd");
 //        nit2 = new News(6,"ABC","SEFDSF0","asd sdf asd sad fasdf","asdf sdf","sd fweasd");
 //        adapter.add(new NewsPair(nit1,nit2));
 
 
-        flipView.setAdapter(adapter);
+//        flipView.setAdapter(adapter);
     }
 
 
@@ -146,10 +146,31 @@ public class HealthListActivity extends ActionBarActivity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-                .commit();
+        FragmentHealth fragment = null;
+        switch (position){
+            case 0:
+                fragment = new FragmentHealth();
+                break;
+            case 1:
+                fragment = new FragmentHealth();
+                break;
+            case 2:
+                fragment = new FragmentHealth();
+                break;
+        }
+
+        if(fragment!=null){
+            fragment.setPosition(position);
+            android.app.FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, fragment).commit();
+        }
+        else {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                    .commit();
+        }
     }
 
     public void onSectionAttached(int number) {
