@@ -265,6 +265,28 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return  video;
     }
 
+        public Weather getCurrentWeather(String CURR_CITY){
+            String query = "SELECT * FROM " + TABLE_WEATHER + " WHERE " + WEATHER_CITY + "='" + CURR_CITY +  "';";
+            Log.e("Query",query);
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor c = db.rawQuery(query, null);
+            Weather weather = new Weather();
+            Log.e("Query",Integer.toString(c.getCount()));
+            if(c.moveToLast()){
+                Log.e("Query","Inside iteration");
+                weather.setID(c.getInt(c.getColumnIndex(WEATHER_ID)));
+                weather.setCity(c.getString(c.getColumnIndex(WEATHER_CITY)));
+                weather.setMain(c.getString(c.getColumnIndex(WEATHER_MAIN)));
+                weather.setDescription(c.getString(c.getColumnIndex(WEATHER_DESCRIPTION)));
+                weather.setTemp(c.getFloat(c.getColumnIndex(WEATHER_TEMP)));
+                weather.setMInTemp(c.getFloat(c.getColumnIndex(WEATHER_MIN_TEMP)));
+                weather.setMaxTemp(c.getFloat(c.getColumnIndex(WEATHER_MAX_TEMP)));
+                weather.setHumidity(c.getInt(c.getColumnIndex(WEATHER_HUMIDITY)));
+
+            }
+            return weather;
+        }
+
     public List<Videos> getAllVideosbyCategory(int category){
         List<Videos> videos = new ArrayList<Videos>();
         String selectQuery = null;

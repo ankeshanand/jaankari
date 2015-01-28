@@ -71,32 +71,35 @@ public class HomeScreen extends ActionBarActivity {
         setContentView(R.layout.activity_home_screen);
         db = new DatabaseHandler(this.getApplicationContext());
         Weather weather = null;
-        weather = db.getCurrentWeather();
-        if(weather != null){
-            TextView temp = (TextView) findViewById(R.id.temp);
-            ImageView weatherIcon = (ImageView) findViewById(R.id.weatherIcon);
-            TextView humidity = (TextView) findViewById(R.id.humidity);
-            Log.e("Home-Screen", Float.toString(weather.getTemp()));
-            temp.setText(Float.toString(weather.getTemp()));
-            switch (weather.getDescription()) {
-                case "Clear":
-                    weatherIcon.setImageResource(R.drawable.clear);
-                    break;
-                case "Cloudy":
-                    weatherIcon.setImageResource(R.drawable.cloudy);
-                    break;
-                case "Rain":
-                    weatherIcon.setImageResource(R.drawable.rain);
-                    break;
-            }
+        try {
+            weather = db.getCurrentWeather("Mumbai");
+            if (weather != null) {
+                TextView temp = (TextView) findViewById(R.id.temp);
+                ImageView weatherIcon = (ImageView) findViewById(R.id.weatherIcon);
+                TextView humidity = (TextView) findViewById(R.id.humidity);
+                Log.e("Home-Screen", Float.toString(weather.getTemp()));
+                temp.setText(""+weather.getTemp());
+                switch (weather.getDescription()) {
+                    case "Clear":
+                        weatherIcon.setImageResource(R.drawable.clear);
+                        break;
+                    case "Cloudy":
+                        weatherIcon.setImageResource(R.drawable.cloudy);
+                        break;
+                    case "Rain":
+                        weatherIcon.setImageResource(R.drawable.rain);
+                        break;
+                }
 
-            humidity.setText(Integer.toString(weather.getHumidity()) + " % Humidity");
+                humidity.setText(Integer.toString(weather.getHumidity()) + " % Humidity");
+            }
+        }catch(Exception e){
+            e.printStackTrace();
         }
         db.closeDB();
         Intent intent = new Intent(getApplicationContext(),VideoDownloadService.class);
-
-
         startService(intent);
+
 
         Intent bgServiceIntent = new Intent(getApplicationContext(), WifiHandler.class);
         startService(bgServiceIntent);

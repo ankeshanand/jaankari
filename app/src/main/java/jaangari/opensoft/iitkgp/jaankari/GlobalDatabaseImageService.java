@@ -21,6 +21,7 @@ import jaangari.opensoft.iitkgp.jaangari.R;
 import jaangari.opensoft.iitkgp.jaankari.util.Health;
 import jaangari.opensoft.iitkgp.jaankari.util.News;
 import jaangari.opensoft.iitkgp.jaankari.util.Videos;
+import jaangari.opensoft.iitkgp.jaankari.util.Weather;
 
 public class GlobalDatabaseImageService extends Service {
     private String TAG = "GloabalDatabaseImage";
@@ -106,6 +107,33 @@ public class GlobalDatabaseImageService extends Service {
         }
     }
 
+    public void getWeather(){
+        try{
+            String url = "http://"+getString(R.string.ip_address)+"/getWeather.php";
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpGet httpGet = new HttpGet(url);
+            HttpResponse response = httpclient.execute(httpGet);
+            String json_string = EntityUtils.toString(response.getEntity());
+            JSONArray jsonArray = new JSONArray(json_string);
+            db = new DatabaseHandler(getApplicationContext());
+            for (int i=0;i<jsonArray.length();i++){
+                JSONObject root = jsonArray.getJSONObject(i);
+                Weather weather = new Weather(root.getInt("id"),root.getString("city_name"),
+                        root.getString("main"),root.getString("description"),(float)root.getDouble("temp"),
+                        (float)root.getDouble("temp_min"),(float)root.getDouble("temp_max"),root.getInt("humidity"));
+                db.addWeather(weather);
+                Log.e(TAG,root.toString());
+            }
+            db.closeDB();
+            SharedPreferences sp=getSharedPreferences("Login", 0);
+            SharedPreferences.Editor Ed=sp.edit();
+            Ed.putBoolean("Weather",true);
+            Ed.commit();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId){
 
@@ -117,6 +145,9 @@ public class GlobalDatabaseImageService extends Service {
         Thread t = new Thread(new Runnable(){
             @Override
             public void run() {
+                if(!sp.getBoolean("Weather",false)){
+                    getWeather();
+                }
                 if(!sp.getBoolean("News",false)){
                     getNews();
                 }
