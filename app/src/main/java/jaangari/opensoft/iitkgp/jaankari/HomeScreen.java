@@ -1,9 +1,13 @@
 package jaangari.opensoft.iitkgp.jaankari;
 
+import android.app.SearchManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -78,7 +82,7 @@ public class HomeScreen extends ActionBarActivity {
                 ImageView weatherIcon = (ImageView) findViewById(R.id.weatherIcon);
                 TextView humidity = (TextView) findViewById(R.id.humidity);
                 Log.e("Home-Screen", Float.toString(weather.getTemp()));
-                temp.setText(""+weather.getTemp());
+                temp.setText(""+(int)weather.getTemp());
                 switch (weather.getDescription()) {
                     case "Clear":
                         weatherIcon.setImageResource(R.drawable.clear);
@@ -121,7 +125,21 @@ public class HomeScreen extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.menu_home_screen, menu);
-        return super.onCreateOptionsMenu(menu);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(new ComponentName(getApplicationContext(),SearchableActivity.class)));
+        searchView.setIconifiedByDefault(false);
+        // return super.onCreateOptionsMenu(menu);
+        return true;
+    }
+
+    @Override
+    public boolean onSearchRequested() {
+        Bundle appData = new Bundle();
+        appData.putBoolean(SearchableActivity.JARGON, true);
+        startSearch(null, false, appData, false);
+        return true;
     }
 
     @Override
