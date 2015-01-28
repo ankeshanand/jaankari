@@ -16,9 +16,14 @@ The project has three major components:
   1. **Recommendation System:**
     *Built with the Apache Mahout Machine Learning library.*
 
-    Two different recommender systems were built each for Videos and Arcticles. For Videos, rating on a scale of 5 was asked from user once he has viewed the video. For articles, number of articles viewed by the user was used to compute the extent to which a user likes some article. 
+    Two different recommender systems were built each for Videos and Arcticles. 
+    For Videos, rating on a scale of 5 was asked from user once he has viewed the video. 
+    For articles, number of articles viewed by the user was used to compute the extent to which a user likes some article. 
 
-  For experiencing more hits during searching, 2 step user-based **collaborative filtering** was used. First, users interest for a particular category is computed by computing the interest of user for a particular category. More articles should be recommended for the category user in more interested in. Once the number of articles to be downloaded for a category is decided, using the user based similarity, most relavant articles/videos using the data of other users who have rated the items is recommended.
+  For experiencing more hits during searching, 2 step user-based **collaborative filtering** was used. 
+  First, users interest for a particular category is computed by computing the interest of user for a particular category. 
+  More articles should be recommended for the category user in more interested in. 
+  Once the number of articles to be downloaded for a category is decided, using the user based similarity, most relavant articles/videos using the data of other users who have rated the items is recommended.
 
   2. **Backend services on the server:** *Built on NodeJS and MySQL*
   
@@ -26,7 +31,11 @@ The project has three major components:
 
   3. **The Android app** 
   
-    a. **User Interface:** The homescreen UI is a slick tiled menu of different categories. It also includes a search bar that searches across the global database for News and articles. For browsing articles, we use a cool flip animation. Each activity such as Videos, News etc. also has a Navigation Drawer assosiated with it to browse Popular, Recommended and History. Weather information is displayed dynamically on the weather tile.
+    a. **User Interface:** The homescreen UI is a slick tiled menu of different categories. 
+It also includes a search bar that searches across the global database for News and articles. 
+For browsing articles, we use a cool flip animation. 
+Each activity such as Videos, News etc. also has a Navigation Drawer assosiated with it to browse Popular, Recommended and History. 
+Weather information is displayed dynamically on the weather tile.
 
     b. **Wifi P2P Network:** We use a P2P network over Wifi hotspot to let users fetch content from each other. We preferred Wifi hostops over Bluetooth as they are **faster**, **consistent** and provide **multiple connections.**
   
