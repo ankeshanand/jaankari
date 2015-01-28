@@ -117,6 +117,15 @@
             android:name="jaangari.opensoft.iitkgp.jaankari.BackgroundServices.FileServer"
             android:exported="false" >
         </service>
+
+        <activity
+            android:name="jaangari.opensoft.iitkgp.jaankari.CommodityActivity"
+            android:label="@string/title_activity_commodity"
+            android:parentActivityName="jaangari.opensoft.iitkgp.jaankari.HomeScreen" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="jaangari.opensoft.iitkgp.jaankari.HomeScreen" />
+        </activity>
     </application>
 
 </manifest>

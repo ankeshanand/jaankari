@@ -40,6 +40,11 @@ public class HomeScreen extends ActionBarActivity {
         startActivity(intent);
     }
 
+    public void commodityIntent(View view){
+        Intent intent = new Intent(getApplicationContext(),CommodityActivity.class);
+        startActivity(intent);
+    }
+
 
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
