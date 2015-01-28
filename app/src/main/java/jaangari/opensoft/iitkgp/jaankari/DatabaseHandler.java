@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
 
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -346,26 +348,31 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 list.add(searchResults);
             }while(results.moveToNext());
         }
+        JSONArray ar = new JSONArray(list);
+        Log.v(TAG,ar.toString());
+
         db.close();
-        return  list;
+        return list;
     }
     //TODO:Gets list of category,ids based on the search query.
 
-    public ArrayList<PairCategory> fetchIndexList(String query) {
-
-        ArrayList<Integer> indexes = new ArrayList<Integer>();
-
-        indexes.add(33);
-
-        indexes.add(66);
-
-        ArrayList<PairCategory> res = (new ArrayList<>());
-
-        res.add(new PairCategory("Sports",indexes));
-
-        res.add(new PairCategory("News",indexes));
-
-        return res;
+    public String fetchIndexList(String query) {
+        ArrayList<SearchResults> list = searchMatches(query,null);
+        JSONArray ar = new JSONArray(list);
+        return ar.toString();
+//        ArrayList<Integer> indexes = new ArrayList<Integer>();
+//
+//        indexes.add(33);
+//
+//        indexes.add(66);
+//
+//        ArrayList<PairCategory> res = (new ArrayList<>());
+//
+//        res.add(new PairCategory("Sports",indexes));
+//
+//        res.add(new PairCategory("News",indexes));
+//
+//        return res;
 
     }
 

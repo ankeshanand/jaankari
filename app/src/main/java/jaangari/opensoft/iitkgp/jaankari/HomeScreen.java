@@ -60,11 +60,11 @@ public class HomeScreen extends ActionBarActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         }
-        else if(id==R.id.update_profile_picture){
-            Intent intent =  new Intent(this,UpdateProfilePicActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-        }
+//        else if(id==R.id.update_profile_picture){
+//            Intent intent =  new Intent(this,UpdateProfilePicActivity.class);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//            startActivity(intent);
+//        }
 
         return super.onOptionsItemSelected(item);
     }
