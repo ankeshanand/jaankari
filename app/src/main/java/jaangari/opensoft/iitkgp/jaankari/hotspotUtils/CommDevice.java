@@ -43,29 +43,8 @@ public class CommDevice {
 
     private static boolean IS_MSG_RECEIVED = false  ;
     DatabaseHandler dbHandler;
-    private class StoppableThread extends Thread{
-        boolean bExit = false;
-
-        public void exit(boolean bExit){
-            this.bExit = bExit;
-        }
-
-        @Override
-        public void run(){
-            while(!bExit){
-                System.out.println("Thread is running");
-                try {
-                    listenForReplies();
-                } catch (Exception ex) {
-                    // Logger.getLogger(ThreadTester.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-    }
 
     private static final long LISTEN_TIMEOUT = 30000 ;
-
-
 
     private static final int MESSAGE_SIZE = 10;
     private static  boolean IS_RECEIVED = false;
@@ -75,6 +54,7 @@ public class CommDevice {
     public static final int PORT_SRC = 2802;
 
     public static final int PORT_FILE = 4545;
+    public static final int PORT_FILE_download = 5545;
 
     Context mContext ;
 
@@ -151,6 +131,7 @@ public class CommDevice {
 //            outputStream.flush();
 
         } catch (Exception e) {
+            Log.d("CommDevice","ERROR = " + e);
             e.printStackTrace();
         }
     }
@@ -345,6 +326,8 @@ public class CommDevice {
         return true;
     }
 
+
+
     public String getFilePathfromID(int query) throws IOException {
         InputStream indexFile = null;
         String filePath = "" ;
@@ -406,6 +389,165 @@ public class CommDevice {
 //            bis.read(buffer,0,buffer.length);
 //            outputStream.write(buffer,0,buffer.length);
 //            outputStream.flush();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean listenForFileRequests() throws IOException {
+        ServerSocket servsock = null;
+        Socket sock = null;
+        try {
+
+            servsock = new ServerSocket(PORT_FILE_download);
+
+            while (true) {
+                //Log.d("CommDevice", "Listening for File Request");
+
+                sock = servsock != null ? servsock.accept() : null;
+
+                Log.d("CommDevice","Accepted Connection for File Request");
+
+                String fPath = waitForStringSocket(sock);
+                Log.d("CommDevice","****FILENAME = " + fPath);
+                sendFileOverSocket(sock,fPath);
+
+                if (sock != null) sock.close();
+
+            }
+        }
+        catch (Exception e)
+        {
+
+        }
+        finally {
+            if (servsock != null) servsock.close();
+        }
+
+        return true;
+
+    }
+    public void requestFile(String IP, String category,int id) throws IOException {
+        Socket socket = null;
+        try {
+            socket = new Socket(IP.substring(1), PORT_FILE_download);
+            sendStringoverSocket(socket,"/storage/sdcard0/inp.mp3");
+            saveFileOverSocket(socket);
+                        //socket.close();
+//            bis.read(buffer,0,buffer.length);
+//            outputStream.write(buffer,0,buffer.length);
+//            outputStream.flush();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendStringoverSocket(Socket socket, String toSend) throws IOException {
+
+        OutputStream outputStream = socket.getOutputStream();
+        PrintWriter out = new PrintWriter(outputStream);
+        Log.d("CommDevice","Sending String = " + toSend);
+
+        out.print(toSend + "\n");
+        out.flush();
+
+        //out.close();
+
+        // byte[] buffer = msg.getBytes();
+        //outputStream.write(buffer);
+        //outputStream.flush();
+
+        //outputStream.close();
+
+        Log.d("CommDevice","Sent the message!!\n");
+
+    }
+
+    public String waitForStringSocket(Socket sock) throws IOException {
+
+        InputStream is = sock.getInputStream();
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(is));
+
+        String theS = in.readLine();
+
+        //in.close();
+        //is.close();
+
+        return theS ;
+    }
+
+    public void sendFileOverSocket(Socket sock,String filePath) throws IOException {
+        Socket socket = null;
+        try {
+            socket = sock; //new Socket(IP, PORT_FILE);
+            OutputStream outputStream = socket.getOutputStream();
+            File f = new File( filePath);
+            byte [] buffer = new byte[1024];
+            FileInputStream fis = new FileInputStream(f);
+            Log.d("CommDevice","Read the file!!\n");
+
+            BufferedInputStream bis = new BufferedInputStream(fis);
+
+            int read = -1;
+            while((read = bis.read(buffer)) > 0)
+            {
+                outputStream.write(buffer, 0 ,read);
+            }
+            //outputStream.flush();
+
+            outputStream.close();
+            sock.close();
+            bis.close();
+
+            Log.d("CommDevice","Sent the file!!\n");
+            //socket.close();
+//            bis.read(buffer,0,buffer.length);
+//            outputStream.write(buffer,0,buffer.length);
+//            outputStream.flush();
+
+        } catch (Exception e) {
+            Log.d("CommDevice","ERRe!" + e);
+            e.printStackTrace();
+        }
+    }
+    public void saveFileOverSocket(Socket sock) throws IOException {
+        try {
+
+            InputStream is = sock.getInputStream();
+
+            //final File file2 = new File(dbHandler.getFilePath("", 1));
+            final File file2 = new File("/storage/sdcard0/outSTR22.mp3");
+
+            final OutputStream output = new FileOutputStream(file2);
+
+            final byte[] buffer = new byte[1024];
+            try {
+                int read = -1;
+                while ((read = is.read(buffer)) > 0)
+                {
+                    output.write(buffer, 0 , read);
+                }
+
+                Log.d("CommDevice","Recieved File");
+
+
+                output.close();
+                is.close();
+                sock.close();
+                IS_RECEIVED = true;
+
+            }
+            catch (Exception e)
+            {
+                Log.d("CommDevice",e.toString());
+
+            }
+
+            Log.d("CommDevice","Saved the file!!\n");
+
 
         } catch (Exception e) {
             e.printStackTrace();
