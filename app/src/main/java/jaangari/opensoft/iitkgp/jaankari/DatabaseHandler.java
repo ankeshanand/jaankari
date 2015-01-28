@@ -248,6 +248,30 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return news;
     }
 
+
+    public List<Health> getAllHealth(){
+        List<Health> healths = new ArrayList<Health>();
+        String selectQuery = "SELECT * FROM " + TABLE_HEALTH+"";
+        Log.e(TAG, selectQuery);
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        if(c.moveToFirst()){
+            do{
+                Health health1 = new Health();
+                health1.setID(c.getInt(c.getColumnIndex(NEWS_ID)));
+                health1.setTitle(c.getString(c.getColumnIndex(NEWS_TITLE)));
+                health1.setText(c.getString(c.getColumnIndex(NEWS_TEXT)));
+                healths.add(health1);
+                Log.e(TAG,health1.getTitle());
+            }while(c.moveToNext());
+        }
+        else{
+            Log.e(TAG,c.toString());
+        }
+        db.close();
+        return healths;
+    }
+
     public Videos getVideobyId(int id){
         Videos video = new Videos();
         String selectQuery = "SELECT * FROM "+TABLE_VIDEOS + " WHERE " + VIDEOS_ID + "="+id + ";";

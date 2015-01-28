@@ -9,7 +9,7 @@
         android:layout_height="fill_parent"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:background="@color/blue"
+        android:background="@color/background_material_light"
         android:paddingBottom="2dp"
         android:clickable="true"
         android:onClick="newsClickedUp"
@@ -20,7 +20,8 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/abc_text_size_large_material"
         android:textStyle="bold"
-        android:paddingLeft="25dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
         android:paddingTop="15dp"
         android:text="Title" />
     <TextView
@@ -29,6 +30,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="10dp"
         android:paddingLeft="15dp"
+        android:paddingRight="15dp"
         android:textSize="@dimen/abc_text_size_medium_material"
         android:text="Summary of the news article" />
 
@@ -44,7 +46,7 @@
         android:layout_height="fill_parent"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:background="@color/blue"
+        android:background="@color/background_material_light"
         android:paddingTop="2dp"
         android:clickable="true"
         android:onClick="newsClickedDown"
@@ -54,8 +56,9 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/abc_text_size_large_material"
-            android:paddingLeft="25dp"
+            android:paddingLeft="15dp"
             android:paddingTop="15dp"
+            android:paddingRight="15dp"
             android:textStyle="bold"
             android:text="Title" />
         <TextView
@@ -64,6 +67,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
             android:paddingLeft="15dp"
+            android:paddingRight="15dp"
             android:textSize="@dimen/abc_text_size_medium_material"
             android:text="Summary of the news article" />
     </LinearLayout>

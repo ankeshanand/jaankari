@@ -8,6 +8,7 @@ public class Health {
     private String title;
     private String text;
 
+    public Health(){}
 
     public Health(int id,String title, String text){
         this.id = id;

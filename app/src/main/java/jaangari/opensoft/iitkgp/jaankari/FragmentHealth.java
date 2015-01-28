@@ -75,12 +75,12 @@ public class FragmentHealth extends Fragment {
         parentLayout = inflater.inflate(R.layout.fragment_health_list, container, false);
         db = new DatabaseHandler(this.getActivity().getApplicationContext());
         FlipView flipview = (FlipView) parentLayout.findViewById(R.id.flip_view_health);
-        //List<Health> nlist = db.getAllHealthbyCategory(position);
+        List<Health> nlist = db.getAllHealth();
 //        Log.e(TAG, videos.toString());
 
 
         //Get health
-        List<Health> nlist = new ArrayList<Health>();
+        //List<Health> nlist = new ArrayList<Health>();
         Health second = null;
         ArrayList<HealthPair> news_pair_list = new ArrayList<HealthPair>();
         for(int i=0; i<nlist.size(); i+=2){
@@ -96,12 +96,12 @@ public class FragmentHealth extends Fragment {
 
         HealthAdapter adapter = new HealthAdapter(this.getActivity(), news_pair_list);
 
-        Health hit1 = new Health(1,"ABC","sd sdf asd sad fasdf");
-        Health hit2 = new Health(2,"DEF","WEFASF0. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf");
-        adapter.add(new HealthPair(hit1,hit2));
-        hit1 = new Health(3,"Aasdf we ","SD sad fasdf asdfwe rsaf asdfasdf");
-        hit2 = new Health(4,"E aefsde","asWe wea dfdf");
-        adapter.add(new HealthPair(hit1,hit2));
+//        Health hit1 = new Health(1,"ABC","sd sdf asd sad fasdf");
+//        Health hit2 = new Health(2,"DEF","WEFASF0. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf");
+//        adapter.add(new HealthPair(hit1,hit2));
+//        hit1 = new Health(3,"Aasdf we ","SD sad fasdf asdfwe rsaf asdfasdf");
+//        hit2 = new Health(4,"E aefsde","asWe wea dfdf");
+//        adapter.add(new HealthPair(hit1,hit2));
 
         flipview.setAdapter(adapter);
         db.closeDB();

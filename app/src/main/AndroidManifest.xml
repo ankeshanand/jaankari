@@ -87,6 +87,13 @@
             android:label="@string/title_activity_video"
             android:screenOrientation="portrait" >
         </activity>
+
+        <activity
+            android:name="jaangari.opensoft.iitkgp.jaankari.NewsMainActivity"
+            android:label="@string/title_activity_video"
+            android:screenOrientation="portrait" >
+        </activity>
+
         <activity
             android:name="jaangari.opensoft.iitkgp.jaankari.NewsListActivity"
             android:label="@string/title_activity_news_list"

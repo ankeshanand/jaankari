@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import java.text.DecimalFormat;
+
 import jaangari.opensoft.iitkgp.jaangari.R;
 import jaangari.opensoft.iitkgp.jaankari.BackgroundServices.QueryHandler;
 import jaangari.opensoft.iitkgp.jaankari.BackgroundServices.WifiHandler;
@@ -78,7 +80,8 @@ public class HomeScreen extends ActionBarActivity {
                 ImageView weatherIcon = (ImageView) findViewById(R.id.weatherIcon);
                 TextView humidity = (TextView) findViewById(R.id.humidity);
                 Log.e("Home-Screen", Float.toString(weather.getTemp()));
-                temp.setText(""+weather.getTemp());
+                DecimalFormat df = new DecimalFormat("#.#");
+                temp.setText(""+df.format((weather.getTemp()-273))+"\u00b0");
                 switch (weather.getDescription()) {
                     case "Clear":
                         weatherIcon.setImageResource(R.drawable.clear);
