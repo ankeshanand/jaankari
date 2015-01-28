@@ -21,6 +21,7 @@
     <string name="old_password">Current Password</string>
     <string name="update_password">Update!</string>
     <string name="ip_address">10.132.188.62/~rahulanishetty/OpenSoft/</string>
+    <string name="home_screen">Home</string>
 
     <string-array name="profile_updates">
         <item>Update Profile Picture</item>

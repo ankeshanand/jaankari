@@ -13,6 +13,8 @@ import java.util.List;
 
 import jaangari.opensoft.iitkgp.jaankari.util.Health;
 import jaangari.opensoft.iitkgp.jaankari.util.News;
+import jaangari.opensoft.iitkgp.jaankari.util.PairCategory;
+import jaangari.opensoft.iitkgp.jaankari.util.SearchResults;
 import jaangari.opensoft.iitkgp.jaankari.util.Videos;
 import jaangari.opensoft.iitkgp.jaankari.util.Weather;
 
@@ -246,6 +248,22 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return news;
     }
 
+    public Videos getVideobyId(int id){
+        Videos video = new Videos();
+        String selectQuery = "SELECT * FROM "+TABLE_VIDEOS + " WHERE " + VIDEOS_ID + "="+id + ";";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        if(c.moveToFirst()){
+            video.setID(c.getInt(c.getColumnIndex(VIDEOS_ID)));
+            video.setName(c.getString(c.getColumnIndex(VIDEOS_FILENAME)));
+            video.setCategory(c.getInt(c.getColumnIndex(VIDEOS_CATEGORY)));
+            video.setPath(c.getString(c.getColumnIndex(VIDEOS_PATH)));
+            video.setRating(c.getFloat(c.getColumnIndex(VIDEOS_RATING)));
+            video.setHistory(c.getInt(c.getColumnIndex(VIDEOS_HISTORY)));
+            video.setIsRated(c.getInt(c.getColumnIndex(VIDEOS_RATED)));
+        }
+        return  video;
+    }
 
     public List<Videos> getAllVideosbyCategory(int category){
         List<Videos> videos = new ArrayList<Videos>();
@@ -281,21 +299,54 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return videos;
     }
 
-    public Cursor searchMatches(String query, String[] columns){
+
+    public ArrayList<SearchResults> searchMatches(String query, String[] columns){
+        ArrayList<SearchResults> list = new ArrayList<SearchResults>();
         SQLiteDatabase db = this.getReadableDatabase();
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        builder.setTables(TABLE_VIRTUAL);
         String titleQuery =  builder.buildQuery(null,VIRTUAL_TITLE + " MATCH '"+query+"*'",null,null,null,null);
         String summaryQuery = builder.buildQuery(null,VIRTUAL_SUMMARY + " MATCH '"+query+"*'",null,null,null,null);
         String textQuery = builder.buildQuery(null,VIRTUAL_TEXT + " MATCH '"+query+"*'",null,null,null,null);
         String unionQuery = builder.buildUnionQuery(new String[]{titleQuery,summaryQuery,textQuery},null,null);
-        Cursor result = db.rawQuery(unionQuery,null);
+        Log.e(TAG,unionQuery.toString());
+        unionQuery = unionQuery.replace("ALL"," ");
+        Log.e(TAG,unionQuery.toString());
+        Cursor results = db.rawQuery(unionQuery,null);
+        if(results.moveToFirst()){
+            do{
+                int id = results.getInt(results.getColumnIndex(VIRTUAL_ID));
+                String category = results.getString(results.getColumnIndex(VIRTUAL_CATEGORY));
+                String title = results.getString(results.getColumnIndex(VIRTUAL_TITLE));
+                String summary = results.getString(results.getColumnIndex(VIRTUAL_SUMMARY));
+                String text = results.getString(results.getColumnIndex(VIRTUAL_TEXT));
+                SearchResults searchResults = new SearchResults(id,title,summary,text,category);
+                list.add(searchResults);
+            }while(results.moveToNext());
+        }
         db.close();
-        return  result;
+        return  list;
     }
     //TODO:Gets list of category,ids based on the search query.
-    public ArrayList<SearchableActivity.PairCategory> fetchIndexList(String query){
-        return null;
+
+    public ArrayList<PairCategory> fetchIndexList(String query) {
+
+        ArrayList<Integer> indexes = new ArrayList<Integer>();
+
+        indexes.add(33);
+
+        indexes.add(66);
+
+        ArrayList<PairCategory> res = (new ArrayList<>());
+
+        res.add(new PairCategory("Sports",indexes));
+
+        res.add(new PairCategory("News",indexes));
+
+        return res;
+
     }
+
     //TODO: Returnd the filepath corresponding the category and id. Null if n.a
     public String checkLocalDatabase(String category, int id) {
         return null;

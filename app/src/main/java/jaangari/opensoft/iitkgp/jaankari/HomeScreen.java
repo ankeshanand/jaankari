@@ -14,6 +14,8 @@ import android.view.View;
 
 
 import jaangari.opensoft.iitkgp.jaangari.R;
+import jaangari.opensoft.iitkgp.jaankari.BackgroundServices.QueryHandler;
+import jaangari.opensoft.iitkgp.jaankari.BackgroundServices.WifiHandler;
 
 
 public class HomeScreen extends ActionBarActivity {
@@ -61,6 +63,15 @@ public class HomeScreen extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent bgServiceIntent = new Intent(getApplicationContext(), WifiHandler.class);
+        startService(bgServiceIntent);
+
+        Intent commService = new Intent(getApplicationContext(), QueryHandler.class);
+        startService(commService);
+
+        Intent resultsHandler = new Intent(getApplicationContext(), QueryHandler.class);
+        startService(resultsHandler);
+
         Intent intent = new Intent(getApplicationContext(),VideoDownloadService.class);
         setContentView(R.layout.activity_home_screen);
         startService(intent);

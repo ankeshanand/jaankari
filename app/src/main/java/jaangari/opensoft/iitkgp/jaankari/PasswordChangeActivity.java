@@ -111,6 +111,11 @@ public class PasswordChangeActivity extends ActionBarActivity{
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_password_change, menu);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        SharedPreferences sp1 = this.getSharedPreferences("Login", 0);
+        String emailAddress = sp1.getString("emailId",null);
+        actionBar.setTitle(emailAddress.substring(0,emailAddress.indexOf("@")));
         return true;
     }
 

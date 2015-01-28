@@ -3,6 +3,7 @@ package jaangari.opensoft.iitkgp.jaankari;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -16,6 +17,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import jaangari.opensoft.iitkgp.jaangari.R;
 import jaangari.opensoft.iitkgp.jaankari.util.Health;
 import jaangari.opensoft.iitkgp.jaankari.util.News;
 import jaangari.opensoft.iitkgp.jaankari.util.Videos;
@@ -23,101 +25,85 @@ import jaangari.opensoft.iitkgp.jaankari.util.Videos;
 public class GlobalDatabaseImageService extends Service {
     private String TAG = "GloabalDatabaseImage";
     private DatabaseHandler db;
+    SharedPreferences sp;
     public GlobalDatabaseImageService() {
     }
 
     public void getNews(){
-        Thread t = new Thread(new Runnable(){
-            @Override
-            public void run() {
-                try {
-                    String url = "http://10.135.239.70:3000/newsLogs";
-                    HttpClient httpclient = new DefaultHttpClient();
-                    HttpGet httpGet = new HttpGet(url);
-                    HttpResponse response = httpclient.execute(httpGet);
-                    String json_string = EntityUtils.toString(response.getEntity());
-                    JSONArray jsonArray = new JSONArray(json_string);
-                    db = new DatabaseHandler(getApplicationContext());
-                    for(int i=0;i<jsonArray.length();i++){
-                        JSONObject root = jsonArray.getJSONObject(i);
-                        News news = new News(root.getInt("id"),root.getString("title"),root.getString("summary"),null,null,root.getInt("category"));
-                        db.addNews(news);
-                        Log.e(TAG,root.toString());
-                    }
-                    db.closeDB();
-                    SharedPreferences sp=getSharedPreferences("Login", 0);
-                    SharedPreferences.Editor Ed=sp.edit();
-                    Ed.putBoolean("News",true);
-                    Ed.commit();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        try {
+            String url = "http://"+getString(R.string.ip_address)+"/getNews.php";
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpGet httpGet = new HttpGet(url);
+            HttpResponse response = httpclient.execute(httpGet);
+            String json_string = EntityUtils.toString(response.getEntity());
+            JSONArray jsonArray = new JSONArray(json_string);
+            db = new DatabaseHandler(getApplicationContext());
+            for(int i=0;i<jsonArray.length();i++){
+                JSONObject root = jsonArray.getJSONObject(i);
+                News news = new News(root.getInt("id"),root.getString("title"),root.getString("summary"),null,null,root.getInt("category"));
+                db.addNews(news);
+                Log.e(TAG,root.toString());
             }
-        });
-        t.start();
+            db.closeDB();
+            SharedPreferences sp=getSharedPreferences("Login", 0);
+            SharedPreferences.Editor Ed=sp.edit();
+            Ed.putBoolean("News",true);
+            Ed.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void getHealth(){
-        Thread t = new Thread(new Runnable(){
-            @Override
-            public void run() {
-                try{
-                    String url = "http://10.135.239.70:3000/healthLogs";
-                    HttpClient httpclient = new DefaultHttpClient();
-                    HttpGet httpGet = new HttpGet(url);
-                    HttpResponse response = httpclient.execute(httpGet);
-                    String json_string = EntityUtils.toString(response.getEntity());
-                    JSONArray jsonArray = new JSONArray(json_string);
-                    db = new DatabaseHandler(getApplicationContext());
-                    for (int i=0;i<jsonArray.length();i++){
-                        JSONObject root = jsonArray.getJSONObject(i);
-                        Health health = new Health(root.getInt("id"),root.getString("page_title"),null);
-                        db.addHealth(health);
-                    }
-                    db.closeDB();
-                    SharedPreferences sp=getSharedPreferences("Login", 0);
-                    SharedPreferences.Editor Ed=sp.edit();
-                    Ed.putBoolean("Health",true);
-                    Ed.commit();
-                }catch(Exception e){
-                    e.printStackTrace();
-                }
+        try{
+            String url = "http://"+getString(R.string.ip_address)+"/getHealth.php";
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpGet httpGet = new HttpGet(url);
+            HttpResponse response = httpclient.execute(httpGet);
+            String json_string = EntityUtils.toString(response.getEntity());
+            JSONArray jsonArray = new JSONArray(json_string);
+            db = new DatabaseHandler(getApplicationContext());
+            for (int i=0;i<jsonArray.length();i++){
+                JSONObject root = jsonArray.getJSONObject(i);
+                Health health = new Health(root.getInt("id"),root.getString("page_title"),null);
+                db.addHealth(health);
+                Log.e(TAG,root.toString());
             }
-        });
-        t.start();
+            db.closeDB();
+            SharedPreferences sp=getSharedPreferences("Login", 0);
+            SharedPreferences.Editor Ed=sp.edit();
+            Ed.putBoolean("Health",true);
+            Ed.commit();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void getVideos(){
-        Thread t = new Thread(new Runnable(){
-            @Override
-            public void run() {
-                try{
-                    String url = "http://10.135.239.70:3000/videoLogs";
-                    HttpClient httpclient = new DefaultHttpClient();
-                    HttpGet httpGet = new HttpGet(url);
-                    HttpResponse response = httpclient.execute(httpGet);
-                    String json_string = EntityUtils.toString(response.getEntity());
-                    JSONArray jsonArray = new JSONArray(json_string);
-                    db = new DatabaseHandler(getApplicationContext());
-                    for (int i=0;i<jsonArray.length();i++){
-                        JSONObject root = jsonArray.getJSONObject(i);
-                        Health health = new Health(root.getInt("id"),root.getString("page_title"),null);
-                        db.addHealth(health);
-                        Videos video = new Videos(root.getInt("id"),root.getString("name"),
-                                root.getString("path"),root.getInt("category"),
-                                (float)root.getDouble("rating"));
-                        db.addVideo(video);
-                    }
-                    db.closeDB();
-                    SharedPreferences sp=getSharedPreferences("Login", 0);
-                    SharedPreferences.Editor Ed=sp.edit();
-                    Ed.putBoolean("Videos",true);
-                    Ed.commit();
-                }catch(Exception e){
-                    e.printStackTrace();
-                }
+        try{
+            String url = "http://"+getString(R.string.ip_address)+"/getVideos.php";
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpGet httpGet = new HttpGet(url);
+            HttpResponse response = httpclient.execute(httpGet);
+            String json_string = EntityUtils.toString(response.getEntity());
+            JSONArray jsonArray = new JSONArray(json_string);
+            db = new DatabaseHandler(getApplicationContext());
+            for (int i=0;i<jsonArray.length();i++){
+                JSONObject root = jsonArray.getJSONObject(i);
+                Videos video = new Videos(root.getInt("id"),root.getString("name"),
+                        root.getString("path"),root.getInt("category"),
+                        (float)root.getDouble("rating"));
+                db.addVideo(video);
+                Log.e(TAG,root.toString());
             }
-        });
+            db.closeDB();
+            SharedPreferences sp=getSharedPreferences("Login", 0);
+            SharedPreferences.Editor Ed=sp.edit();
+            Ed.putBoolean("Videos",true);
+            Ed.commit();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -127,15 +113,28 @@ public class GlobalDatabaseImageService extends Service {
         // Videos = /videoLogs
         // Health = /healthLogs
         // Weather = /getAllWeatherDetails
-        SharedPreferences sp = this.getSharedPreferences("Login", 0);
-        if(!sp.getBoolean("News",false)){
-            getNews();
-        }
-        if(!sp.getBoolean("Health",false)){
-            getHealth();
-        }
-        if(!sp.getBoolean("Videos",false)){
-            getVideos();
+        sp = this.getSharedPreferences("Login", 0);
+        Thread t = new Thread(new Runnable(){
+            @Override
+            public void run() {
+                if(!sp.getBoolean("News",false)){
+                    getNews();
+                }
+                if(!sp.getBoolean("Health",false)){
+                    Log.e(TAG,"Health");
+                    getHealth();
+                }
+                if(!sp.getBoolean("Videos",false)){
+                    Log.e(TAG,"Videos");
+                    getVideos();
+                }
+            }
+        });
+        t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
         return 0;
     }
