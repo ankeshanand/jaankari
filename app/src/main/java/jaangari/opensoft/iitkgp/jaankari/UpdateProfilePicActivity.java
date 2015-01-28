@@ -84,78 +84,78 @@ public class UpdateProfilePicActivity extends Activity {
         }
     }
 
-    private void setProfilePic(Bitmap yourSelectedImage , boolean set){
-        ImageView mImageView;
-        mImageView = (ImageView) findViewById(R.id.profile_pic);
-//        ViewGroup.LayoutParams params = mImageView.getLayoutParams();
-//        params.height = (int) (yourSelectedImage.getHeight());
-//        params.width = (int) (yourSelectedImage.getWidth());
-//        Log.v(PRINT_SERVICE, "height :" + params.height + " , width : " + params.width);
-//        mImageView.setLayoutParams(params);
-        mImageView.setImageBitmap(yourSelectedImage);
-        if(set) {
-            writeProfilePic(yourSelectedImage);
-        }
-    }
+//    private void setProfilePic(Bitmap yourSelectedImage , boolean set){
+//        ImageView mImageView;
+//        mImageView = (ImageView) findViewById(R.id.profile_pic);
+////        ViewGroup.LayoutParams params = mImageView.getLayoutParams();
+////        params.height = (int) (yourSelectedImage.getHeight());
+////        params.width = (int) (yourSelectedImage.getWidth());
+////        Log.v(PRINT_SERVICE, "height :" + params.height + " , width : " + params.width);
+////        mImageView.setLayoutParams(params);
+//        mImageView.setImageBitmap(yourSelectedImage);
+//        if(set) {
+//            writeProfilePic(yourSelectedImage);
+//        }
+//    }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
-        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
-        switch(requestCode) {
-            case REQUEST_CAMERA:
-                File f = new File(Environment.getExternalStorageDirectory().toString()+"/temp.jpg");
-                try {
-                    Uri selectedImage = Uri.fromFile(f);
-                    Bitmap yourSelectedImage = decodeUri(selectedImage);
-                    setProfilePic(yourSelectedImage,true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-            case SELECT_PHOTO:
-                if(resultCode == RESULT_OK){
-                    Uri selectedImage = imageReturnedIntent.getData();
-                    Bitmap yourSelectedImage = null;
-                    try {
-                        yourSelectedImage = decodeUri(selectedImage);
-                        setProfilePic(yourSelectedImage,true);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
-        }
-    }
+ //   @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+//        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+//        switch(requestCode) {
+//            case REQUEST_CAMERA:
+//                File f = new File(Environment.getExternalStorageDirectory().toString()+"/temp.jpg");
+//                try {
+//                    Uri selectedImage = Uri.fromFile(f);
+//                    Bitmap yourSelectedImage = decodeUri(selectedImage);
+//                    setProfilePic(yourSelectedImage,true);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//                break;
+//            case SELECT_PHOTO:
+//                if(resultCode == RESULT_OK){
+//                    Uri selectedImage = imageReturnedIntent.getData();
+//                    Bitmap yourSelectedImage = null;
+//                    try {
+//                        yourSelectedImage = decodeUri(selectedImage);
+//                        setProfilePic(yourSelectedImage,true);
+//                    } catch (FileNotFoundException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//        }
+//    }
 
 
-    private Bitmap decodeUri(Uri selectedImage) throws FileNotFoundException {
-
-        // Decode image size
-        BitmapFactory.Options o = new BitmapFactory.Options();
-        o.inJustDecodeBounds = true;
-        BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImage), null, o);
-
-        // The new size we want to scale to
-        final int REQUIRED_SIZE = 140;
-
-        // Find the correct scale value. It should be the power of 2.
-        int width_tmp = o.outWidth, height_tmp = o.outHeight;
-        int scale = 1;
-        while (true) {
-            if (width_tmp / 2 < REQUIRED_SIZE
-                    || height_tmp / 2 < REQUIRED_SIZE) {
-                break;
-            }
-            width_tmp /= 2;
-            height_tmp /= 2;
-            scale *= 2;
-        }
-
-        // Decode with inSampleSize
-        BitmapFactory.Options o2 = new BitmapFactory.Options();
-        o2.inSampleSize = scale;
-        return BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImage), null, o2);
-
-    }
+//    private Bitmap decodeUri(Uri selectedImage) throws FileNotFoundException {
+//
+//        // Decode image size
+//        BitmapFactory.Options o = new BitmapFactory.Options();
+//        o.inJustDecodeBounds = true;
+//        BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImage), null, o);
+//
+//        // The new size we want to scale to
+//        final int REQUIRED_SIZE = 140;
+//
+//        // Find the correct scale value. It should be the power of 2.
+//        int width_tmp = o.outWidth, height_tmp = o.outHeight;
+//        int scale = 1;
+//        while (true) {
+//            if (width_tmp / 2 < REQUIRED_SIZE
+//                    || height_tmp / 2 < REQUIRED_SIZE) {
+//                break;
+//            }
+//            width_tmp /= 2;
+//            height_tmp /= 2;
+//            scale *= 2;
+//        }
+//
+//        // Decode with inSampleSize
+//        BitmapFactory.Options o2 = new BitmapFactory.Options();
+//        o2.inSampleSize = scale;
+//        return BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImage), null, o2);
+//
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

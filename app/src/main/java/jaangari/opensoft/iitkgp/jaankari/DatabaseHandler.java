@@ -8,9 +8,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
 
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import jaangari.opensoft.iitkgp.jaankari.util.Commodity;
 import jaangari.opensoft.iitkgp.jaankari.util.Health;
 import jaangari.opensoft.iitkgp.jaankari.util.News;
 import jaangari.opensoft.iitkgp.jaankari.util.PairCategory;
@@ -32,6 +35,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String TABLE_NEWS = "News";
     private static final String TABLE_HEALTH = "Health";
     private static final String TABLE_VIRTUAL = "FTS_TABLE";
+    private static final String TABLE_COMMODITY = "Commodity";
 
     //Video Columns
     private static final String VIDEOS_ID = "id";
@@ -71,6 +75,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String VIRTUAL_TITLE = "title";
     private static final String VIRTUAL_SUMMARY = "Summary";
     private static final String VIRTUAL_TEXT = "text";
+    //Commodity Column
+    private static final String COMM_ID = "id";
+    private static final String COMM_NAME = "name";
+    private static final String COMM_MIN = "min";
+    private static final String COMM_MAX = "max";
 
 
     private final String TAG = "Database";
@@ -99,6 +108,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String CREATE_VIRTUAL_TABLE = "CREATE VIRTUAL TABLE IF NOT EXISTS " + TABLE_VIRTUAL + " USING fts3("
                 +VIRTUAL_ID+", "+VIRTUAL_CATEGORY+", "
                 +VIRTUAL_TITLE+", "+VIRTUAL_SUMMARY+", "+VIRTUAL_TEXT+", tokenize=porter);";
+        String CREATE_COMMODITY_TABLE = "CREATE TABLE IF NOT EXISTS "+TABLE_COMMODITY+"(" +COMM_ID+" CHAR PRIMARY KEY," +
+                COMM_NAME +" TEXT,"+COMM_MIN + " TEXT,"+ COMM_MAX + " TEXT" + " );";
 
         db.execSQL(CREATE_VIDEOS_TABLE);
         Log.v(TAG, "Videos Table created");
@@ -110,6 +121,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         Log.v(TAG,"Health Table Created");
         db.execSQL(CREATE_VIRTUAL_TABLE);
         Log.v(TAG,"Virtual Table Created");
+        db.execSQL(CREATE_COMMODITY_TABLE);
+        Log.v("Commodity","Commodity Table Created");
     }
 
     @Override
@@ -119,6 +132,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NEWS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_HEALTH);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_VIRTUAL);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMMODITY);
         onCreate(db);
     }
 
@@ -199,6 +213,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(VIRTUAL_SUMMARY,(String)null);
         values.put(VIRTUAL_TEXT,health.getText());
         db.insert(TABLE_VIRTUAL,null,values);
+        db.close();
+    }
+
+    public void addCommodity(Commodity commodity){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COMM_ID,commodity.getID());
+        values.put(COMM_NAME,commodity.getName());
+        values.put(COMM_MIN,commodity.getMin());
+        values.put(COMM_MAX,commodity.getMax());
+        db.insert(TABLE_COMMODITY,null,values);
         db.close();
     }
 
@@ -346,26 +371,57 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 list.add(searchResults);
             }while(results.moveToNext());
         }
+        JSONArray ar = new JSONArray(list);
+        Log.v(TAG,ar.toString());
         db.close();
-        return  list;
+        return list;
+
     }
+
+    public List<Commodity> getCommodityPrices(){
+        List<Commodity> prices = new ArrayList<>();
+        String selectQuery = "SELECT * FROM " + TABLE_COMMODITY + " LIMIT 10";
+
+        Log.e(TAG, selectQuery);
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        if(c.moveToFirst()){
+            do{
+                Commodity commodity = new Commodity();
+                commodity.setID(c.getString(c.getColumnIndex(COMM_ID)));
+                commodity.setName(c.getString(c.getColumnIndex(COMM_NAME)));
+                commodity.setMin(c.getString(c.getColumnIndex(COMM_MIN)));
+                commodity.setMax(c.getString(c.getColumnIndex(COMM_MAX)));
+                Log.e(TAG,commodity.getName());
+            }while(c.moveToNext());
+        }
+        else{
+            Log.e(TAG,c.toString());
+        }
+        return prices;
+    }
+//TODO:Gets list of category,ids based on the search query.
+
+
     //TODO:Gets list of category,ids based on the search query.
 
-    public ArrayList<PairCategory> fetchIndexList(String query) {
-
-        ArrayList<Integer> indexes = new ArrayList<Integer>();
-
-        indexes.add(33);
-
-        indexes.add(66);
-
-        ArrayList<PairCategory> res = (new ArrayList<>());
-
-        res.add(new PairCategory("Sports",indexes));
-
-        res.add(new PairCategory("News",indexes));
-
-        return res;
+    public String fetchIndexList(String query) {
+        ArrayList<SearchResults> list = searchMatches(query,null);
+        JSONArray ar = new JSONArray(list);
+        return ar.toString();
+//        ArrayList<Integer> indexes = new ArrayList<Integer>();
+//
+//        indexes.add(33);
+//
+//        indexes.add(66);
+//
+//        ArrayList<PairCategory> res = (new ArrayList<>());
+//
+//        res.add(new PairCategory("Sports",indexes));
+//
+//        res.add(new PairCategory("News",indexes));
+//
+//        return res;
 
     }
 

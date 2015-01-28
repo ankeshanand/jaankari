@@ -85,6 +85,7 @@ public class LoginActivity extends FragmentActivity implements LoaderCallbacks<C
                                                 "(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}";
 
     private UserLoginTask mAuthTask = null;
+    private DownloadTask mDownloadTask = null;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -94,97 +95,97 @@ public class LoginActivity extends FragmentActivity implements LoaderCallbacks<C
     private ImageView mImageView;
 
 
-    public void imagePick(View view){
-        final CharSequence[] items = {"Take Photo", "Choose from Library","Cancel"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-        builder.setTitle("Add profile picture");
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item){
-                if(items[item].equals("Take Photo")){
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    File f = new File(android.os.Environment.getExternalStorageDirectory(),"temp.jpg");
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-                    startActivityForResult(intent,REQUEST_CAMERA);
-                }
-                else if(items[item].equals("Choose from Library")){
-                    Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-                    photoPickerIntent.setType("image/*");
-                    startActivityForResult(photoPickerIntent, SELECT_PHOTO);
-                }
-                else if(items[item].equals("Cancel")){
-                    dialog.dismiss();
-                }
-            }
-        });
-        builder.show();
-    }
+//    public void imagePick(View view){
+//        final CharSequence[] items = {"Take Photo", "Choose from Library","Cancel"};
+//        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+//        builder.setTitle("Add profile picture");
+//        builder.setItems(items, new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int item){
+//                if(items[item].equals("Take Photo")){
+//                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                    File f = new File(android.os.Environment.getExternalStorageDirectory(),"temp.jpg");
+//                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+//                    startActivityForResult(intent,REQUEST_CAMERA);
+//                }
+//                else if(items[item].equals("Choose from Library")){
+//                    Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+//                    photoPickerIntent.setType("image/*");
+//                    startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+//                }
+//                else if(items[item].equals("Cancel")){
+//                    dialog.dismiss();
+//                }
+//            }
+//        });
+//        builder.show();
+//    }
 
-    private void writeProfilePic(Bitmap yourSelectedImage){
-        String path = android.os.Environment.getExternalStorageDirectory() + File.separator + getString(R.string.app_name);
-        OutputStream fOut = null;
-        File file = new File(path);
-        if (!file.exists())
-            file.mkdirs();
-        path += File.separator + "proPics.jpg";
-        file = new File(path);
-        try {
-            fOut = new FileOutputStream(file);
-            yourSelectedImage.compress(Bitmap.CompressFormat.JPEG, 85, fOut);
-            fOut.flush();
-            fOut.close();
-            SharedPreferences sp = getSharedPreferences("Login", 0);
-            SharedPreferences.Editor Ed = sp.edit();
-            Ed.putString("proPic", path);
-            Ed.commit();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    private void writeProfilePic(Bitmap yourSelectedImage){
+//        String path = android.os.Environment.getExternalStorageDirectory() + File.separator + getString(R.string.app_name);
+//        OutputStream fOut = null;
+//        File file = new File(path);
+//        if (!file.exists())
+//            file.mkdirs();
+//        path += File.separator + "proPics.jpg";
+//        file = new File(path);
+//        try {
+//            fOut = new FileOutputStream(file);
+//            yourSelectedImage.compress(Bitmap.CompressFormat.JPEG, 85, fOut);
+//            fOut.flush();
+//            fOut.close();
+//            SharedPreferences sp = getSharedPreferences("Login", 0);
+//            SharedPreferences.Editor Ed = sp.edit();
+//            Ed.putString("proPic", path);
+//            Ed.commit();
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
-    private void setProfilePic(Bitmap yourSelectedImage , boolean set){
-        mImageView = (ImageView) findViewById(R.id.profile_pic);
-        ViewGroup.LayoutParams params = mImageView.getLayoutParams();
-        params.height = 200;
-        params.width = 200;
-        mImageView.setLayoutParams(params);
-        mImageView.setImageBitmap(yourSelectedImage);
-        if(set) {
-            writeProfilePic(yourSelectedImage);
-        }
-    }
+//    private void setProfilePic(Bitmap yourSelectedImage , boolean set){
+//        mImageView = (ImageView) findViewById(R.id.profile_pic);
+//        ViewGroup.LayoutParams params = mImageView.getLayoutParams();
+//        params.height = 200;
+//        params.width = 200;
+//        mImageView.setLayoutParams(params);
+//        mImageView.setImageBitmap(yourSelectedImage);
+//        if(set) {
+//            writeProfilePic(yourSelectedImage);
+//        }
+//    }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
-        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
-        switch(requestCode) {
-            case REQUEST_CAMERA:
-                File f = new File(Environment.getExternalStorageDirectory().toString()+"/temp.jpg");
-                try {
-                    Uri selectedImage = Uri.fromFile(f);
-                    Bitmap yourSelectedImage = decodeUri(selectedImage);
-                    setProfilePic(yourSelectedImage,true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-            case SELECT_PHOTO:
-                if(resultCode == RESULT_OK){
-                    Uri selectedImage = imageReturnedIntent.getData();
-                    Bitmap yourSelectedImage = null;
-                    try {
-                        yourSelectedImage = decodeUri(selectedImage);
-                        setProfilePic(yourSelectedImage,true);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+//        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+//        switch(requestCode) {
+//            case REQUEST_CAMERA:
+//                File f = new File(Environment.getExternalStorageDirectory().toString()+"/temp.jpg");
+//                try {
+//                    Uri selectedImage = Uri.fromFile(f);
+//                    Bitmap yourSelectedImage = decodeUri(selectedImage);
+//                    setProfilePic(yourSelectedImage,true);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//                break;
+//            case SELECT_PHOTO:
+//                if(resultCode == RESULT_OK){
+//                    Uri selectedImage = imageReturnedIntent.getData();
+//                    Bitmap yourSelectedImage = null;
+//                    try {
+//                        yourSelectedImage = decodeUri(selectedImage);
+//                        setProfilePic(yourSelectedImage,true);
+//                    } catch (FileNotFoundException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//        }
+//    }
 
 
     private Bitmap decodeUri(Uri selectedImage) throws FileNotFoundException {
@@ -220,10 +221,13 @@ public class LoginActivity extends FragmentActivity implements LoaderCallbacks<C
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(AppStatus.getInstance(this).isOnline()){
-            Intent intent_service = new Intent(getApplicationContext(),GlobalDatabaseImageService.class);
-            startService(intent_service);
-        }
+        mDownloadTask = new DownloadTask();
+        mDownloadTask.execute((Void) null);
+
+//        if(AppStatus.getInstance(this).isOnline()){
+//            Intent intent_service = new Intent(getApplicationContext(),GlobalDatabaseImageService.class);
+//            startService(intent_service);
+//        }
 
 //        if(savedInstanceState==null){
 //            mainFragment = new MainFragment();
@@ -247,15 +251,15 @@ public class LoginActivity extends FragmentActivity implements LoaderCallbacks<C
             }
         } else {
             setContentView(R.layout.activity_login);
-            if(path!=null){
-                try {
-                    Bitmap yourSelectedImage = BitmapFactory.decodeFile(path);
-                    setProfilePic(yourSelectedImage,false);
-                }catch(Exception e){
-                    Log.e("Profile Pic path","Error Could not find file at " + path);
-                    e.printStackTrace();
-                }
-            }
+//            if(path!=null){
+//                try {
+//                    Bitmap yourSelectedImage = BitmapFactory.decodeFile(path);
+//                    setProfilePic(yourSelectedImage,false);
+//                }catch(Exception e){
+//                    Log.e("Profile Pic path","Error Could not find file at " + path);
+//                    e.printStackTrace();
+//                }
+//            }
             // Set up the login form.
             mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
             populateAutoComplete();
@@ -467,6 +471,17 @@ public class LoginActivity extends FragmentActivity implements LoaderCallbacks<C
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
+
+    public class DownloadTask extends AsyncTask<Void, Void, Boolean>{
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            Intent intent_service = new Intent(getApplicationContext(),GlobalDatabaseImageService.class);
+            startService(intent_service);
+            return true;
+        }
+    }
+
+
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mEmail;
