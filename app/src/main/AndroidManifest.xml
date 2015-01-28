@@ -121,6 +121,10 @@
             android:name="jaangari.opensoft.iitkgp.jaankari.BackgroundServices.ResultsHandler"
             android:exported="false" >
         </service>
+        <service
+            android:name="jaangari.opensoft.iitkgp.jaankari.BackgroundServices.FileServer"
+            android:exported="false" >
+        </service>
     </application>
 
 </manifest>
