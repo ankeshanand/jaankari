@@ -8,7 +8,10 @@ An Android app that makes Information and entermainment accessible to phones in 
 
 ## Overview
 
-Jaankari lets you browse several categories of information such as **News, Videos, Weather, Commodity Prices, Health facts** and **Educational books**. It intelligently downloads the relevant content for a user and provides a rich **offline experience**. The omni search lets users search for all the information available on the servers even when they don't have the files or are offline. Under the hood, it forms a **P2P network** over Wifi hotspot to let users fetch content from each other.
+Jaankari lets you browse several categories of information such as **News, Videos, Weather, Commodity Prices, Health facts** and **Educational books**. 
+It intelligently downloads the relevant content for a user and provides a rich **offline experience**. 
+The omni search lets users search for all the information available on the servers even when they don't have the files or are offline. 
+Under the hood, it forms a **P2P network** over Wifi hotspot to let users fetch content from each other.
 
 ## Architecture
 
