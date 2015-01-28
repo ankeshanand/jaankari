@@ -84,21 +84,21 @@ public class CommDevice {
             }
             System.out.println("here *** "+ ans);
 
-            String listAvailable =  dbHandler.fetchIndexList(ans);
-//            Log.d("CommDevice", listAvailable.get(0).toString() + "is the fetchIndex");
-//
+            ArrayList<PairCategory> listAvailable =  dbHandler.fetchIndexList(ans);
+            Log.d("CommDevice", listAvailable.get(0).toString() + "is the fetchIndex");
+
             JSONObject finalJson = new JSONObject();
-//            JSONArray json = new JSONArray();
-//            for(PairCategory p : listAvailable)
-//            {
-//                try {
-//                    json.put(p.getJSONOut());
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
+            JSONArray json = new JSONArray();
+            for(PairCategory p : listAvailable)
+            {
+                try {
+                    json.put(p.getJSONOut());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
             finalJson.put("IP",dp.getAddress());
-            finalJson.put("list",new JSONArray(listAvailable));
+            finalJson.put("list",json);
             sendMsg(finalJson.toString(), dp.getAddress());
             Log.d("CommDevice", ans);
             Log.d("CommDevice","Sent the Available indexes :"+ finalJson.toString());

@@ -179,7 +179,7 @@ public class FragmentNews extends Fragment {
         video_history++;
         //video_id
         if(rating!=-1){
-            db.updateRating(video_id);
+            db.updateRated(video_id);
         }
         db.updateVideoHistory(video_id,video_history);
         db.closeDB();

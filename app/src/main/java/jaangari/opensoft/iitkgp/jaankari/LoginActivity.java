@@ -93,7 +93,7 @@ public class LoginActivity extends FragmentActivity implements LoaderCallbacks<C
     private View mProgressView;
     private View mLoginFormView;
     private ImageView mImageView;
-
+    private MainFragment mainFragment;
 
 //    public void imagePick(View view){
 //        final CharSequence[] items = {"Take Photo", "Choose from Library","Cancel"};
@@ -188,58 +188,56 @@ public class LoginActivity extends FragmentActivity implements LoaderCallbacks<C
 //    }
 
 
-    private Bitmap decodeUri(Uri selectedImage) throws FileNotFoundException {
-
-        // Decode image size
-        BitmapFactory.Options o = new BitmapFactory.Options();
-        o.inJustDecodeBounds = true;
-        BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImage), null, o);
-
-        // The new size we want to scale to
-        final int REQUIRED_SIZE = 300;
-
-        // Find the correct scale value. It should be the power of 2.
-        int width_tmp = o.outWidth, height_tmp = o.outHeight;
-        int scale = 1;
-        while (true) {
-            if (width_tmp / 2 < REQUIRED_SIZE
-                    || height_tmp / 2 < REQUIRED_SIZE) {
-                break;
-            }
-            width_tmp /= 2;
-            height_tmp /= 2;
-            scale *= 2;
-        }
-
-        // Decode with inSampleSize
-        BitmapFactory.Options o2 = new BitmapFactory.Options();
-        o2.inSampleSize = scale;
-        return BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImage), null, o2);
-
-    }
+//    private Bitmap decodeUri(Uri selectedImage) throws FileNotFoundException {
+//
+//        // Decode image size
+//        BitmapFactory.Options o = new BitmapFactory.Options();
+//        o.inJustDecodeBounds = true;
+//        BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImage), null, o);
+//
+//        // The new size we want to scale to
+//        final int REQUIRED_SIZE = 300;
+//
+//        // Find the correct scale value. It should be the power of 2.
+//        int width_tmp = o.outWidth, height_tmp = o.outHeight;
+//        int scale = 1;
+//        while (true) {
+//            if (width_tmp / 2 < REQUIRED_SIZE
+//                    || height_tmp / 2 < REQUIRED_SIZE) {
+//                break;
+//            }
+//            width_tmp /= 2;
+//            height_tmp /= 2;
+//            scale *= 2;
+//        }
+//
+//        // Decode with inSampleSize
+//        BitmapFactory.Options o2 = new BitmapFactory.Options();
+//        o2.inSampleSize = scale;
+//        return BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImage), null, o2);
+//
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mDownloadTask = new DownloadTask();
-        mDownloadTask.execute((Void) null);
 
 //        if(AppStatus.getInstance(this).isOnline()){
 //            Intent intent_service = new Intent(getApplicationContext(),GlobalDatabaseImageService.class);
 //            startService(intent_service);
 //        }
 
-//        if(savedInstanceState==null){
-//            mainFragment = new MainFragment();
-//            getSupportFragmentManager()
-//                    .beginTransaction()
-//                    .add(android.R.id.content, mainFragment)
-//                    .commit();
-//        }
-//        else{
-//            mainFragment = (MainFragment) getSupportFragmentManager()
-//                    .findFragmentById(android.R.id.content);
-//        }
+        if(savedInstanceState==null){
+            mainFragment = new MainFragment();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(android.R.id.content, mainFragment)
+                    .commit();
+        }
+        else{
+            mainFragment = (MainFragment) getSupportFragmentManager()
+                    .findFragmentById(android.R.id.content);
+        }
 
         SharedPreferences sp1 = this.getSharedPreferences("Login", 0);
         String sLogin = sp1.getString("sLogin", null);
@@ -251,6 +249,8 @@ public class LoginActivity extends FragmentActivity implements LoaderCallbacks<C
             }
         } else {
             setContentView(R.layout.activity_login);
+            mDownloadTask = new DownloadTask();
+            mDownloadTask.execute((Void) null);
 //            if(path!=null){
 //                try {
 //                    Bitmap yourSelectedImage = BitmapFactory.decodeFile(path);

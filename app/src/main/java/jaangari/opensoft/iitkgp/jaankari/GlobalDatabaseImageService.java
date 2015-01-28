@@ -42,8 +42,12 @@ public class GlobalDatabaseImageService extends Service {
             for(int i=0;i<jsonArray.length();i++){
                 JSONObject root = jsonArray.getJSONObject(i);
                 News news = new News(root.getInt("id"),root.getString("title"),root.getString("summary"),null,null,root.getInt("category"));
-                db.addNews(news);
-                Log.e(TAG,root.toString());
+                try {
+                    db.addNews(news);
+                }catch (Exception e){
+                    db.updateNews(news);
+                }
+                Log.e(TAG, root.toString());
             }
             db.closeDB();
             SharedPreferences sp=getSharedPreferences("Login", 0);
@@ -67,8 +71,12 @@ public class GlobalDatabaseImageService extends Service {
             for (int i=0;i<jsonArray.length();i++){
                 JSONObject root = jsonArray.getJSONObject(i);
                 Health health = new Health(root.getInt("id"),root.getString("page_title"),null);
-                db.addHealth(health);
-                Log.e(TAG,root.toString());
+                try {
+                    db.addHealth(health);
+                }catch(Exception e){
+                    db.updateHealth(health);
+                }
+                Log.e(TAG, root.toString());
             }
             db.closeDB();
             SharedPreferences sp=getSharedPreferences("Login", 0);
@@ -94,8 +102,13 @@ public class GlobalDatabaseImageService extends Service {
                 Videos video = new Videos(root.getInt("id"),root.getString("name"),
                         root.getString("path"),root.getInt("category"),
                         (float)root.getDouble("rating"));
-                db.addVideo(video);
-                Log.e(TAG,root.toString());
+                try {
+                    db.addVideo(video);
+                }catch(Exception e){
+                    db.deleteVideo(video.getID());
+                    db.addVideo(video);
+                }
+                Log.e(TAG, root.toString());
             }
             db.closeDB();
             SharedPreferences sp=getSharedPreferences("Login", 0);
@@ -121,7 +134,11 @@ public class GlobalDatabaseImageService extends Service {
                 Weather weather = new Weather(root.getInt("id"),root.getString("city_name"),
                         root.getString("main"),root.getString("description"),(float)root.getDouble("temp"),
                         (float)root.getDouble("temp_min"),(float)root.getDouble("temp_max"),root.getInt("humidity"));
-                db.addWeather(weather);
+                try {
+                    db.addWeather(weather);
+                }catch(Exception e){
+                    db.updateWeather(weather);
+                }
                 Log.e(TAG,root.toString());
             }
             db.closeDB();

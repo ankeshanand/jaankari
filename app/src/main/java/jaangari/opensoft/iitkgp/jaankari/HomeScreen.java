@@ -1,5 +1,7 @@
 package jaangari.opensoft.iitkgp.jaankari;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -78,10 +80,35 @@ public class HomeScreen extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
+
+
+        Intent inten1 = new Intent(this,QueryAlarmReciever.class);
+        final PendingIntent pIntent = PendingIntent.getBroadcast(this, QueryAlarmReciever.REQUEST_CODE,inten1, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        long firstMillis = System.currentTimeMillis();
+        long intervalMillis=86400000;
+        alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, firstMillis, intervalMillis, pIntent);
+
+        Thread t = new Thread(new Runnable(){
+            @Override
+            public void run(){
+                    while (true) {
+                        Intent temp = new Intent(getApplicationContext(), DownloadFilesService.class);
+                        try{
+                        startService(temp);
+                        Thread.sleep(10000);
+                    }catch(Exception e){
+                            e.printStackTrace();
+                        }
+                }
+            }
+        });
+
+
         db = new DatabaseHandler(this.getApplicationContext());
         Weather weather = null;
         try {
-            weather = db.getCurrentWeather("Mumbai");
+            weather = db.getCurrentWeather("Kharagpur");
             if (weather != null) {
                 TextView temp = (TextView) findViewById(R.id.temp);
                 ImageView weatherIcon = (ImageView) findViewById(R.id.weatherIcon);
@@ -106,7 +133,7 @@ public class HomeScreen extends ActionBarActivity {
             e.printStackTrace();
         }
         db.closeDB();
-        Intent intent = new Intent(getApplicationContext(),VideoDownloadService.class);
+        Intent intent = new Intent(getApplicationContext(),DownloadUpdated.class);
         startService(intent);
 
 

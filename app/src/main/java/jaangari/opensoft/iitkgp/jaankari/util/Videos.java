@@ -21,6 +21,7 @@ public class Videos {
     private float rating;
     private int history;
     private int isRated;
+    private int isPresent;
 
     public Videos(){}
 
@@ -85,6 +86,14 @@ public class Videos {
     }
     public int getIsRated(){
         return this.isRated;
+    }
+
+    public int getIsPresent(){
+        return this.isPresent;
+    }
+
+    public void setIsPresent(int isPresent){
+        this.isPresent = isPresent;
     }
 
 }
