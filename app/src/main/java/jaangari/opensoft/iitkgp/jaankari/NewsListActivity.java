@@ -28,51 +28,51 @@ import jaangari.opensoft.iitkgp.jaankari.util.News;
 import jaangari.opensoft.iitkgp.jaankari.util.NewsPair;
 import se.emilsjolander.flipview.FlipView;
 
-
-class NewsAdapter extends ArrayAdapter<NewsPair> {
-    public NewsAdapter(Context context, ArrayList<NewsPair> newsitems) {
-        super(context, 0, newsitems);
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        // Get the data item for this position
-        NewsPair npair;
-        npair = getItem(position);
-
-        // Check if an existing view is being reused, otherwise inflate the view
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_news, parent, false);
-        }
-        // Lookup view for data population
-        TextView tvName = (TextView) convertView.findViewById(R.id.newsTitleUp);
-        TextView tvHome = (TextView) convertView.findViewById(R.id.newsSummaryUp);
-        tvName.setText(npair.getFirst().getTitle());
-        tvHome.setText(npair.getFirst().getSummary());
-        if(npair.getSecond() != null) {
-            TextView tv1Name = (TextView) convertView.findViewById(R.id.newsTitleDown);
-            TextView tv1Home = (TextView) convertView.findViewById(R.id.newsSummaryDown);
-            // Populate the data into the template view using the data object
-
-            //System.out.println(nitem.getTitle()+nitem.getSummary());
-
-            tv1Name.setText(npair.getSecond().getTitle());
-            tv1Home.setText(npair.getSecond().getSummary());
-        }
-//        View up=(View) convertView.findViewById(R.id.NewsListUpperLayout);
 //
-//        up.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getApplicationContext(),NewsMainActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-
-        // Return the completed view to render on screen
-        return convertView;
-    }
-}
+//class NewsAdapter extends ArrayAdapter<NewsPair> {
+//    public NewsAdapter(Context context, ArrayList<NewsPair> newsitems) {
+//        super(context, 0, newsitems);
+//    }
+//
+//    @Override
+//    public View getView(int position, View convertView, ViewGroup parent) {
+//        // Get the data item for this position
+//        NewsPair npair;
+//        npair = getItem(position);
+//
+//        // Check if an existing view is being reused, otherwise inflate the view
+//        if (convertView == null) {
+//            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_news, parent, false);
+//        }
+//        // Lookup view for data population
+//        TextView tvName = (TextView) convertView.findViewById(R.id.newsTitleUp);
+//        TextView tvHome = (TextView) convertView.findViewById(R.id.newsSummaryUp);
+//        tvName.setText(npair.getFirst().getTitle());
+//        tvHome.setText(npair.getFirst().getSummary());
+//        if(npair.getSecond() != null) {
+//            TextView tv1Name = (TextView) convertView.findViewById(R.id.newsTitleDown);
+//            TextView tv1Home = (TextView) convertView.findViewById(R.id.newsSummaryDown);
+//            // Populate the data into the template view using the data object
+//
+//            //System.out.println(nitem.getTitle()+nitem.getSummary());
+//
+//            tv1Name.setText(npair.getSecond().getTitle());
+//            tv1Home.setText(npair.getSecond().getSummary());
+//        }
+////        View up=(View) convertView.findViewById(R.id.NewsListUpperLayout);
+////
+////        up.setOnClickListener(new View.OnClickListener(){
+////            @Override
+////            public void onClick(View v) {
+////                Intent intent = new Intent(getApplicationContext(),NewsMainActivity.class);
+////                startActivity(intent);
+////            }
+////        });
+//
+//        // Return the completed view to render on screen
+//        return convertView;
+//    }
+//}
 
 
 public class NewsListActivity extends ActionBarActivity
@@ -114,22 +114,22 @@ public class NewsListActivity extends ActionBarActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
-        FlipView flipView = (FlipView) findViewById(R.id.flip_view);
-        ArrayList<NewsPair> news_items_list = new ArrayList<NewsPair>();
-        NewsAdapter adapter = new NewsAdapter(this, news_items_list);
-
-        News nit1 = new News(1,"ABC","SEFDSF0","asd sdf asd sad fasdf","asdf sdf","sd fweasd");
-        News nit2 = new News(2,"DEF","WEFASF0. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf","sfewa dsad sad fasdf","we ewr ","We sadfasd");
-        adapter.add(new NewsPair(nit1,nit2));
-        nit1 = new News(3,"Aasdf we ","Swqre terSF0","SD sad fasdf asdfwe rsaf asdfasdf","asdf sdf","sd fweasd");
-        nit2 = new News(4,"E aefsde","Swe rwadsfa F0","asWe wea dfdf","asdf sdf","sd fweasd");
-        adapter.add(new NewsPair(nit1,nit2));
-        nit1 = new News(5,"ABC","SEFDSF0","asd sdf asd sad fasdf","asdf sdf","sd fweasd");
-        nit2 = new News(6,"ABC","SEFDSF0","asd sdf asd sad fasdf","asdf sdf","sd fweasd");
-        adapter.add(new NewsPair(nit1,nit2));
-
-
-        flipView.setAdapter(adapter);
+//        FlipView flipView = (FlipView) findViewById(R.id.flip_view);
+//        ArrayList<NewsPair> news_items_list = new ArrayList<NewsPair>();
+//        NewsAdapter adapter = new NewsAdapter(this, news_items_list);
+//
+//        News nit1 = new News(1,"ABC","SEFDSF0","asd sdf asd sad fasdf","asdf sdf",1);
+//        News nit2 = new News(2,"DEF","WEFASF0. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf. sfewa dsad sad fasdf","sfewa dsad sad fasdf","we ewr ",1);
+//        adapter.add(new NewsPair(nit1,nit2));
+//        nit1 = new News(3,"Aasdf we ","Swqre terSF0","SD sad fasdf asdfwe rsaf asdfasdf","asdf sdf",1);
+//        nit2 = new News(4,"E aefsde","Swe rwadsfa F0","asWe wea dfdf","asdf sdf",0);
+//        adapter.add(new NewsPair(nit1,nit2));
+//        nit1 = new News(5,"ABC","SEFDSF0","asd sdf asd sad fasdf","asdf sdf",2);
+//        nit2 = new News(6,"ABC","SEFDSF0","asd sdf asd sad fasdf","asdf sdf",1);
+//        adapter.add(new NewsPair(nit1,nit2));
+//
+//
+//        flipView.setAdapter(adapter);
     }
 
     public void newsClickedUp(View view){
@@ -168,10 +168,43 @@ public class NewsListActivity extends ActionBarActivity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-                .commit();
+        FragmentNews fragment = null;
+        switch (position){
+            case 0:
+                fragment = new FragmentNews();
+                break;
+            case 1:
+                fragment = new FragmentNews();
+                break;
+            case 2:
+                fragment = new FragmentNews();
+                break;
+            case 3:
+                fragment = new FragmentNews();
+                break;
+            case 4:
+                fragment = new FragmentNews();
+                break;
+            case 5:
+                fragment = new FragmentNews();
+                break;
+            case 6:
+                fragment = new FragmentNews();
+                break;
+        }
+
+        if(fragment!=null){
+            fragment.setPosition(position);
+            android.app.FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, fragment).commit();
+        }
+        else {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                    .commit();
+        }
     }
 
     public void onSectionAttached(int number) {
@@ -180,7 +213,7 @@ public class NewsListActivity extends ActionBarActivity
                 mTitle = getString(R.string.news_section_1);
                 break;
             case 2:
-                mTitle = getString(R.string.news_section_2);;
+                mTitle = getString(R.string.news_section_2);
                 break;
             case 3:
                 mTitle = getString(R.string.news_section_3);
