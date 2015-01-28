@@ -441,6 +441,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 commodity.setName(c.getString(c.getColumnIndex(COMM_NAME)));
                 commodity.setMin(c.getString(c.getColumnIndex(COMM_MIN)));
                 commodity.setMax(c.getString(c.getColumnIndex(COMM_MAX)));
+                prices.add(commodity);
                 Log.e(TAG,commodity.getName());
             }while(c.moveToNext());
         }

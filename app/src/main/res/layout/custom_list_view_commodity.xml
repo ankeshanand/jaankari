@@ -4,18 +4,25 @@
     android:layout_height="match_parent"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
+    android:paddingTop="16dp"
     android:orientation="horizontal" >
     <TextView
-        android:layout_width="150dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:id="@+id/commName"/>
+        android:id="@+id/commName"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#ffffffff"/>
     <TextView
-        android:layout_width="150dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:id="@+id/minPrice" />
+        android:id="@+id/minPrice"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#ffffffff"/>
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:id="@+id/maxPrice" />
+        android:id="@+id/maxPrice"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#ffffffff"/>
 
 </LinearLayout>
