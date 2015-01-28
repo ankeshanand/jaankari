@@ -3,11 +3,17 @@ package jaangari.opensoft.iitkgp.jaankari.BackgroundServices;
 import android.app.IntentService;
 import android.content.Intent;
 import android.content.Context;
+import android.app.IntentService;
+import android.content.Intent;
+import android.content.Context;
 import android.util.Log;
 
-import org.json.JSONException;
-
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 import jaangari.opensoft.iitkgp.jaankari.hotspotUtils.CommDevice;
 
@@ -18,7 +24,7 @@ import jaangari.opensoft.iitkgp.jaankari.hotspotUtils.CommDevice;
  * TODO: Customize class - update intent actions, extra parameters and static
  * helper methods.
  */
-public class QueryHandler extends IntentService {
+public class ResultsHandler extends IntentService {
     // TODO: Rename actions, choose action names that describe tasks that this
     // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
     private static final String ACTION_FOO = "jaangari.opensoft.iitkgp.jaankari.BackgroundServices.action.FOO";
@@ -36,7 +42,7 @@ public class QueryHandler extends IntentService {
      */
     // TODO: Customize helper method
     public static void startActionFoo(Context context, String param1, String param2) {
-        Intent intent = new Intent(context, QueryHandler.class);
+        Intent intent = new Intent(context, ResultsHandler.class);
         intent.setAction(ACTION_FOO);
         intent.putExtra(EXTRA_PARAM1, param1);
         intent.putExtra(EXTRA_PARAM2, param2);
@@ -51,43 +57,97 @@ public class QueryHandler extends IntentService {
      */
     // TODO: Customize helper method
     public static void startActionBaz(Context context, String param1, String param2) {
-        Intent intent = new Intent(context, QueryHandler.class);
+        Intent intent = new Intent(context, ResultsHandler.class);
         intent.setAction(ACTION_BAZ);
         intent.putExtra(EXTRA_PARAM1, param1);
         intent.putExtra(EXTRA_PARAM2, param2);
         context.startService(intent);
     }
 
-    public QueryHandler() {
-        super("QueryHandler");
+    public ResultsHandler() {
+        super("ResultsHandler");
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        if (intent != null) {
-            Log.d("CommDevice", "Listening for Queries");
-            CommDevice cd = null;
+
+
+        Log.d("BroadcastRec", "Staring Service");
+        try {
+            listenForAvailableIDs();
+
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    public boolean listenForAvailableIDs() throws IOException {
+        ServerSocket servsock = null;
+        Socket sock = null;
+        try {
             try {
-                cd = new CommDevice(getApplicationContext());
-                cd.listenForQueries();
+                servsock = new ServerSocket(CommDevice.PORT_FILE);
             } catch (IOException e) {
                 e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
+            while (true) {
+                System.out.println("Waiting...");
+                try {
+                    sock = servsock != null ? servsock.accept() : null;
+                    System.out.println("Accepted connection : " + sock);
 
-            final String action = intent.getAction();
-            if (ACTION_FOO.equals(action)) {
-                final String param1 = intent.getStringExtra(EXTRA_PARAM1);
-                final String param2 = intent.getStringExtra(EXTRA_PARAM2);
-                handleActionFoo(param1, param2);
-            } else if (ACTION_BAZ.equals(action)) {
-                final String param1 = intent.getStringExtra(EXTRA_PARAM1);
-                final String param2 = intent.getStringExtra(EXTRA_PARAM2);
-                handleActionBaz(param1, param2);
+                    Log.d("CommDevice","Accepted Connection");
+                    InputStream is = sock.getInputStream();
+
+                    BufferedReader in = new BufferedReader(new InputStreamReader(is));
+
+                    String msg = in.readLine();
+
+
+//                    final byte[] buffer = new byte[1024];
+                    try {
+//                        int read = -1;
+//                        while ((read = is.read(buffer)) > 0)
+//                        {
+//                            msg += buffer.toString();
+//                        }
+
+                        Log.d("CommDevice","Recieved Message : "+msg);
+
+                        Log.d("BroadcastRec", "Started Service");
+                        Intent ii = new Intent("NOTIFICATION");
+
+                        ii.putExtra("JSON", msg);
+                        sendBroadcast(ii);
+
+                        is.close();
+                        //CommDevice.IS_MSG_RECEIVED = true;
+                        break;
+
+                    }
+                    catch (Exception e)
+                    {
+                        Log.d("CommDevice",e.toString());
+
+                    }
+                }
+
+                finally {
+                    if (sock != null) sock.close();
+                }
             }
+        } finally {
+            if (servsock != null) servsock.close();
         }
+
+        return true;
     }
+
+
 
     /**
      * Handle action Foo in the provided background thread with the provided

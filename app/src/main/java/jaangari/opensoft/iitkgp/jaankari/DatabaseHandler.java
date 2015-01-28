@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -12,6 +13,8 @@ import java.util.List;
 
 import jaangari.opensoft.iitkgp.jaankari.util.Health;
 import jaangari.opensoft.iitkgp.jaankari.util.News;
+import jaangari.opensoft.iitkgp.jaankari.util.PairCategory;
+import jaangari.opensoft.iitkgp.jaankari.util.SearchResults;
 import jaangari.opensoft.iitkgp.jaankari.util.Videos;
 import jaangari.opensoft.iitkgp.jaankari.util.Weather;
 
@@ -28,6 +31,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String TABLE_WEATHER = "Weather";
     private static final String TABLE_NEWS = "News";
     private static final String TABLE_HEALTH = "Health";
+    private static final String TABLE_VIRTUAL = "FTS_TABLE";
 
     //Video Columns
     private static final String VIDEOS_ID = "id";
@@ -54,15 +58,22 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String NEWS_TEXT = "text";
     private static final String NEWS_SUMMARY="summary";
     private static final String NEWS_PLACE="place";
+    private static final String NEWS_CATEGORY = "category";
 
     //Health Column
     private static final String HEALTH_ID = "id";
     private static final String HEALTH_TITLE = "title";
     private static final String HEALTH_TEXT = "text";
 
+    //Virtual Table
+    private static final String VIRTUAL_ID = "id";
+    private static final String VIRTUAL_CATEGORY = "Category";
+    private static final String VIRTUAL_TITLE = "title";
+    private static final String VIRTUAL_SUMMARY = "Summary";
+    private static final String VIRTUAL_TEXT = "text";
+
 
     private final String TAG = "Database";
-    private final String CURR_CITY = "Kharagpur";
     //TODO Education/Books Database Schema on Server and App
 
     public DatabaseHandler(Context context){
@@ -80,19 +91,25 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 WEATHER_MAX_TEMP + " REAL,"+WEATHER_MIN_TEMP + " REAL,"+WEATHER_HUMIDITY + " INTEGER"+");";
 
         String CREATE_NEWS_TABLE = "CREATE TABLE IF NOT EXISTS "+TABLE_NEWS+"(" +NEWS_ID+" INTEGER PRIMARY KEY," +
-                NEWS_PLACE +" TEXT,"+NEWS_TITLE + " TEXT,"+NEWS_SUMMARY +" TEXT,"+NEWS_TEXT +" TEXT"+");";
+                NEWS_PLACE +" TEXT,"+NEWS_TITLE + " TEXT,"+NEWS_SUMMARY +" TEXT,"+NEWS_TEXT +" TEXT,"+NEWS_CATEGORY + " INTEGER"+");";
 
         String CREATE_HEALTH_TABLE = "CREATE TABLE IF NOT EXISTS "+TABLE_HEALTH+"(" +HEALTH_ID+" INTEGER PRIMARY KEY," +
                 HEALTH_TITLE +" TEXT,"+HEALTH_TEXT + " TEXT"+");";
 
+        String CREATE_VIRTUAL_TABLE = "CREATE VIRTUAL TABLE IF NOT EXISTS " + TABLE_VIRTUAL + " USING fts3("
+                +VIRTUAL_ID+", "+VIRTUAL_CATEGORY+", "
+                +VIRTUAL_TITLE+", "+VIRTUAL_SUMMARY+", "+VIRTUAL_TEXT+", tokenize=porter);";
+
         db.execSQL(CREATE_VIDEOS_TABLE);
-        Log.v(TAG, "Videos created");
+        Log.v(TAG, "Videos Table created");
         db.execSQL(CREATE_WEATHER_TABLE);
         Log.v(TAG, "Weather Table Created");
         db.execSQL(CREATE_NEWS_TABLE);
         Log.v(TAG,"News Table Created");
         db.execSQL(CREATE_HEALTH_TABLE);
         Log.v(TAG,"Health Table Created");
+        db.execSQL(CREATE_VIRTUAL_TABLE);
+        Log.v(TAG,"Virtual Table Created");
     }
 
     @Override
@@ -101,6 +118,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_WEATHER);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NEWS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_HEALTH);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_VIRTUAL);
         onCreate(db);
     }
 
@@ -121,7 +139,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(VIDEOS_RATING,video.getRating());
         values.put(VIDEOS_HISTORY,0);
         values.put(VIDEOS_RATED,0);
-        db.insert(TABLE_VIDEOS,null,values);
+        db.insert(TABLE_VIDEOS, null, values);
+        values = new ContentValues();
+        values.put(VIRTUAL_ID,video.getID());
+        values.put(VIRTUAL_CATEGORY,"Video");
+        values.put(VIRTUAL_TITLE,video.getName());
+        values.put(VIRTUAL_SUMMARY,(String)null);
+        values.put(VIRTUAL_TEXT,(String)null);
+        db.insert(TABLE_VIRTUAL,null,values);
         db.close();
     }
 
@@ -133,7 +158,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(NEWS_SUMMARY,news.getSummary());
         values.put(NEWS_TEXT,news.getText());
         values.put(NEWS_TITLE,news.getTitle());
+        values.put(NEWS_CATEGORY,news.getCategory());
         db.insert(TABLE_NEWS,null,values);
+        values = new ContentValues();
+        values.put(VIRTUAL_ID,news.getID());
+        values.put(VIRTUAL_CATEGORY,"News");
+        values.put(VIRTUAL_TITLE,news.getTitle());
+        values.put(VIRTUAL_SUMMARY,news.getSummary());
+        values.put(VIRTUAL_TEXT,news.getText());
+        db.insert(TABLE_VIRTUAL,null,values);
         db.close();
     }
 
@@ -159,6 +192,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(HEALTH_TEXT,health.getText());
         values.put(HEALTH_TITLE,health.getTitle());
         db.insert(TABLE_HEALTH,null,values);
+        values = new ContentValues();
+        values.put(VIRTUAL_ID,health.getID());
+        values.put(VIRTUAL_CATEGORY,"Health");
+        values.put(VIRTUAL_TITLE,health.getTitle());
+        values.put(VIRTUAL_SUMMARY,(String)null);
+        values.put(VIRTUAL_TEXT,health.getText());
+        db.insert(TABLE_VIRTUAL,null,values);
         db.close();
     }
 
@@ -169,6 +209,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(VIDEOS_HISTORY,history);
         db.update(TABLE_VIDEOS,values,VIDEOS_ID+ " = ?",new String[]{String.valueOf(id)});
         Log.e(TAG,"Updated History");
+        db.close();
     }
 
     public void updateRating(int id){
@@ -177,10 +218,74 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(VIDEOS_RATED,1);
         db.update(TABLE_VIDEOS,values,VIDEOS_ID+ " = ?",new String[]{String.valueOf(id)});
         Log.e(TAG,"Updated isRated");
+        db.close();
     }
 
 
+    public List<News> getAllNewsbyCategory(int category){
+        List<News> news = new ArrayList<News>();
+        String selectQuery = "SELECT * FROM " + TABLE_NEWS + " WHERE " + NEWS_CATEGORY + "=" + category;
+        Log.e(TAG, selectQuery);
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        if(c.moveToFirst()){
+            do{
+                News news1 = new News();
+                news1.setID(c.getInt(c.getColumnIndex(NEWS_ID)));
+                news1.setTitle(c.getString(c.getColumnIndex(NEWS_TITLE)));
+                news1.setCategory(category);
+                news1.setSummary(c.getString(c.getColumnIndex(NEWS_SUMMARY)));
+                news1.setText(c.getString(c.getColumnIndex(NEWS_TEXT)));
+                news1.setPlace(c.getString(c.getColumnIndex(NEWS_PLACE)));
+                news.add(news1);
+                Log.e(TAG,news1.getTitle());
+            }while(c.moveToNext());
+        }
+        else{
+            Log.e(TAG,c.toString());
+        }
+        db.close();
+        return news;
+    }
 
+    public Videos getVideobyId(int id){
+        Videos video = new Videos();
+        String selectQuery = "SELECT * FROM "+TABLE_VIDEOS + " WHERE " + VIDEOS_ID + "="+id + ";";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        if(c.moveToFirst()){
+            video.setID(c.getInt(c.getColumnIndex(VIDEOS_ID)));
+            video.setName(c.getString(c.getColumnIndex(VIDEOS_FILENAME)));
+            video.setCategory(c.getInt(c.getColumnIndex(VIDEOS_CATEGORY)));
+            video.setPath(c.getString(c.getColumnIndex(VIDEOS_PATH)));
+            video.setRating(c.getFloat(c.getColumnIndex(VIDEOS_RATING)));
+            video.setHistory(c.getInt(c.getColumnIndex(VIDEOS_HISTORY)));
+            video.setIsRated(c.getInt(c.getColumnIndex(VIDEOS_RATED)));
+        }
+        return  video;
+    }
+
+        public Weather getCurrentWeather(String CURR_CITY){
+            String query = "SELECT * FROM " + TABLE_WEATHER + " WHERE " + WEATHER_CITY + "='" + CURR_CITY +  "';";
+            Log.e("Query",query);
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor c = db.rawQuery(query, null);
+            Weather weather = new Weather();
+            Log.e("Query",Integer.toString(c.getCount()));
+            if(c.moveToLast()){
+                Log.e("Query","Inside iteration");
+                weather.setID(c.getInt(c.getColumnIndex(WEATHER_ID)));
+                weather.setCity(c.getString(c.getColumnIndex(WEATHER_CITY)));
+                weather.setMain(c.getString(c.getColumnIndex(WEATHER_MAIN)));
+                weather.setDescription(c.getString(c.getColumnIndex(WEATHER_DESCRIPTION)));
+                weather.setTemp(c.getFloat(c.getColumnIndex(WEATHER_TEMP)));
+                weather.setMInTemp(c.getFloat(c.getColumnIndex(WEATHER_MIN_TEMP)));
+                weather.setMaxTemp(c.getFloat(c.getColumnIndex(WEATHER_MAX_TEMP)));
+                weather.setHumidity(c.getInt(c.getColumnIndex(WEATHER_HUMIDITY)));
+
+            }
+            return weather;
+        }
 
     public List<Videos> getAllVideosbyCategory(int category){
         List<Videos> videos = new ArrayList<Videos>();
@@ -212,32 +317,63 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         else{
             Log.e(TAG,c.toString());
         }
+        db.close();
         return videos;
     }
 
-    public Weather getCurrentWeather(){
-        String query = "SELECT * FROM " + TABLE_WEATHER + " WHERE " + WEATHER_CITY + "=" + CURR_CITY +  ";";
+
+    public ArrayList<SearchResults> searchMatches(String query, String[] columns){
+        ArrayList<SearchResults> list = new ArrayList<SearchResults>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = db.rawQuery(query, null);
-        Weather weather = null;
-        if(c.moveToFirst()){
-            weather.setCity(c.getString(c.getColumnIndex(WEATHER_CITY)));
-            weather.setTemp(c.getFloat(c.getColumnIndex(WEATHER_TEMP)));
-            weather.setHumidity(c.getInt(c.getColumnIndex(WEATHER_HUMIDITY)));
-            weather.setMain(c.getString(c.getColumnIndex(WEATHER_MAIN)));
-            weather.setDescription(c.getString(c.getColumnIndex(WEATHER_DESCRIPTION)));
+        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        builder.setTables(TABLE_VIRTUAL);
+        String titleQuery =  builder.buildQuery(null,VIRTUAL_TITLE + " MATCH '"+query+"*'",null,null,null,null);
+        String summaryQuery = builder.buildQuery(null,VIRTUAL_SUMMARY + " MATCH '"+query+"*'",null,null,null,null);
+        String textQuery = builder.buildQuery(null,VIRTUAL_TEXT + " MATCH '"+query+"*'",null,null,null,null);
+        String unionQuery = builder.buildUnionQuery(new String[]{titleQuery,summaryQuery,textQuery},null,null);
+        Log.e(TAG,unionQuery.toString());
+        unionQuery = unionQuery.replace("ALL"," ");
+        Log.e(TAG,unionQuery.toString());
+        Cursor results = db.rawQuery(unionQuery,null);
+        if(results.moveToFirst()){
+            do{
+                int id = results.getInt(results.getColumnIndex(VIRTUAL_ID));
+                String category = results.getString(results.getColumnIndex(VIRTUAL_CATEGORY));
+                String title = results.getString(results.getColumnIndex(VIRTUAL_TITLE));
+                String summary = results.getString(results.getColumnIndex(VIRTUAL_SUMMARY));
+                String text = results.getString(results.getColumnIndex(VIRTUAL_TEXT));
+                SearchResults searchResults = new SearchResults(id,title,summary,text,category);
+                list.add(searchResults);
+            }while(results.moveToNext());
         }
-        return weather;
+        db.close();
+        return  list;
     }
-//TODO:Gets list of category,ids based on the search query.
-    public ArrayList<SearchableActivity.PairCategory> fetchIndexList(String query) {
+    //TODO:Gets list of category,ids based on the search query.
+
+    public ArrayList<PairCategory> fetchIndexList(String query) {
+
+        ArrayList<Integer> indexes = new ArrayList<Integer>();
+
+        indexes.add(33);
+
+        indexes.add(66);
+
+        ArrayList<PairCategory> res = (new ArrayList<>());
+
+        res.add(new PairCategory("Sports",indexes));
+
+        res.add(new PairCategory("News",indexes));
+
+        return res;
+
+    }
+
+    //TODO: Returnd the filepath corresponding the category and id. Null if n.a
+    public String checkLocalDatabase(String category, int id) {
         return null;
     }
-//TODO: Returnd the filepath corresponding the category and id. Null if n.a
-    public String checkLocalDatabase(String category, int id) {
-            return null;
-    }
-//TODO:Returns Filepath even though file isnot present in the local db.
+    //TODO:Returns Filepath even though file isnot present in the local db.
     public String getFilePath(String category, int id) {
         return null;
     }
