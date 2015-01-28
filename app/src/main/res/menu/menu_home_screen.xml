@@ -15,9 +15,9 @@
         <!--app:showAsAction="ifRoom|collapseActionView"-->
         <!--app:actionViewClass="android.app.v7.widget.ImageView" />-->
 
-    <item
-        android:id="@+id/update_profile_picture"
-        android:title="@string/menu_update_profile_pic"/>
+    <!--<item-->
+        <!--android:id="@+id/update_profile_picture"-->
+        <!--android:title="@string/menu_update_profile_pic"/>-->
     <item
         android:id="@+id/update_password"
         android:title="@string/menu_update_password"/>
