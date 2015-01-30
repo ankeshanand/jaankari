@@ -60,7 +60,7 @@ public class SearchResults implements Comparable<SearchResults>{
             map.put(a.get(i),true);
         }
         for(int i=0;i<size;i++){
-            if(!map.containsKey(toBeAppended.get(i)) ){
+            if(!map.containsKey(toBeAppended.get(i)) || true ){
                 a.add(toBeAppended.get(i));
                 map.put(toBeAppended.get(i),true);
             }

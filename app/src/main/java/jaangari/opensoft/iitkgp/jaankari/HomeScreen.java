@@ -147,7 +147,7 @@ public class HomeScreen extends ActionBarActivity {
 
 
         Intent commService = new Intent(getApplicationContext(), QueryHandler.class);
-        startService(commService);
+        startService(commService); // TODO - ROhan - Reopen this handler
 
         Intent resultsHandler = new Intent(getApplicationContext(), ResultsHandler.class);
         startService(resultsHandler);

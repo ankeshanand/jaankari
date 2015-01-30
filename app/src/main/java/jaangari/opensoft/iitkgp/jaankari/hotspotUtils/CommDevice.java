@@ -2,7 +2,9 @@ package jaangari.opensoft.iitkgp.jaankari.hotspotUtils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.wifi.WifiManager;
 import android.os.Environment;
+import android.text.format.Formatter;
 import android.util.Log;
 
 import com.google.android.gms.internal.db;
@@ -48,7 +50,7 @@ public class CommDevice {
 
     private static final int MESSAGE_SIZE = 10;
     private static  boolean IS_RECEIVED = false;
-    public static String BROADCAST_IP = "192.168.43.0";
+    public static String BROADCAST_IP = "192.168.43.255";
     //public static String BROADCAST_IP = "10.0.3.0";
     public static final int PORT_DST = 6667;
     public static final int PORT_SRC = 2802;
@@ -98,13 +100,24 @@ public class CommDevice {
 //                    e.printStackTrace();
 //                }
 //            }
-            finalJson.put("IP",dp.getAddress());
+            //finalJson.put("IP",dp.getAddress());
+            finalJson.put("IP",getMyIp());
             finalJson.put("list",new JSONArray(listAvailable));
             sendMsg(finalJson.toString(), dp.getAddress());
             Log.d("CommDevice", ans);
             Log.d("CommDevice","Sent the Available indexes :"+ finalJson.toString());
         }
 
+    }
+
+    public String getMyIp()
+    {
+        // Todo - Rohan - Implement This Function
+
+        //WifiManager wm = (WifiManager) getSystemService(WIFI_SERVICE);
+        //String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
+
+        return "/192.168.43.1";
     }
 
     public void sendMsg(String msg, InetAddress address) {
@@ -418,6 +431,7 @@ public class CommDevice {
 
                 Log.d("CommDevice","****FILENAME = " + fPath);
                 sendFileOverSocket(sock,fPath);
+                //sendFileOverSocket(sock,"/storage/emulated/legacy/Jaankari/bak/inp.mp4");
 
                 if (sock != null) sock.close();
 
@@ -506,7 +520,7 @@ public class CommDevice {
             {
                 outputStream.write(buffer, 0 ,read);
             }
-            //outputStream.flush();
+            outputStream.flush();
 
             outputStream.close();
             sock.close();

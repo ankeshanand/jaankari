@@ -121,12 +121,16 @@ public class GlobalDatabaseImageService extends Service {
     }
 
     public void getWeather(){
+
+        Log.d(TAG,"Downloading Weather");
         try{
-            String url = "http://"+getString(R.string.ip_address)+"/getWeather.php";
+            String url = "http://"+getString(R.string.ip_address)+"getWeather.php";
             HttpClient httpclient = new DefaultHttpClient();
             HttpGet httpGet = new HttpGet(url);
+            Log.d(TAG,"URL = " + url);
             HttpResponse response = httpclient.execute(httpGet);
             String json_string = EntityUtils.toString(response.getEntity());
+            Log.d(TAG,"Resp=" + json_string);
             JSONArray jsonArray = new JSONArray(json_string);
             db = new DatabaseHandler(getApplicationContext());
             for (int i=0;i<jsonArray.length();i++){
@@ -147,6 +151,7 @@ public class GlobalDatabaseImageService extends Service {
             Ed.putBoolean("Weather",true);
             Ed.commit();
         }catch(Exception e){
+            Log.d(TAG,e.toString());
             e.printStackTrace();
         }
     }
@@ -181,7 +186,7 @@ public class GlobalDatabaseImageService extends Service {
                 }
             }
         });
-       // t.start();
+        t.start();
 //        try {
 //            t.join();
 //        } catch (InterruptedException e) {
