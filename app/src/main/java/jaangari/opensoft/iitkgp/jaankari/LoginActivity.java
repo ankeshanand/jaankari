@@ -242,6 +242,8 @@ public class LoginActivity extends FragmentActivity implements LoaderCallbacks<C
         SharedPreferences sp1 = this.getSharedPreferences("Login", 0);
         String sLogin = sp1.getString("sLogin", null);
         String path = sp1.getString("proPic",null);
+
+        // todo : Remove the following hardcoded true
         if (sLogin != null || true) {
             if (true || sLogin.equals("true")) {
                 mDownloadTask = new DownloadTask();

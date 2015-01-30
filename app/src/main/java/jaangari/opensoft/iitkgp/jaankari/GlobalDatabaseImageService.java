@@ -158,6 +158,9 @@ public class GlobalDatabaseImageService extends Service {
         // Videos = /videoLogs
         // Health = /healthLogs
         // Weather = /getAllWeatherDetails
+        sp = this.getSharedPreferences("Login", 0);
+
+        // todo : Remove the following hardcoded true
 
         Thread t = new Thread(new Runnable(){
             @Override
@@ -178,7 +181,7 @@ public class GlobalDatabaseImageService extends Service {
                 }
             }
         });
-        t.start();
+       // t.start();
 //        try {
 //            t.join();
 //        } catch (InterruptedException e) {
