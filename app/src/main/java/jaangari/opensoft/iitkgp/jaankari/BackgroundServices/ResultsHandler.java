@@ -140,9 +140,14 @@ public class ResultsHandler extends IntentService {
                     if (sock != null) sock.close();
                 }
             }
-        } finally {
-            if (servsock != null) servsock.close();
         }
+        catch (Exception e)
+        {
+
+        }
+//        finally {
+//            if (servsock != null) servsock.close();
+//        }
 
         return true;
     }

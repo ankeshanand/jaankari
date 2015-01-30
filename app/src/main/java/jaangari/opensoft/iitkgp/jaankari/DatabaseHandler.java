@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
+import android.os.Environment;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -617,30 +618,31 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     //TODO:Gets list of category,ids based on the search query.
 
-    public ArrayList<PairCategory> fetchIndexList(String query) {
+    public String fetchIndexList(String query) {
 
-        ArrayList<Integer> indexes = new ArrayList<Integer>();
+        ArrayList<SearchResults> list = searchMatches(query,null);
 
-        indexes.add(33);
+        JSONArray ar = new JSONArray();
+        for(SearchResults i : list)
+        {
+            ar.put(i.getArray());
+        }
 
-        indexes.add(66);
-
-        ArrayList<PairCategory> res = (new ArrayList<>());
-
-        res.add(new PairCategory("Sports",indexes));
-
-        res.add(new PairCategory("News",indexes));
-
-        return res;
+        return ar.toString();
 
     }
 
-    //TODO: Returnd the filepath corresponding the category and id. Null if n.a
-    public String checkLocalDatabase(String category, int id) {
-        return null;
-    }
     //TODO:Returns Filepath even though file isnot present in the local db.
     public String getFilePath(String category, int id) {
-        return null;
+        Videos video = getVideobyId(id);
+        String path = video.getPath();
+
+        // TODO : REMOVE HARDCODE String ans = Environment.getExternalStorageDirectory() + "/Jaankari" + "/Videos/" + path.substring(path.lastIndexOf("/"));
+
+        String ans = Environment.getExternalStorageDirectory() + "/Jaankari" + "/Videos" + path.substring(path.lastIndexOf("/"));
+
+        Log.d("CommDevice", Environment.getExternalStorageDirectory().toString() );
+
+        return ans;
     }
 }

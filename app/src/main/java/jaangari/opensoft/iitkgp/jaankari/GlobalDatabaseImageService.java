@@ -158,32 +158,32 @@ public class GlobalDatabaseImageService extends Service {
         // Videos = /videoLogs
         // Health = /healthLogs
         // Weather = /getAllWeatherDetails
-        sp = this.getSharedPreferences("Login", 0);
+
         Thread t = new Thread(new Runnable(){
             @Override
             public void run() {
-                if(!sp.getBoolean("Weather",false)){
+                if(!sp.getBoolean("Weather",false) || true){
                     getWeather();
                 }
-                if(!sp.getBoolean("News",false)){
+                if(!sp.getBoolean("News",false) || true){
                     getNews();
                 }
-                if(!sp.getBoolean("Health",false)){
+                if(!sp.getBoolean("Health",false) || true){
                     Log.e(TAG,"Health");
                     getHealth();
                 }
-                if(!sp.getBoolean("Videos",false)){
+                if(!sp.getBoolean("Videos",false) || true){
                     Log.e(TAG,"Videos");
                     getVideos();
                 }
             }
         });
         t.start();
-        try {
-            t.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            t.join();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
         return 0;
     }
     @Override

@@ -1,39 +1,39 @@
 package jaangari.opensoft.iitkgp.jaankari.hotspotUtils;
 
-        import android.content.Context;
-        import android.content.Intent;
-        import android.os.Environment;
-        import android.util.Log;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Environment;
+import android.util.Log;
 
-        import com.google.android.gms.internal.db;
+import com.google.android.gms.internal.db;
 
-        import org.json.JSONArray;
-        import org.json.JSONException;
-        import org.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-        import java.io.BufferedInputStream;
-        import java.io.BufferedReader;
-        import java.io.File;
-        import java.io.FileInputStream;
-        import java.io.FileNotFoundException;
-        import java.io.FileOutputStream;
-        import java.io.IOException;
-        import java.io.InputStream;
-        import java.io.InputStreamReader;
-        import java.io.OutputStream;
-        import java.io.PrintWriter;
-        import java.net.DatagramPacket;
-        import java.net.DatagramSocket;
-        import java.net.InetAddress;
-        import java.net.InetSocketAddress;
-        import java.net.ServerSocket;
-        import java.net.Socket;
-        import java.util.ArrayList;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
 
-        import jaangari.opensoft.iitkgp.jaankari.BackgroundServices.ResultsHandler;
-        import jaangari.opensoft.iitkgp.jaankari.DatabaseHandler;
-        import jaangari.opensoft.iitkgp.jaankari.SearchableActivity;
-        import jaangari.opensoft.iitkgp.jaankari.util.PairCategory;
+import jaangari.opensoft.iitkgp.jaankari.BackgroundServices.ResultsHandler;
+import jaangari.opensoft.iitkgp.jaankari.DatabaseHandler;
+import jaangari.opensoft.iitkgp.jaankari.SearchableActivity;
+import jaangari.opensoft.iitkgp.jaankari.util.PairCategory;
 
 /**
  * Created by shiwangi on 24/1/15.
@@ -60,6 +60,7 @@ public class CommDevice {
 
 
     public CommDevice(final Context context) throws IOException {
+        mContext = context;
         dbHandler = new DatabaseHandler(context);
     }
 
@@ -84,21 +85,21 @@ public class CommDevice {
             }
             System.out.println("here *** "+ ans);
 
-            ArrayList<PairCategory> listAvailable =  dbHandler.fetchIndexList(ans);
-            Log.d("CommDevice", listAvailable.get(0).toString() + "is the fetchIndex");
-
+            String listAvailable =  dbHandler.fetchIndexList(ans);
+//            Log.d("CommDevice", listAvailable.get(0).toString() + "is the fetchIndex");
+//
             JSONObject finalJson = new JSONObject();
-            JSONArray json = new JSONArray();
-            for(PairCategory p : listAvailable)
-            {
-                try {
-                    json.put(p.getJSONOut());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+//            JSONArray json = new JSONArray();
+//            for(PairCategory p : listAvailable)
+//            {
+//                try {
+//                    json.put(p.getJSONOut());
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
             finalJson.put("IP",dp.getAddress());
-            finalJson.put("list",json);
+            finalJson.put("list",new JSONArray(listAvailable));
             sendMsg(finalJson.toString(), dp.getAddress());
             Log.d("CommDevice", ans);
             Log.d("CommDevice","Sent the Available indexes :"+ finalJson.toString());
@@ -409,7 +410,12 @@ public class CommDevice {
 
                 Log.d("CommDevice","Accepted Connection for File Request");
 
-                String fPath = waitForStringSocket(sock);
+                String strRec = waitForStringSocket(sock);
+                strRec = strRec.replaceAll("\n","");
+                String[] tokens = strRec.split(";");
+
+                String fPath = dbHandler.getFilePath(tokens[0],Integer.parseInt(tokens[1]));
+
                 Log.d("CommDevice","****FILENAME = " + fPath);
                 sendFileOverSocket(sock,fPath);
 
@@ -419,7 +425,8 @@ public class CommDevice {
         }
         catch (Exception e)
         {
-
+            Log.d("CommDevice","Error=" + e.toString());
+            e.printStackTrace();
         }
         finally {
             if (servsock != null) servsock.close();
@@ -432,9 +439,10 @@ public class CommDevice {
         Socket socket = null;
         try {
             socket = new Socket(IP.substring(1), PORT_FILE_download);
-            sendStringoverSocket(socket,"/storage/sdcard0/inp.mp3");
-            saveFileOverSocket(socket);
-                        //socket.close();
+            String toSend = category + ";" + String.valueOf(id);
+            sendStringoverSocket(socket,toSend);
+            saveFileOverSocket(socket,category,id);
+            //socket.close();
 //            bis.read(buffer,0,buffer.length);
 //            outputStream.write(buffer,0,buffer.length);
 //            outputStream.flush();
@@ -472,6 +480,8 @@ public class CommDevice {
         BufferedReader in = new BufferedReader(new InputStreamReader(is));
 
         String theS = in.readLine();
+
+        Log.d("CommDevice", "got waited String = " + theS);
 
         //in.close();
         //is.close();
@@ -513,13 +523,18 @@ public class CommDevice {
             e.printStackTrace();
         }
     }
-    public void saveFileOverSocket(Socket sock) throws IOException {
+    public void saveFileOverSocket(Socket sock, String cat, int id) throws IOException {
         try {
 
             InputStream is = sock.getInputStream();
 
             //final File file2 = new File(dbHandler.getFilePath("", 1));
-            final File file2 = new File("/storage/sdcard0/outSTR22.mp3");
+
+
+            DatabaseHandler databaseHandler = new DatabaseHandler(mContext);
+            String fpath = databaseHandler.getFilePath(cat,id);
+            //String fpath = "/storage/emulated/legacy/Jaankari/bak/out.mp4";
+            final File file2 = new File(fpath);
 
             final OutputStream output = new FileOutputStream(file2);
 
@@ -532,7 +547,6 @@ public class CommDevice {
                 }
 
                 Log.d("CommDevice","Recieved File");
-
 
                 output.close();
                 is.close();

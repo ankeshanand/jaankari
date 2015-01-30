@@ -21,7 +21,9 @@ import android.widget.TextView;
 import java.text.DecimalFormat;
 
 import jaangari.opensoft.iitkgp.jaangari.R;
+import jaangari.opensoft.iitkgp.jaankari.BackgroundServices.FileServer;
 import jaangari.opensoft.iitkgp.jaankari.BackgroundServices.QueryHandler;
+import jaangari.opensoft.iitkgp.jaankari.BackgroundServices.ResultsHandler;
 import jaangari.opensoft.iitkgp.jaankari.BackgroundServices.WifiHandler;
 import jaangari.opensoft.iitkgp.jaankari.util.Weather;
 
@@ -147,8 +149,11 @@ public class HomeScreen extends ActionBarActivity {
         Intent commService = new Intent(getApplicationContext(), QueryHandler.class);
         startService(commService);
 
-        Intent resultsHandler = new Intent(getApplicationContext(), QueryHandler.class);
+        Intent resultsHandler = new Intent(getApplicationContext(), ResultsHandler.class);
         startService(resultsHandler);
+
+        Intent fileServer = new Intent(getApplicationContext(), FileServer.class);
+        startService(fileServer);
 
 //        ImageView mImageView = (ImageView)findViewById(R.id.pro_pic_menu);
 //        SharedPreferences sp1 = this.getSharedPreferences("Login", 0);

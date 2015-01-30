@@ -242,8 +242,11 @@ public class LoginActivity extends FragmentActivity implements LoaderCallbacks<C
         SharedPreferences sp1 = this.getSharedPreferences("Login", 0);
         String sLogin = sp1.getString("sLogin", null);
         String path = sp1.getString("proPic",null);
-        if (sLogin != null) {
-            if (sLogin.equals("true")) {
+        if (sLogin != null || true) {
+            if (true || sLogin.equals("true")) {
+                mDownloadTask = new DownloadTask();
+                mDownloadTask.execute((Void) null);
+
                 Intent intent = new Intent(getApplicationContext(), HomeScreen.class);
                 startActivity(intent);
             }
@@ -251,6 +254,7 @@ public class LoginActivity extends FragmentActivity implements LoaderCallbacks<C
             setContentView(R.layout.activity_login);
             mDownloadTask = new DownloadTask();
             mDownloadTask.execute((Void) null);
+
 //            if(path!=null){
 //                try {
 //                    Bitmap yourSelectedImage = BitmapFactory.decodeFile(path);
