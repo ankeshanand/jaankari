@@ -170,30 +170,30 @@ public class SearchableActivity extends ActionBarActivity {
 
     protected int launchResult(SearchResults result)
     {
-        Intent mIntent = new Intent(this, ResultViewer.class);
-        mIntent.putExtra("SearchResult", result.getArray().toString());
-        startActivity(mIntent);
-        return 0;
-
-//        if("Video".equals(result.getCategory())){
-//            Intent intent = new Intent();
-//            intent.setAction(android.content.Intent.ACTION_VIEW);
-//            db = new DatabaseHandler(getApplicationContext());
-//            Videos video = db.getVideobyId(result.getId());
-//
-//            File file = new File(db.getFilePath(result.getCategory(), result.getId()));
-//            db.closeDB();
-//            Log.d(TAG, db.getFilePath(result.getCategory(), result.getId()));
-//            intent.setDataAndType(Uri.fromFile(file), "video/*");
-//            video_id = video.getID();
-//            video_history = video.getHistory();
-//            startActivity(intent);
-//        }
-//        else{
-//
-//        }
-//
+//        Intent mIntent = new Intent(this, ResultViewer.class);
+//        mIntent.putExtra("SearchResult", result.getArray().toString());
+//        startActivity(mIntent);
 //        return 0;
+
+        if("Video".equals(result.getCategory())){
+            Intent intent = new Intent();
+            intent.setAction(android.content.Intent.ACTION_VIEW);
+            db = new DatabaseHandler(getApplicationContext());
+            Videos video = db.getVideobyId(result.getId());
+
+            File file = new File(db.getFilePath(result.getCategory(), result.getId()));
+            db.closeDB();
+            Log.d(TAG, db.getFilePath(result.getCategory(), result.getId()));
+            intent.setDataAndType(Uri.fromFile(file), "video/*");
+            video_id = video.getID();
+            video_history = video.getHistory();
+            startActivity(intent);
+        }
+        else{
+
+        }
+
+        return 0;
     }
     protected void contentSearch(String Query){
         if(Query!=null){
