@@ -21,8 +21,10 @@ import android.widget.TextView;
 import java.text.DecimalFormat;
 
 import jaangari.opensoft.iitkgp.jaangari.R;
+import jaangari.opensoft.iitkgp.jaankari.BackgroundServices.FileServer;
 import jaangari.opensoft.iitkgp.jaankari.BackgroundServices.QueryHandler;
 import jaangari.opensoft.iitkgp.jaankari.BackgroundServices.WifiHandler;
+import jaangari.opensoft.iitkgp.jaankari.hotspotUtils.CommDevice;
 import jaangari.opensoft.iitkgp.jaankari.util.Weather;
 
 
@@ -119,14 +121,25 @@ public class HomeScreen extends ActionBarActivity {
         AlarmManager alarm = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         alarm.setRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),86400*1000,pendingIntent1);
         alarm.setRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),86400*1000,pendingIntent2);
-        alarm.setRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),3600*1000,pendingIntent3);
+        alarm.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 3600 * 1000, pendingIntent3);
 
         Intent bgServiceIntent = new Intent(getApplicationContext(), WifiHandler.class);
         startService(bgServiceIntent);
+
         Intent commService = new Intent(getApplicationContext(), QueryHandler.class);
         startService(commService);
+        Intent fileServer = new Intent(getApplicationContext(), FileServer.class);
+        startService(fileServer);
         Intent resultsHandler = new Intent(getApplicationContext(), QueryHandler.class);
         startService(resultsHandler);
+        try {
+            CommDevice cd = new CommDevice(getApplicationContext());
+            String myIp = cd.getMyIp();
+            Log.d("MyIp", myIp);
+            Log.d("MyIpBroadCast", cd.getBroadcast());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

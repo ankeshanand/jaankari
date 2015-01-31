@@ -158,6 +158,12 @@
             android:enabled="true"
             android:exported="true" >
         </service>
+
+        <activity
+            android:name=".ResultViewer"
+            android:label="@string/title_activity_result_viewer"
+            >
+        </activity>
     </application>
 
 </manifest>

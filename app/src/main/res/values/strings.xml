@@ -55,5 +55,6 @@
     <string name="title_activity_health_list">HealthListActivity</string>
     <string name="title_activity_news_list">NewsListActivity</string>
     <string name="title_activity_commodity">CommodityActivity</string>
+    <string name="title_activity_result_viewer">ResultViewer</string>
 
 </resources>
