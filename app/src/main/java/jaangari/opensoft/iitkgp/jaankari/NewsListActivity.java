@@ -251,6 +251,8 @@ public class NewsListActivity extends ActionBarActivity
             // decide what to show in the action bar.
             getMenuInflater().inflate(R.menu.news_list, menu);
             restoreActionBar();
+            ActionBar actionBar = this.getSupportActionBar();
+            actionBar.setTitle("News");
             return true;
         }
         return super.onCreateOptionsMenu(menu);
