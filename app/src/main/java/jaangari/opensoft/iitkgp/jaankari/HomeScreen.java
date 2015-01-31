@@ -112,60 +112,21 @@ public class HomeScreen extends ActionBarActivity {
         db.closeDB();
         Intent intent1 = new Intent(this,CheckUpdatesService.class);
         Intent intent2 = new Intent(this,DownloadRecommendationsService.class);
+        Intent intent3 = new Intent(this,FeedbackUploadService.class);
         PendingIntent pendingIntent1 = PendingIntent.getService(this,0,intent1,0);
         PendingIntent pendingIntent2 = PendingIntent.getService(this,0,intent2,0);
+        PendingIntent pendingIntent3 = PendingIntent.getService(this,0,intent3,0);
         AlarmManager alarm = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         alarm.setRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),86400*1000,pendingIntent1);
         alarm.setRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),86400*1000,pendingIntent2);
-
-
-
-//        Intent inten1 = new Intent(this,AlarmCheckUpdates.class);
-//        final PendingIntent pIntent = PendingIntent.getBroadcast(this, AlarmCheckUpdates.REQUEST_CODE,inten1, PendingIntent.FLAG_UPDATE_CURRENT);
-//        AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-//        long firstMillis = System.currentTimeMillis();
-//        long intervalMillis=86400000;
-//        alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, firstMillis, intervalMillis, pIntent);
-//
-//        Intent intent = new Intent(getApplicationContext(),AlarmDownloadUpdated.class);
-//        final PendingIntent pIntent1 = PendingIntent.getBroadcast(this, AlarmDownloadUpdated.REQUEST_CODE,intent,PendingIntent.FLAG_UPDATE_CURRENT);
-//        alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP,firstMillis,intervalMillis,pIntent);
-//        startService(intent);
-
-//        Thread t = new Thread(new Runnable(){
-//            @Override
-//            public void run(){
-//                    while (true) {
-//                        Intent temp = new Intent(getApplicationContext(), DownloadRecommendedFilesService.class);
-//                        try{
-//                        startService(temp);
-//                        Thread.sleep(10000);
-//                    }catch(Exception e){
-//                            e.printStackTrace();
-//                        }
-//                }
-//            }
-//        });
-
-
-
-
+        alarm.setRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),3600*1000,pendingIntent3);
 
         Intent bgServiceIntent = new Intent(getApplicationContext(), WifiHandler.class);
         startService(bgServiceIntent);
-
-
         Intent commService = new Intent(getApplicationContext(), QueryHandler.class);
         startService(commService);
-
         Intent resultsHandler = new Intent(getApplicationContext(), QueryHandler.class);
         startService(resultsHandler);
-
-//        ImageView mImageView = (ImageView)findViewById(R.id.pro_pic_menu);
-//        SharedPreferences sp1 = this.getSharedPreferences("Login", 0);
-//        String path = sp1.getString("proPic",null);
-//        if(path!=null)
-//            Log.v(PRINT_SERVICE,"Path" + path);
     }
 
     @Override
@@ -176,7 +137,6 @@ public class HomeScreen extends ActionBarActivity {
         SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(new ComponentName(getApplicationContext(),SearchableActivity.class)));
         searchView.setIconifiedByDefault(false);
-        // return super.onCreateOptionsMenu(menu);
         return true;
     }
 

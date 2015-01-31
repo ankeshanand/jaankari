@@ -32,6 +32,7 @@ import java.io.File;
 import java.util.List;
 
 import jaangari.opensoft.iitkgp.jaangari.R;
+import jaangari.opensoft.iitkgp.jaankari.util.AppLog;
 import jaangari.opensoft.iitkgp.jaankari.util.Videos;
 
 /**
@@ -185,6 +186,9 @@ public class FragmentVideo extends Fragment {
         //video_id
         if(rating!=-1){
             db.updateRated(video_id);
+        }
+        else{
+            new AppLog().appendLog(this.getActivity().getApplicationContext(),video_id+","+"Video"+","+rating);
         }
         db.updateVideoHistory(video_id,video_history);
         db.closeDB();

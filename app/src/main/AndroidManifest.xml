@@ -88,37 +88,29 @@
             android:label="@string/title_activity_video"
             android:screenOrientation="portrait" >
         </activity>
-
         <activity
             android:name="jaangari.opensoft.iitkgp.jaankari.NewsMainActivity"
             android:label="@string/title_activity_video"
             android:screenOrientation="portrait" >
         </activity>
-
         <activity
             android:name="jaangari.opensoft.iitkgp.jaankari.NewsListActivity"
             android:label="@string/title_activity_news_list"
             android:parentActivityName="jaangari.opensoft.iitkgp.jaankari.HomeScreen"
-            android:screenOrientation="portrait"
-            >
-
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="jaangari.opensoft.iitkgp.jaankari.HomeScreen" />
         </activity>
-
         <activity
             android:name="jaangari.opensoft.iitkgp.jaankari.HealthListActivity"
             android:label="@string/title_activity_health_list"
             android:parentActivityName="jaangari.opensoft.iitkgp.jaankari.HomeScreen"
-            android:screenOrientation="portrait"
-            >
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="jaangari.opensoft.iitkgp.jaankari.HomeScreen" />
         </activity>
-
-
 
         <service
             android:name="jaangari.opensoft.iitkgp.jaankari.GlobalDatabaseImageService"
@@ -158,6 +150,11 @@
         </service>
         <service
             android:name="jaangari.opensoft.iitkgp.jaankari.DownloadRecommendedFilesService"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
+        <service
+            android:name="jaangari.opensoft.iitkgp.jaankari.FeedbackUploadService"
             android:enabled="true"
             android:exported="true" >
         </service>
