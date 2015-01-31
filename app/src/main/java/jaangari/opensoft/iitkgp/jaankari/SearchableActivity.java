@@ -103,62 +103,68 @@ public class SearchableActivity extends ActionBarActivity {
             db = new DatabaseHandler(getApplicationContext());
             final ArrayList<SearchResults> results= db.searchMatches(Query,null);
             db.closeDB();
-            ListView listView = (ListView)findViewById(R.id.search_list_view);
             int size = results.size();
-            videoTitle = new String[size];
-            otherSummary = new String[size];
-            otherTitle = new String[size];
-            image = new Bitmap[size];
-            rating = new float[size];
-            for (int i=0;i<size;i++){
-                SearchResults result = results.get(i);
-                if ("Video".equals(result.getCategory())){
-                    db = new DatabaseHandler(getApplicationContext());
-                    Videos video = db.getVideobyId(result.getId());
-                    db.closeDB();
-                    //TODO - getVideo paths by id;
-                    videoTitle[i]=video.getName();
-                    otherTitle[i]=null;
-                    otherSummary[i]=null;
-                    String path = video.getPath();
-                    image[i]= BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + "/" + getString(R.string.app_name) + "/Videos/"
-                            + path.substring(path.lastIndexOf("/") + 1, path.lastIndexOf(".mp4")) + "_thumbnail.jpg");;
-                    rating[i]=video.getRating();
-                }
-                else{
-                    videoTitle[i]=null;
-                    otherTitle[i]=result.getTitle();
-                    otherSummary[i]=result.getSummary();
-                    image[i]=null;
-                    rating[i]=0;
-
-                }
-            }
-            CustomList adapter = new CustomList(this, videoTitle, image, rating,otherTitle,otherSummary);
-            listView.setAdapter(adapter);
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    SearchResults result = results.get(position);
-                    if("Video".equals(result.getCategory())){
-                        Intent intent = new Intent();
-                        intent.setAction(android.content.Intent.ACTION_VIEW);
+            if(size>0){
+                ListView listView = (ListView)findViewById(R.id.search_list_view);
+                videoTitle = new String[size];
+                otherSummary = new String[size];
+                otherTitle = new String[size];
+                image = new Bitmap[size];
+                rating = new float[size];
+                for (int i=0;i<size;i++){
+                    SearchResults result = results.get(i);
+                    if ("Video".equals(result.getCategory())){
                         db = new DatabaseHandler(getApplicationContext());
                         Videos video = db.getVideobyId(result.getId());
                         db.closeDB();
                         String path = video.getPath();
-                        File file = new File(Environment.getExternalStorageDirectory() + "/" + getString(R.string.app_name) + "/Videos/" + path.substring(path.lastIndexOf("/")));
-                        Log.e(TAG, Environment.getExternalStorageDirectory() +"/"+ getString(R.string.app_name) + "/Videos/" + path.substring(path.lastIndexOf("/")));
-                        intent.setDataAndType(Uri.fromFile(file), "video/*");
-                        video_id = video.getID();
-                        video_history = video.getHistory();
-                        startActivity(intent);
+                        videoTitle[i]=video.getName();
+                        otherTitle[i]=null;
+                        otherSummary[i]=null;
+                        image[i] = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + "/" +
+                                getString(R.string.app_name) + "/Videos/"
+                                + path.substring(path.lastIndexOf("/") + 1, path.lastIndexOf(".mp4")) + "_thumbnail.jpg");
+                        rating[i] = video.getRating();
                     }
                     else{
+                        videoTitle[i]=null;
+                        otherTitle[i]=result.getTitle();
+                        otherSummary[i]=result.getSummary();
+                        image[i]=null;
+                        rating[i]=0;
 
                     }
                 }
-            });
+                CustomList adapter = new CustomList(this, videoTitle, image, rating,otherTitle,otherSummary);
+                listView.setAdapter(adapter);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        SearchResults result = results.get(position);
+                        if("Video".equals(result.getCategory())){
+                            Intent intent = new Intent();
+                            intent.setAction(android.content.Intent.ACTION_VIEW);
+                            db = new DatabaseHandler(getApplicationContext());
+                            Videos video = db.getVideobyId(result.getId());
+                            db.closeDB();
+                            String path = video.getPath();
+                            File file = new File(Environment.getExternalStorageDirectory() + "/" + getString(R.string.app_name) + "/Videos/" + path.substring(path.lastIndexOf("/")));
+//                            Log.e(TAG, Environment.getExternalStorageDirectory() +"/"+ getString(R.string.app_name) + "/Videos/" + path.substring(path.lastIndexOf("/")));
+                            intent.setDataAndType(Uri.fromFile(file), "video/*");
+                            video_id = video.getID();
+                            video_history = video.getHistory();
+                            startActivity(intent);
+                        }
+                        else{
+
+                        }
+                    }
+                });
+            }
+            else{
+                TextView textView = (TextView)findViewById(R.id.searchable_text_view);
+                textView.setText("Sorry! No local results found!");
+            }
 
         }
     }

@@ -4,9 +4,11 @@ import android.app.Service;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.IBinder;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -40,15 +42,16 @@ import jaangari.opensoft.iitkgp.jaankari.util.News;
 import jaangari.opensoft.iitkgp.jaankari.util.Videos;
 import jaangari.opensoft.iitkgp.jaankari.util.Weather;
 
-public class DownloadFilesService extends Service {
+public class DownloadRecommendedFilesService extends Service {
     private final int TIMEOUT_CONNECTION = 5000;//5sec
     private final int TIMEOUT_SOCKET = 30000;//30sec
     private final String USER_AGENT = "Mozilla/5.0";
+    private String TAG = "DownloadRecommendationFilesService";
     DatabaseHandler db;
-    public DownloadFilesService() {
+    public DownloadRecommendedFilesService() {
     }
 
-    private boolean Videodownload(String path,String filename,int id){
+    private boolean Videodownload(String path,int id){
         String str = "http://"+getString(R.string.ip_address)+path;
         try {
             URL url = new URL(str);
@@ -81,6 +84,7 @@ public class DownloadFilesService extends Service {
             inStream.close();
             db = new DatabaseHandler(this.getApplicationContext());
             db.updateVideo(id);
+            db.deleteDownload(id,"Video");
             db.closeDB();
             Bitmap bm = ThumbnailUtils.createVideoThumbnail(Environment.getExternalStorageDirectory() + "/" + getString(R.string.app_name) + "/Videos/"
                     + path.substring(path.lastIndexOf("/") + 1), MediaStore.Images.Thumbnails.MINI_KIND);
@@ -169,30 +173,25 @@ public class DownloadFilesService extends Service {
                     commodity.setMin(root.getString("min"));
                     db.addCommodity(commodity);
                 }
+                db.deleteDownload(id,category);
                 db.closeDB();
             }
         }catch (Exception e){
-
+            return false;
         }
         return true;
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId){
-        db = new DatabaseHandler(getApplicationContext());
-        ArrayList<Download> list= db.getToDoDownload();
-        db.closeDB();
-        for (int i=0;i<list.size();i++){
-            Download temp = list.get(i);
-            if("Video".contains(temp.category)){
-                db = new DatabaseHandler(getApplicationContext());
-                Videos video = db.getVideobyId(temp.id);
-                Videodownload(video.getPath(), video.getName(),temp.id);
-                db.closeDB();
+        DownloadFiles mDownlaodFiles = new DownloadFiles();
+        mDownlaodFiles.execute((Void)null);
+        try {
+            while (!mDownlaodFiles.get()) {
+                mDownlaodFiles.execute((Void)null);
             }
-            else {
-                dowloadText(temp.category,temp.id);
-            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
         return 0;
     }
@@ -201,5 +200,29 @@ public class DownloadFilesService extends Service {
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    private class DownloadFiles extends AsyncTask<Void,Void,Boolean>{
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            db = new DatabaseHandler(getApplicationContext());
+            ArrayList<Download> list= db.getToDoDownload();
+            db.closeDB();
+            for (int i=0;i<list.size();i++){
+                Download temp = list.get(i);
+                if("Video".contains(temp.category)){
+                    db = new DatabaseHandler(getApplicationContext());
+                    Videos video = db.getVideobyId(temp.id);
+                    Log.d(TAG,video.getName()+ " : " + video.getPath());
+                    db.closeDB();
+                    Videodownload(video.getPath(),temp.id);
+                }
+                else {
+                    dowloadText(temp.category,temp.id);
+                }
+            }
+            return true;
+        }
     }
 }

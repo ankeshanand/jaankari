@@ -6,10 +6,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
+import android.os.Environment;
 import android.util.Log;
 
 import org.json.JSONArray;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -162,6 +164,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 
     public void addDownload(int id,String category){
+        deleteDownload(id,category);
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(DOWNLOAD_ID,id);
@@ -184,36 +187,91 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void deleteDownload(int id){
+    public void deleteDownload(int id, String category){
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_TODOWNLOAD,DOWNLOAD_ID+"=" + id,null);
+        db.delete(TABLE_TODOWNLOAD,DOWNLOAD_ID+"=" + id + "  AND " + DOWNLOAD_CATEGORY +" = '" + category+"';",null);
         db.close();
     }
 
 
-    public void addVideo(Videos video){
+    public void addVideo(Videos video) {
+        deleteVideo(video.getID());
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(VIDEOS_ID,video.getID());
-        values.put(VIDEOS_FILENAME,video.getName());
-        values.put(VIDEOS_PATH,video.getPath());
-        values.put(VIDEOS_CATEGORY,video.getCategory());
-        values.put(VIDEOS_RATING,video.getRating());
-        values.put(VIDEOS_HISTORY,0);
-        values.put(VIDEOS_RATED,0);
-        values.put(VIDEOS_IN_DATABASE,0);
+        values.put(VIDEOS_ID, video.getID());
+        values.put(VIDEOS_FILENAME, video.getName());
+        values.put(VIDEOS_PATH, video.getPath());
+        values.put(VIDEOS_CATEGORY, video.getCategory());
+        values.put(VIDEOS_RATING, video.getRating());
+        values.put(VIDEOS_HISTORY, 0);
+        values.put(VIDEOS_RATED, 0);
+        values.put(VIDEOS_IN_DATABASE, 0);
         db.insert(TABLE_VIDEOS, null, values);
         values = new ContentValues();
-        values.put(VIRTUAL_ID,video.getID());
-        values.put(VIRTUAL_CATEGORY,"Video");
-        values.put(VIRTUAL_TITLE,video.getName());
-        values.put(VIRTUAL_SUMMARY,(String)null);
-        values.put(VIRTUAL_TEXT,(String)null);
-        db.insert(TABLE_VIRTUAL,null,values);
+        values.put(VIRTUAL_ID, video.getID());
+        values.put(VIRTUAL_CATEGORY, "Video");
+        values.put(VIRTUAL_TITLE, video.getName());
+        values.put(VIRTUAL_SUMMARY, (String) null);
+        values.put(VIRTUAL_TEXT, (String) null);
+        db.insert(TABLE_VIRTUAL, null, values);
         db.close();
+    }
+
+    public Videos getVideobyId(int id){
+        Videos video = new Videos();
+        String selectQuery = "SELECT * FROM "+TABLE_VIDEOS + " WHERE " + VIDEOS_ID + "="+id + ";";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        if(c.moveToFirst()){
+            video.setID(c.getInt(c.getColumnIndex(VIDEOS_ID)));
+            video.setName(c.getString(c.getColumnIndex(VIDEOS_FILENAME)));
+            video.setCategory(c.getInt(c.getColumnIndex(VIDEOS_CATEGORY)));
+            video.setPath(c.getString(c.getColumnIndex(VIDEOS_PATH)));
+            video.setRating(c.getFloat(c.getColumnIndex(VIDEOS_RATING)));
+            video.setHistory(c.getInt(c.getColumnIndex(VIDEOS_HISTORY)));
+            video.setIsRated(c.getInt(c.getColumnIndex(VIDEOS_RATED)));
+            video.setIsPresent(c.getInt(c.getColumnIndex(VIDEOS_IN_DATABASE)));
+        }
+        Log.d(TAG,video.getName() + " : " + video.getPath() );
+        return  video;
+    }
+
+    public List<Videos> getAllVideosbyCategory(int category){
+        List<Videos> videos = new ArrayList<Videos>();
+        String selectQuery = null;
+        if(category!=2){
+            selectQuery = "SELECT * FROM "+ TABLE_VIDEOS + " WHERE "+VIDEOS_IN_DATABASE + "=1 AND ("+ VIDEOS_CATEGORY + "=" + category+ " OR " + VIDEOS_CATEGORY + "=2);";
+        }
+        else{
+            selectQuery = "SELECT * FROM " + TABLE_VIDEOS + " WHERE " + VIDEOS_HISTORY + ">0 AND " + VIDEOS_IN_DATABASE + "=1;";
+        }
+
+        Log.e(TAG, selectQuery);
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        if(c.moveToFirst()){
+            do{
+                Videos video = new Videos();
+                video.setID(c.getInt(c.getColumnIndex(VIDEOS_ID)));
+                video.setName(c.getString(c.getColumnIndex(VIDEOS_FILENAME)));
+                video.setCategory(category);
+                video.setPath(c.getString(c.getColumnIndex(VIDEOS_PATH)));
+                video.setRating(c.getFloat(c.getColumnIndex(VIDEOS_RATING)));
+                video.setHistory(c.getInt(c.getColumnIndex(VIDEOS_HISTORY)));
+                video.setIsRated(c.getInt(c.getColumnIndex(VIDEOS_RATED)));
+                videos.add(video);
+                Log.e(TAG,video.getName());
+            }while(c.moveToNext());
+        }
+        else{
+            Log.e(TAG,c.toString());
+        }
+        db.close();
+        return videos;
     }
 
     public void deleteVideo(int id){
+        Log.d(TAG, "Deleting video by : " + id );
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_VIDEOS,VIDEOS_ID+"=" + id,null);
         db.delete(TABLE_VIRTUAL,VIRTUAL_ID+"="+id +" AND "+ VIRTUAL_CATEGORY+" = 'Video'",null);
@@ -247,6 +305,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public void addNews(News news){
+        deleteNews(news.getID());
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(NEWS_ID, news.getID());
@@ -273,6 +332,32 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    public List<News> getAllNewsbyCategory(int category){
+        List<News> news = new ArrayList<News>();
+        String selectQuery = "SELECT * FROM " + TABLE_NEWS + " WHERE " + NEWS_CATEGORY + "=" + category+";";
+        Log.e(TAG, selectQuery);
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        if(c.moveToFirst()){
+            do{
+                News news1 = new News();
+                news1.setID(c.getInt(c.getColumnIndex(NEWS_ID)));
+                news1.setTitle(c.getString(c.getColumnIndex(NEWS_TITLE)));
+                news1.setCategory(category);
+                news1.setSummary(c.getString(c.getColumnIndex(NEWS_SUMMARY)));
+                news1.setText(c.getString(c.getColumnIndex(NEWS_TEXT)));
+                news1.setPlace(c.getString(c.getColumnIndex(NEWS_PLACE)));
+                news.add(news1);
+                Log.e(TAG,news1.getTitle());
+            }while(c.moveToNext());
+        }
+        else{
+            Log.e(TAG,c.toString());
+        }
+        db.close();
+        return news;
+    }
+
     public void updateNews(News news){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -291,6 +376,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public void addWeather(Weather weather){
+        deleteWeather(weather.getID());
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(WEATHER_ID,weather.getID());
@@ -327,6 +413,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 
     public void addHealth(Health health){
+        deleteHealth(health.getID());
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(HEALTH_ID,health.getID());
@@ -342,82 +429,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.insert(TABLE_VIRTUAL,null,values);
         db.close();
     }
-
-    public void deleteHealth(int id){
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_HEALTH,HEALTH_ID+"=" + id,null);
-        db.delete(TABLE_VIRTUAL,VIRTUAL_ID+"="+id +" AND "+ VIRTUAL_CATEGORY+" = 'Health'",null);
-        db.close();
-    }
-
-    public void updateHealth(Health health){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(HEALTH_TITLE,health.getTitle());
-        values.put(HEALTH_TEXT,health.getText());
-        db.update(TABLE_HEALTH, values, HEALTH_ID + " = ?", new String[]{String.valueOf(health.getID())});
-        values = new ContentValues();
-        values.put(VIRTUAL_TITLE,health.getTitle());
-        values.put(VIRTUAL_TEXT,health.getText());
-        db.update(TABLE_VIRTUAL,values,HEALTH_ID +" = ?" +  " AND " + VIRTUAL_CATEGORY + " = Health", new String[]{String.valueOf(health.getID())});
-        db.close();
-    }
-
-    public void addCommodity(Commodity commodity){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COMM_ID,commodity.getID());
-        values.put(COMM_NAME, commodity.getName());
-        values.put(COMM_MIN,commodity.getMin());
-        values.put(COMM_MAX,commodity.getMax());
-        db.insert(TABLE_COMMODITY,null,values);
-        db.close();
-    }
-
-    public void updateCommodity(Commodity commodity){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COMM_MAX,commodity.getMax());
-        values.put(COMM_MIN,commodity.getMin());
-        values.put(COMM_NAME,commodity.getName());
-        db.update(TABLE_VIRTUAL,values,COMM_ID+ " = ?", new String[]{String.valueOf(commodity.getID())});
-        db.close();
-    }
-
-    public void deleteCommodity(int id){
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_COMMODITY,COMM_ID+"=" + id,null);
-        db.close();
-    }
-
-
-
-    public List<News> getAllNewsbyCategory(int category){
-        List<News> news = new ArrayList<News>();
-        String selectQuery = "SELECT * FROM " + TABLE_NEWS + " WHERE " + NEWS_CATEGORY + "=" + category+"";
-        Log.e(TAG, selectQuery);
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = db.rawQuery(selectQuery, null);
-        if(c.moveToFirst()){
-            do{
-                News news1 = new News();
-                news1.setID(c.getInt(c.getColumnIndex(NEWS_ID)));
-                news1.setTitle(c.getString(c.getColumnIndex(NEWS_TITLE)));
-                news1.setCategory(category);
-                news1.setSummary(c.getString(c.getColumnIndex(NEWS_SUMMARY)));
-                news1.setText(c.getString(c.getColumnIndex(NEWS_TEXT)));
-                news1.setPlace(c.getString(c.getColumnIndex(NEWS_PLACE)));
-                news.add(news1);
-                Log.e(TAG,news1.getTitle());
-            }while(c.moveToNext());
-        }
-        else{
-            Log.e(TAG,c.toString());
-        }
-        db.close();
-        return news;
-    }
-
 
     public List<Health> getAllHealth(){
         List<Health> healths = new ArrayList<Health>();
@@ -442,78 +453,77 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return healths;
     }
 
-    public Videos getVideobyId(int id){
-        Videos video = new Videos();
-        String selectQuery = "SELECT * FROM "+TABLE_VIDEOS + " WHERE " + VIDEOS_ID + "="+id + ";";
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = db.rawQuery(selectQuery, null);
-        if(c.moveToFirst()){
-            video.setID(c.getInt(c.getColumnIndex(VIDEOS_ID)));
-            video.setName(c.getString(c.getColumnIndex(VIDEOS_FILENAME)));
-            video.setCategory(c.getInt(c.getColumnIndex(VIDEOS_CATEGORY)));
-            video.setPath(c.getString(c.getColumnIndex(VIDEOS_PATH)));
-            video.setRating(c.getFloat(c.getColumnIndex(VIDEOS_RATING)));
-            video.setHistory(c.getInt(c.getColumnIndex(VIDEOS_HISTORY)));
-            video.setIsRated(c.getInt(c.getColumnIndex(VIDEOS_RATED)));
-        }
-        return  video;
-    }
-
-        public Weather getCurrentWeather(String CURR_CITY){
-            String query = "SELECT * FROM " + TABLE_WEATHER + " WHERE " + WEATHER_CITY + "='" + CURR_CITY +  "';";
-            Log.e("Query",query);
-            SQLiteDatabase db = this.getReadableDatabase();
-            Cursor c = db.rawQuery(query, null);
-            Weather weather = new Weather();
-            Log.e("Query",Integer.toString(c.getCount()));
-            if(c.moveToLast()){
-                Log.e("Query","Inside iteration");
-                weather.setID(c.getInt(c.getColumnIndex(WEATHER_ID)));
-                weather.setCity(c.getString(c.getColumnIndex(WEATHER_CITY)));
-                weather.setMain(c.getString(c.getColumnIndex(WEATHER_MAIN)));
-                weather.setDescription(c.getString(c.getColumnIndex(WEATHER_DESCRIPTION)));
-                weather.setTemp(c.getFloat(c.getColumnIndex(WEATHER_TEMP)));
-                weather.setMInTemp(c.getFloat(c.getColumnIndex(WEATHER_MIN_TEMP)));
-                weather.setMaxTemp(c.getFloat(c.getColumnIndex(WEATHER_MAX_TEMP)));
-                weather.setHumidity(c.getInt(c.getColumnIndex(WEATHER_HUMIDITY)));
-
-            }
-            return weather;
-        }
-
-    public List<Videos> getAllVideosbyCategory(int category){
-        List<Videos> videos = new ArrayList<Videos>();
-        String selectQuery = null;
-        if(category!=2){
-            selectQuery = "SELECT * FROM "+ TABLE_VIDEOS + " WHERE "+ VIDEOS_CATEGORY + "=" + category+ " OR " + VIDEOS_CATEGORY + "=2;";
-        }
-        else{
-            selectQuery = "SELECT * FROM " + TABLE_VIDEOS + " WHERE " + VIDEOS_HISTORY + ">0;";
-        }
-
-        Log.e(TAG, selectQuery);
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = db.rawQuery(selectQuery, null);
-        if(c.moveToFirst()){
-            do{
-                Videos video = new Videos();
-                video.setID(c.getInt(c.getColumnIndex(VIDEOS_ID)));
-                video.setName(c.getString(c.getColumnIndex(VIDEOS_FILENAME)));
-                video.setCategory(category);
-                video.setPath(c.getString(c.getColumnIndex(VIDEOS_PATH)));
-                video.setRating(c.getFloat(c.getColumnIndex(VIDEOS_RATING)));
-                video.setHistory(c.getInt(c.getColumnIndex(VIDEOS_HISTORY)));
-                video.setIsRated(c.getInt(c.getColumnIndex(VIDEOS_RATED)));
-                videos.add(video);
-                Log.e(TAG,video.getName());
-            }while(c.moveToNext());
-        }
-        else{
-            Log.e(TAG,c.toString());
-        }
+    public void deleteHealth(int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_HEALTH,HEALTH_ID+"=" + id,null);
+        db.delete(TABLE_VIRTUAL,VIRTUAL_ID+"="+id +" AND "+ VIRTUAL_CATEGORY+" = 'Health'",null);
         db.close();
-        return videos;
     }
+
+    public void updateHealth(Health health){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(HEALTH_TITLE,health.getTitle());
+        values.put(HEALTH_TEXT,health.getText());
+        db.update(TABLE_HEALTH, values, HEALTH_ID + " = ?", new String[]{String.valueOf(health.getID())});
+        values = new ContentValues();
+        values.put(VIRTUAL_TITLE,health.getTitle());
+        values.put(VIRTUAL_TEXT,health.getText());
+        db.update(TABLE_VIRTUAL,values,HEALTH_ID +" = ?" +  " AND " + VIRTUAL_CATEGORY + " = Health", new String[]{String.valueOf(health.getID())});
+        db.close();
+    }
+
+    public void addCommodity(Commodity commodity){
+        deleteCommodity(commodity.getID());
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COMM_ID,commodity.getID());
+        values.put(COMM_NAME, commodity.getName());
+        values.put(COMM_MIN,commodity.getMin());
+        values.put(COMM_MAX,commodity.getMax());
+        db.insert(TABLE_COMMODITY,null,values);
+        db.close();
+    }
+
+    public void updateCommodity(Commodity commodity){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COMM_MAX,commodity.getMax());
+        values.put(COMM_MIN,commodity.getMin());
+        values.put(COMM_NAME,commodity.getName());
+        db.update(TABLE_VIRTUAL,values,COMM_ID+ " = ?", new String[]{String.valueOf(commodity.getID())});
+        db.close();
+    }
+
+    public void deleteCommodity(String id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_COMMODITY,COMM_ID+"=" + id,null);
+        db.close();
+    }
+
+    public Weather getCurrentWeather(String CURR_CITY){
+        String query = "SELECT * FROM " + TABLE_WEATHER + " WHERE " + WEATHER_CITY + "='" + CURR_CITY +  "';";
+        Log.e("Query",query);
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(query, null);
+        Weather weather = new Weather();
+        Log.e("Query",Integer.toString(c.getCount()));
+        if(c.moveToLast()){
+            Log.e("Query","Inside iteration");
+            weather.setID(c.getInt(c.getColumnIndex(WEATHER_ID)));
+            weather.setCity(c.getString(c.getColumnIndex(WEATHER_CITY)));
+            weather.setMain(c.getString(c.getColumnIndex(WEATHER_MAIN)));
+            weather.setDescription(c.getString(c.getColumnIndex(WEATHER_DESCRIPTION)));
+            weather.setTemp(c.getFloat(c.getColumnIndex(WEATHER_TEMP)));
+            weather.setMInTemp(c.getFloat(c.getColumnIndex(WEATHER_MIN_TEMP)));
+            weather.setMaxTemp(c.getFloat(c.getColumnIndex(WEATHER_MAX_TEMP)));
+            weather.setHumidity(c.getInt(c.getColumnIndex(WEATHER_HUMIDITY)));
+
+        }
+        return weather;
+    }
+
+
 //
 //<<<<<<< HEAD
 //    public Weather getCurrentWeather(){
@@ -562,11 +572,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 String summary = results.getString(results.getColumnIndex(VIRTUAL_SUMMARY));
                 String text = results.getString(results.getColumnIndex(VIRTUAL_TEXT));
                 SearchResults searchResults = new SearchResults(id,title,summary,text,category);
-                list.add(searchResults);
+                if("Video".equals(category)){
+                    Videos video = this.getVideobyId(id);
+                    Log.d(TAG,"Result :" + video.getName() + "is Present : " + video.getIsPresent());
+                    if(video.getIsPresent()==1){
+                        list.add(searchResults);
+                    }
+                }
+                else {
+                    list.add(searchResults);
+                }
             }while(results.moveToNext());
         }
-        JSONArray ar = new JSONArray(list);
-        Log.v(TAG,ar.toString());
         db.close();
         return list;
 
@@ -598,7 +615,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public ArrayList<Download> getToDoDownload() {
         ArrayList<Download> list = new ArrayList<Download>();
-        String selectQuery = "SELECT * FROM" + TABLE_TODOWNLOAD + "WHERE 1";
+        String selectQuery = "SELECT * FROM " + TABLE_TODOWNLOAD + " WHERE 1";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
         if (c.moveToFirst()) {

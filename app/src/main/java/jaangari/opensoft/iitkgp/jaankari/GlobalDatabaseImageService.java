@@ -42,20 +42,16 @@ public class GlobalDatabaseImageService extends Service {
             for(int i=0;i<jsonArray.length();i++){
                 JSONObject root = jsonArray.getJSONObject(i);
                 News news = new News(root.getInt("id"),root.getString("title"),root.getString("summary"),null,null,root.getInt("category"));
-                try {
-                    db.addNews(news);
-                }catch (Exception e){
-                    db.updateNews(news);
-                }
-                Log.e(TAG, root.toString());
+                db.addNews(news);
             }
             db.closeDB();
-            SharedPreferences sp=getSharedPreferences("Login", 0);
+            SharedPreferences sp= getSharedPreferences("Login", 0);
             SharedPreferences.Editor Ed=sp.edit();
             Ed.putBoolean("News",true);
             Ed.commit();
+            Log.d(TAG,"News Set");
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
     }
 
@@ -71,20 +67,17 @@ public class GlobalDatabaseImageService extends Service {
             for (int i=0;i<jsonArray.length();i++){
                 JSONObject root = jsonArray.getJSONObject(i);
                 Health health = new Health(root.getInt("id"),root.getString("page_title"),null);
-                try {
-                    db.addHealth(health);
-                }catch(Exception e){
-                    db.updateHealth(health);
-                }
-                Log.e(TAG, root.toString());
+                db.addHealth(health);
+
             }
             db.closeDB();
             SharedPreferences sp=getSharedPreferences("Login", 0);
             SharedPreferences.Editor Ed=sp.edit();
             Ed.putBoolean("Health",true);
             Ed.commit();
+            Log.d(TAG,"Health Set");
         }catch(Exception e){
-            e.printStackTrace();
+//            e.printStackTrace();
         }
     }
 
@@ -102,21 +95,17 @@ public class GlobalDatabaseImageService extends Service {
                 Videos video = new Videos(root.getInt("id"),root.getString("name"),
                         root.getString("path"),root.getInt("category"),
                         (float)root.getDouble("rating"));
-                try {
-                    db.addVideo(video);
-                }catch(Exception e){
-                    db.deleteVideo(video.getID());
-                    db.addVideo(video);
-                }
-                Log.e(TAG, root.toString());
+                db.addVideo(video);
+                Log.d(TAG,root.toString());
             }
             db.closeDB();
             SharedPreferences sp=getSharedPreferences("Login", 0);
             SharedPreferences.Editor Ed=sp.edit();
             Ed.putBoolean("Videos",true);
             Ed.commit();
+            Log.d(TAG,"Videos set");
         }catch(Exception e){
-            e.printStackTrace();
+//            e.printStackTrace();
         }
     }
 
@@ -134,61 +123,67 @@ public class GlobalDatabaseImageService extends Service {
                 Weather weather = new Weather(root.getInt("id"),root.getString("city_name"),
                         root.getString("main"),root.getString("description"),(float)root.getDouble("temp"),
                         (float)root.getDouble("temp_min"),(float)root.getDouble("temp_max"),root.getInt("humidity"));
-                try {
                     db.addWeather(weather);
-                }catch(Exception e){
-                    db.updateWeather(weather);
-                }
-                Log.e(TAG,root.toString());
             }
             db.closeDB();
             SharedPreferences sp=getSharedPreferences("Login", 0);
             SharedPreferences.Editor Ed=sp.edit();
             Ed.putBoolean("Weather",true);
             Ed.commit();
+            Log.d(TAG,"Weather set");
         }catch(Exception e){
+            Log.d(TAG,"Adding weather failed");
             e.printStackTrace();
         }
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId){
-
-        // News = 10.132.235.67:3000/newsLogs
-        // Videos = /videoLogs
-        // Health = /healthLogs
-        // Weather = /getAllWeatherDetails
         sp = this.getSharedPreferences("Login", 0);
-        Thread t = new Thread(new Runnable(){
-            @Override
-            public void run() {
-                if(!sp.getBoolean("Weather",false)){
-                    getWeather();
-                }
-                if(!sp.getBoolean("News",false)){
-                    getNews();
-                }
-                if(!sp.getBoolean("Health",false)){
-                    Log.e(TAG,"Health");
-                    getHealth();
-                }
-                if(!sp.getBoolean("Videos",false)){
-                    Log.e(TAG,"Videos");
-                    getVideos();
-                }
-            }
-        });
-        t.start();
-        try {
-            t.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        DownloadImage mDownloadImage = new DownloadImage();
+        mDownloadImage.execute((Void)null);
+//        Thread t = new Thread(new Runnable(){
+//            @Override
+//            public void run() {
+//            }
+//        });
+//        t.start();
+        Log.d(TAG,"Done");
         return 0;
     }
     @Override
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    private class DownloadImage extends AsyncTask<Void,Void,Boolean>{
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+
+
+            Log.d(TAG,""+sp.getBoolean("Videos",false));
+            if(!sp.getBoolean("Videos",false)){
+                Log.e(TAG,"Videos");
+                getVideos();
+            }
+            Log.e(TAG,""+sp.getBoolean("Weather",false));
+            if(!sp.getBoolean("Weather",false)){
+                Log.e(TAG,"Weather");
+                getWeather();
+            }
+            Log.d(TAG,""+sp.getBoolean("News",false));
+            if(!sp.getBoolean("News",false)){
+                Log.e(TAG,"News");
+                getNews();
+            }
+            Log.d(TAG,""+sp.getBoolean("Health",false));
+            if(!sp.getBoolean("Health",false)){
+                Log.e(TAG,"Health");
+                getHealth();
+            }
+            return true;
+        }
     }
 }

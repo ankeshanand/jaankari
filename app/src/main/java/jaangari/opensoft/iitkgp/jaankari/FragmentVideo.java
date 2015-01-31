@@ -92,37 +92,42 @@ public class FragmentVideo extends Fragment {
         db = new DatabaseHandler(this.getActivity().getApplicationContext());
         ListView listview = (ListView) parentLayout.findViewById(R.id.videos_list_view);
         videos = db.getAllVideosbyCategory(position);
-        Log.e(TAG, videos.toString());
-        values = new String[videos.size()];
-        imageId = new Bitmap[videos.size()];
-        rating = new float[videos.size()];
-        for (int i = 0; i < videos.size(); i++) {
-            values[i] = videos.get(i).getName();
-            String path = videos.get(i).getPath();
-            rating[i] = videos.get(i).getRating();
-            imageId[i] = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + "/" + getString(R.string.app_name) + "/Videos/"
-                    + path.substring(path.lastIndexOf("/") + 1, path.lastIndexOf(".mp4")) + "_thumbnail.jpg");
-        }
-        CustomList adapter = new CustomList(this.getActivity(), values, imageId, rating);
-        listview.setAdapter(adapter);
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent();
-                intent.setAction(android.content.Intent.ACTION_VIEW);
-                String path = videos.get(position).getPath();
-                File file = new File(Environment.getExternalStorageDirectory() + "/" + getString(R.string.app_name) + "/Videos/" + path.substring(path.lastIndexOf("/")));
-                Log.e(TAG, Environment.getExternalStorageDirectory() + getString(R.string.app_name) + "/Videos/" + path.substring(path.lastIndexOf("/")));
-                intent.setDataAndType(Uri.fromFile(file), "video/*");
-                if(videos.get(position).getIsRated()==0){
-                    video_set = true;
-                }
-                video_id = videos.get(position).getID();
-                video_history = videos.get(position).getHistory();
-                startActivity(intent);
-            }
-        });
         db.closeDB();
+        if(videos.size()!=0) {
+            values = new String[videos.size()];
+            imageId = new Bitmap[videos.size()];
+            rating = new float[videos.size()];
+            for (int i = 0; i < videos.size(); i++) {
+                values[i] = videos.get(i).getName();
+                String path = videos.get(i).getPath();
+                rating[i] = videos.get(i).getRating();
+                imageId[i] = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + "/" + getString(R.string.app_name) + "/Videos/"
+                        + path.substring(path.lastIndexOf("/") + 1, path.lastIndexOf(".mp4")) + "_thumbnail.jpg");
+            }
+            CustomList adapter = new CustomList(this.getActivity(), values, imageId, rating);
+            listview.setAdapter(adapter);
+            listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent intent = new Intent();
+                    intent.setAction(android.content.Intent.ACTION_VIEW);
+                    String path = videos.get(position).getPath();
+                    File file = new File(Environment.getExternalStorageDirectory() + "/" + getString(R.string.app_name) + "/Videos/" + path.substring(path.lastIndexOf("/")));
+                    Log.e(TAG, Environment.getExternalStorageDirectory() + getString(R.string.app_name) + "/Videos/" + path.substring(path.lastIndexOf("/")));
+                    intent.setDataAndType(Uri.fromFile(file), "video/*");
+                    if (videos.get(position).getIsRated() == 0) {
+                        video_set = true;
+                    }
+                    video_id = videos.get(position).getID();
+                    video_history = videos.get(position).getHistory();
+                    startActivity(intent);
+                }
+            });
+        }
+        else{
+            TextView textView = (TextView)parentLayout.findViewById(R.id.fragment_video_text_view);
+            textView.setText("Sorry! No videos at present, please try again later!");
+        }
         return parentLayout;
     }
 
@@ -175,7 +180,7 @@ public class FragmentVideo extends Fragment {
         super.onResume();
     }
     public void updateDb(float rating) {
-        DatabaseHandler db = new DatabaseHandler(this.getActivity().getApplicationContext());
+        db = new DatabaseHandler(this.getActivity().getApplicationContext());
         video_history++;
         //video_id
         if(rating!=-1){

@@ -19,13 +19,17 @@ import java.net.SocketException;
 
 import jaangari.opensoft.iitkgp.jaangari.R;
 
-public class CheckUpdates extends Service {
-    public CheckUpdates() {
+public class CheckUpdatesService extends Service {
+
+    private String TAG = "CheckUpdatesService";
+
+    public CheckUpdatesService() {
     }
 
     private Update update = null;
     @Override
     public int onStartCommand(Intent intent, int flags, int startId){
+        Log.d(TAG,"starting AsyncTask");
         update  = new Update();
         update.execute((Void) null);
         return 0;
@@ -48,6 +52,7 @@ public class CheckUpdates extends Service {
                 HttpGet httpGet = new HttpGet(url);
                 HttpResponse response = httpclient.execute(httpGet);
                 String json_string = EntityUtils.toString(response.getEntity());
+                Log.v(TAG,json_string);
                 if(json_string.contains("true")){
                     return true;
                 }

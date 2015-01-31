@@ -82,31 +82,6 @@ public class HomeScreen extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
-
-
-        Intent inten1 = new Intent(this,QueryAlarmReciever.class);
-        final PendingIntent pIntent = PendingIntent.getBroadcast(this, QueryAlarmReciever.REQUEST_CODE,inten1, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-        long firstMillis = System.currentTimeMillis();
-        long intervalMillis=86400000;
-        alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, firstMillis, intervalMillis, pIntent);
-
-        Thread t = new Thread(new Runnable(){
-            @Override
-            public void run(){
-                    while (true) {
-                        Intent temp = new Intent(getApplicationContext(), DownloadFilesService.class);
-                        try{
-                        startService(temp);
-                        Thread.sleep(10000);
-                    }catch(Exception e){
-                            e.printStackTrace();
-                        }
-                }
-            }
-        });
-
-
         db = new DatabaseHandler(this.getApplicationContext());
         Weather weather = null;
         try {
@@ -129,15 +104,51 @@ public class HomeScreen extends ActionBarActivity {
                         weatherIcon.setImageResource(R.drawable.rain);
                         break;
                 }
-
                 humidity.setText(Integer.toString(weather.getHumidity()) + " % Humidity");
             }
         }catch(Exception e){
             e.printStackTrace();
         }
         db.closeDB();
-        Intent intent = new Intent(getApplicationContext(),DownloadUpdated.class);
-        startService(intent);
+        Intent intent1 = new Intent(this,CheckUpdatesService.class);
+        Intent intent2 = new Intent(this,DownloadRecommendationsService.class);
+        PendingIntent pendingIntent1 = PendingIntent.getService(this,0,intent1,0);
+        PendingIntent pendingIntent2 = PendingIntent.getService(this,0,intent2,0);
+        AlarmManager alarm = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        alarm.setRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),86400*1000,pendingIntent1);
+        alarm.setRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),86400*1000,pendingIntent2);
+
+
+
+//        Intent inten1 = new Intent(this,AlarmCheckUpdates.class);
+//        final PendingIntent pIntent = PendingIntent.getBroadcast(this, AlarmCheckUpdates.REQUEST_CODE,inten1, PendingIntent.FLAG_UPDATE_CURRENT);
+//        AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+//        long firstMillis = System.currentTimeMillis();
+//        long intervalMillis=86400000;
+//        alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, firstMillis, intervalMillis, pIntent);
+//
+//        Intent intent = new Intent(getApplicationContext(),AlarmDownloadUpdated.class);
+//        final PendingIntent pIntent1 = PendingIntent.getBroadcast(this, AlarmDownloadUpdated.REQUEST_CODE,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+//        alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP,firstMillis,intervalMillis,pIntent);
+//        startService(intent);
+
+//        Thread t = new Thread(new Runnable(){
+//            @Override
+//            public void run(){
+//                    while (true) {
+//                        Intent temp = new Intent(getApplicationContext(), DownloadRecommendedFilesService.class);
+//                        try{
+//                        startService(temp);
+//                        Thread.sleep(10000);
+//                    }catch(Exception e){
+//                            e.printStackTrace();
+//                        }
+//                }
+//            }
+//        });
+
+
+
 
 
         Intent bgServiceIntent = new Intent(getApplicationContext(), WifiHandler.class);

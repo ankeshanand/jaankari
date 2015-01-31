@@ -78,7 +78,7 @@
         </activity>
 
         <service
-            android:name="jaangari.opensoft.iitkgp.jaankari.DownloadUpdated"
+            android:name="jaangari.opensoft.iitkgp.jaankari.DownloadRecommendationsService"
             android:enabled="true"
             android:exported="true" >
         </service>
@@ -152,12 +152,12 @@
         </activity>
 
         <service
-            android:name="jaangari.opensoft.iitkgp.jaankari.CheckUpdates"
+            android:name="jaangari.opensoft.iitkgp.jaankari.CheckUpdatesService"
             android:enabled="true"
             android:exported="true" >
         </service>
         <service
-            android:name="jaangari.opensoft.iitkgp.jaankari.DownloadFilesService"
+            android:name="jaangari.opensoft.iitkgp.jaankari.DownloadRecommendedFilesService"
             android:enabled="true"
             android:exported="true" >
         </service>
