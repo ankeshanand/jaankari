@@ -2,6 +2,7 @@ package jaangari.opensoft.iitkgp.jaankari.hotspotUtils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Environment;
 import android.text.format.Formatter;
@@ -26,10 +27,13 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
+import java.text.Normalizer;
 import java.util.ArrayList;
 
 import jaangari.opensoft.iitkgp.jaankari.BackgroundServices.ResultsHandler;
@@ -75,9 +79,6 @@ public class CommDevice {
             byte[] buf = new byte[100];
             DatagramPacket dp = new DatagramPacket(buf, buf.length);
             s.receive(dp);
-            String rcvd = "rcvd from " + dp.getAddress() + ", " + dp.getPort() + ": "
-                    + new String(dp.getData());
-
             String received = new String(dp.getData());
             String ans = "";
             for(int i=0;i<100;i++){
@@ -85,24 +86,18 @@ public class CommDevice {
                     ans+=received.charAt(i);
                 }
             }
-            System.out.println("here *** "+ ans);
 
-            String listAvailable =  dbHandler.fetchIndexList(ans);
-//            Log.d("CommDevice", listAvailable.get(0).toString() + "is the fetchIndex");
-//
+            String myIp = getMyIp();
+            String requestIp = dp.getAddress().getHostAddress();
+
+            if(myIp.equals(requestIp)) // In case of a query request to itself, ignore
+                continue;
+
+            String localResults =  dbHandler.fetchIndexList(ans);
             JSONObject finalJson = new JSONObject();
-//            JSONArray json = new JSONArray();
-//            for(PairCategory p : listAvailable)
-//            {
-//                try {
-//                    json.put(p.getJSONOut());
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-            //finalJson.put("IP",dp.getAddress());
-            finalJson.put("IP",getMyIp());
-            finalJson.put("list",new JSONArray(listAvailable));
+
+            finalJson.put("IP",myIp);
+            finalJson.put("list",new JSONArray(localResults));
             sendMsg(finalJson.toString(), dp.getAddress());
             Log.d("CommDevice", ans);
             Log.d("CommDevice","Sent the Available indexes :"+ finalJson.toString());
@@ -114,10 +109,22 @@ public class CommDevice {
     {
         // Todo - Rohan - Implement This Function
 
-        //WifiManager wm = (WifiManager) getSystemService(WIFI_SERVICE);
-        //String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
+        WifiManager wifiMgr = (WifiManager) mContext.getSystemService(mContext.WIFI_SERVICE);
+        WifiInfo wifiInfo = wifiMgr.getConnectionInfo();
+        int ip = wifiInfo.getIpAddress();
+        String ipAddress = Formatter.formatIpAddress(ip);
+        if(ip==0)
+            return "192.168.43.1" ; // Todo - Rohan - HardCoding ?
 
-        return "/192.168.43.1";
+        return ipAddress;
+    }
+
+    public String intToIp(int i) {
+
+        return ((i >> 24 ) & 0xFF ) + "." +
+                ((i >> 16 ) & 0xFF) + "." +
+                ((i >> 8 ) & 0xFF) + "." +
+                ( i & 0xFF) ;
     }
 
     public void sendMsg(String msg, InetAddress address) {
@@ -452,7 +459,7 @@ public class CommDevice {
     public void requestFile(String IP, String category,int id) throws IOException {
         Socket socket = null;
         try {
-            socket = new Socket(IP.substring(1), PORT_FILE_download);
+            socket = new Socket(IP, PORT_FILE_download); // Todo : Rohan - Check SubString for IP
             String toSend = category + ";" + String.valueOf(id);
             sendStringoverSocket(socket,toSend);
             saveFileOverSocket(socket,category,id);
@@ -462,6 +469,7 @@ public class CommDevice {
 //            outputStream.flush();
 
         } catch (Exception e) {
+            Log.d("CommDevice", e.toString());
             e.printStackTrace();
         }
     }

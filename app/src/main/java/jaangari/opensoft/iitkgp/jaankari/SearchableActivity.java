@@ -137,23 +137,13 @@ public class SearchableActivity extends ActionBarActivity {
                         try {
 
                             CommDevice cd = new CommDevice(getApplicationContext());
-                            cd.requestFile(result.IP, "Video", result.getId());
+                            cd.requestFile(result.IP, result.getCategory(), result.getId());
 
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
 
                                     launchResult(result);
-
-//                                    Intent intent = new Intent();
-//                                    intent.setAction(android.content.Intent.ACTION_VIEW);
-//                                    db = new DatabaseHandler(getApplicationContext());
-//                                    Videos video = db.getVideobyId(result.getId());
-//                                    db.closeDB();
-//                                    String path = video.getPath();
-//                                    File file = new File(Environment.getExternalStorageDirectory() + "/" + getString(R.string.app_name) + "/Videos/" + path.substring(path.lastIndexOf("/")));
-//                                    Log.e(TAG, Environment.getExternalStorageDirectory() +"/"+ getString(R.string.app_name) + "/Videos/" + path.substring(path.lastIndexOf("/")));
-//                                    intent.setDataAndType(Uri.fromFile(file), "video/*");
 
                                 }
                             });

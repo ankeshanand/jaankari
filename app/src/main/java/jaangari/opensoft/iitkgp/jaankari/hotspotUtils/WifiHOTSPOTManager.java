@@ -35,7 +35,6 @@ public class WifiHOTSPOTManager {
         wifiApManager = new WifiApManager(mContext);
         wifiManager = (WifiManager) mContext.getSystemService(mContext.WIFI_SERVICE);
 
-
         while (true)
         {
             NetworkConnectState = EstablishConnection();

@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 
 import jaangari.opensoft.iitkgp.jaangari.R;
@@ -25,6 +26,7 @@ import jaangari.opensoft.iitkgp.jaankari.BackgroundServices.FileServer;
 import jaangari.opensoft.iitkgp.jaankari.BackgroundServices.QueryHandler;
 import jaangari.opensoft.iitkgp.jaankari.BackgroundServices.ResultsHandler;
 import jaangari.opensoft.iitkgp.jaankari.BackgroundServices.WifiHandler;
+import jaangari.opensoft.iitkgp.jaankari.hotspotUtils.CommDevice;
 import jaangari.opensoft.iitkgp.jaankari.util.Weather;
 
 
@@ -154,6 +156,19 @@ public class HomeScreen extends ActionBarActivity {
 
         Intent fileServer = new Intent(getApplicationContext(), FileServer.class);
         startService(fileServer);
+
+        // ToDo - Rohan : Remove This IP TESTING PART
+
+        try {
+            CommDevice cd = new CommDevice(getApplicationContext());
+            String myIp = cd.getMyIp();
+            Log.d("MyIp", myIp);
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
 //        ImageView mImageView = (ImageView)findViewById(R.id.pro_pic_menu);
 //        SharedPreferences sp1 = this.getSharedPreferences("Login", 0);
