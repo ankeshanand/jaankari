@@ -163,9 +163,10 @@ public class HomeScreen extends ActionBarActivity {
             CommDevice cd = new CommDevice(getApplicationContext());
             String myIp = cd.getMyIp();
             Log.d("MyIp", myIp);
+            Log.d("MyIpBroadCast", cd.getBroadcast());
 
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

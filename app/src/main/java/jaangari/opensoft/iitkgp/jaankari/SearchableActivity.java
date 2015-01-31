@@ -14,6 +14,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -26,6 +27,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -45,6 +47,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import jaangari.opensoft.iitkgp.jaangari.R;
+import jaangari.opensoft.iitkgp.jaangari.ResultViewer;
 import jaangari.opensoft.iitkgp.jaankari.hotspotUtils.CommDevice;
 import jaangari.opensoft.iitkgp.jaankari.util.JSONresultsParser;
 import jaangari.opensoft.iitkgp.jaankari.util.SearchResults;
@@ -165,29 +168,32 @@ public class SearchableActivity extends ActionBarActivity {
         });
     }
 
-    protected void launchResult(SearchResults result)
+    protected int launchResult(SearchResults result)
     {
-        if("Video".equals(result.getCategory())){
-            Intent intent = new Intent();
-            intent.setAction(android.content.Intent.ACTION_VIEW);
-            db = new DatabaseHandler(getApplicationContext());
-            Videos video = db.getVideobyId(result.getId());
+        Intent mIntent = new Intent(this, ResultViewer.class);
+        mIntent.putExtra("SearchResult", result.getArray().toString());
+        startActivity(mIntent);
+        return 0;
 
-            String path = video.getPath();
-            //File file = new File(Environment.getExternalStorageDirectory() + "/" + getString(R.string.app_name) + "/Videos/" + path.substring(path.lastIndexOf("/")));
-            File file = new File(db.getFilePath(result.getCategory(), result.getId()));
-            //File file = new File("/storage/emulated/legacy/Jaankari/bak/out.mp4");
-            Log.e(TAG, Environment.getExternalStorageDirectory() +"/"+ getString(R.string.app_name) + "/Videos/" + path.substring(path.lastIndexOf("/")));
-            db.closeDB();
-            Log.d(TAG, db.getFilePath(result.getCategory(), result.getId()));
-            intent.setDataAndType(Uri.fromFile(file), "video/*");
-            video_id = video.getID();
-            video_history = video.getHistory();
-            startActivity(intent);
-        }
-        else{
-
-        }
+//        if("Video".equals(result.getCategory())){
+//            Intent intent = new Intent();
+//            intent.setAction(android.content.Intent.ACTION_VIEW);
+//            db = new DatabaseHandler(getApplicationContext());
+//            Videos video = db.getVideobyId(result.getId());
+//
+//            File file = new File(db.getFilePath(result.getCategory(), result.getId()));
+//            db.closeDB();
+//            Log.d(TAG, db.getFilePath(result.getCategory(), result.getId()));
+//            intent.setDataAndType(Uri.fromFile(file), "video/*");
+//            video_id = video.getID();
+//            video_history = video.getHistory();
+//            startActivity(intent);
+//        }
+//        else{
+//
+//        }
+//
+//        return 0;
     }
     protected void contentSearch(String Query){
         if(Query!=null){
@@ -269,6 +275,7 @@ public class SearchableActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_searchable);
 
@@ -289,7 +296,6 @@ public class SearchableActivity extends ActionBarActivity {
                 public void run() {
                     CommDevice cd = null;
                     try {
-                        Thread.sleep(2000);
                         cd = new CommDevice(getApplicationContext());
                         cd.broadcastQuery(Query);
                     } catch (Exception e) {

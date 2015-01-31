@@ -30,11 +30,15 @@ import java.net.DatagramSocket;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.Enumeration;
 
 import jaangari.opensoft.iitkgp.jaankari.BackgroundServices.ResultsHandler;
 import jaangari.opensoft.iitkgp.jaankari.DatabaseHandler;
@@ -90,6 +94,8 @@ public class CommDevice {
             String myIp = getMyIp();
             String requestIp = dp.getAddress().getHostAddress();
 
+            Log.d("CommDevice", "Got Query request from " + requestIp);
+
             if(myIp.equals(requestIp)) // In case of a query request to itself, ignore
                 continue;
 
@@ -107,16 +113,63 @@ public class CommDevice {
 
     public String getMyIp()
     {
-        // Todo - Rohan - Implement This Function
+//        //  - Rohan - Implement This Function
+//
+//        WifiManager wifiMgr = (WifiManager) mContext.getSystemService(mContext.WIFI_SERVICE);
+//        WifiInfo wifiInfo = wifiMgr.getConnectionInfo();
+//        int ip = wifiInfo.getIpAddress();
+//        String ipAddress = Formatter.formatIpAddress(ip);
+//        if(ip==0)
+//            return "192.168.43.1" ; //   Rohan - HardCoding ?
 
-        WifiManager wifiMgr = (WifiManager) mContext.getSystemService(mContext.WIFI_SERVICE);
-        WifiInfo wifiInfo = wifiMgr.getConnectionInfo();
-        int ip = wifiInfo.getIpAddress();
-        String ipAddress = Formatter.formatIpAddress(ip);
-        if(ip==0)
-            return "192.168.43.1" ; // Todo - Rohan - HardCoding ?
+        return getWifiApIpAddress();
+        //return ipAddress    ;
+    }
 
-        return ipAddress;
+    public String getWifiApIpAddress() {
+        try {
+            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en
+                    .hasMoreElements();) {
+                NetworkInterface intf = en.nextElement();
+                if (intf.getName().contains("wlan")) {
+                    for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr
+                            .hasMoreElements();) {
+                        InetAddress inetAddress = enumIpAddr.nextElement();
+                        if (!inetAddress.isLoopbackAddress()
+                                && (inetAddress.getAddress().length == 4)) {
+                            //Log.d("CommDevice", inetAddress.getHostAddress());
+                            return inetAddress.getHostAddress();
+                        }
+                    }
+                }
+            }
+        } catch (SocketException ex) {
+            Log.e("CommDevice", ex.toString());
+        }
+        return null;
+    }
+
+    public static String getBroadcast() throws SocketException {
+        System.setProperty("java.net.preferIPv4Stack", "true");
+        for (Enumeration<NetworkInterface> niEnum = NetworkInterface.getNetworkInterfaces(); niEnum.hasMoreElements();) {
+            NetworkInterface ni = niEnum.nextElement();
+
+            if (ni.getName().contains("wlan")) {
+                for (InterfaceAddress interfaceAddress : ni.getInterfaceAddresses()) {
+                    try{
+                        return interfaceAddress.getBroadcast().toString().replace("/","");
+                    }
+                    catch (Exception e)
+                    {
+                        continue;
+                    }
+
+                }
+            }
+
+
+        }
+        return null;
     }
 
     public String intToIp(int i) {
@@ -196,7 +249,7 @@ public class CommDevice {
         sock.setBroadcast(true);
         sock.bind(new InetSocketAddress(PORT_SRC));
 
-        InetSocketAddress dst = new InetSocketAddress(BROADCAST_IP, PORT_DST);
+        InetSocketAddress dst = new InetSocketAddress(getBroadcast(), PORT_DST);
 
         String message =query;
 
