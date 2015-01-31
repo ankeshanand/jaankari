@@ -123,6 +123,8 @@ public class HomeScreen extends ActionBarActivity {
         alarm.setRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),86400*1000,pendingIntent2);
         alarm.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 3600 * 1000, pendingIntent3);
 
+
+
         Intent bgServiceIntent = new Intent(getApplicationContext(), WifiHandler.class);
         startService(bgServiceIntent);
 
