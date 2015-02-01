@@ -23,6 +23,7 @@ import java.text.DecimalFormat;
 import jaangari.opensoft.iitkgp.jaangari.R;
 import jaangari.opensoft.iitkgp.jaankari.BackgroundServices.FileServer;
 import jaangari.opensoft.iitkgp.jaankari.BackgroundServices.QueryHandler;
+import jaangari.opensoft.iitkgp.jaankari.BackgroundServices.ResultsHandler;
 import jaangari.opensoft.iitkgp.jaankari.BackgroundServices.WifiHandler;
 import jaangari.opensoft.iitkgp.jaankari.hotspotUtils.CommDevice;
 import jaangari.opensoft.iitkgp.jaankari.util.Weather;
@@ -132,7 +133,7 @@ public class HomeScreen extends ActionBarActivity {
         startService(commService);
         Intent fileServer = new Intent(getApplicationContext(), FileServer.class);
         startService(fileServer);
-        Intent resultsHandler = new Intent(getApplicationContext(), QueryHandler.class);
+        Intent resultsHandler = new Intent(getApplicationContext(), ResultsHandler.class);
         startService(resultsHandler);
         try {
             CommDevice cd = new CommDevice(getApplicationContext());

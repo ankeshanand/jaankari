@@ -216,7 +216,8 @@ public class DownloadRecommendedFilesService extends Service {
                     Videos video = db.getVideobyId(temp.id);
                     Log.d(TAG,video.getName()+ " : " + video.getPath());
                     db.closeDB();
-                    Videodownload(video.getPath(),temp.id);
+                    if(video.getIsPresent()==0)
+                        Videodownload(video.getPath(),temp.id);
                 }
                 else {
                     dowloadText(temp.category,temp.id);

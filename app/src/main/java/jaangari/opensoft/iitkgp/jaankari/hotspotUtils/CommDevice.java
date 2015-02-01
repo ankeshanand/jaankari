@@ -97,7 +97,7 @@ public class CommDevice {
             Log.d("CommDevice", "Got Query request from " + requestIp);
 
             if(myIp.equals(requestIp)) // In case of a query request to itself, ignore
-                continue;
+               continue;
 
             String localResults =  dbHandler.fetchIndexList(ans);
             JSONObject finalJson = new JSONObject();

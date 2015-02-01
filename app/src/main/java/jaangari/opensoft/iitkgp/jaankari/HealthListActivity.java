@@ -203,8 +203,12 @@ public class HealthListActivity extends ActionBarActivity
             // decide what to show in the action bar.
             getMenuInflater().inflate(R.menu.health_list, menu);
             restoreActionBar();
+            ActionBar actionBar = this.getSupportActionBar();
+            actionBar.setTitle("Health");
             return true;
         }
+        ActionBar actionBar = this.getSupportActionBar();
+        actionBar.setTitle("Health");
         return super.onCreateOptionsMenu(menu);
     }
 

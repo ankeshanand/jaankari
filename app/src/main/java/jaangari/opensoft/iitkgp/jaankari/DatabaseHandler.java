@@ -589,6 +589,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     }
 
+
     public List<Commodity> getCommodityPrices(){
         List<Commodity> prices = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + TABLE_COMMODITY + " LIMIT 25";
