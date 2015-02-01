@@ -1,8 +1,6 @@
 # jaankari
 An Android app that makes Information and entermainment accessible to phones in remote areas with low connectivity using Wifi P2P networks.
 
-## Screenshots
-
 <a href="url"><img src="http://i.imgur.com/9A6ORmA.png"  height="400" width="230" ></a>
 <br>
 
